@@ -45,10 +45,10 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@jelly-swap/aeternity@0.1.35-node":
-  version "0.1.35-node"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/aeternity/-/aeternity-0.1.35-node.tgz#ede0731a2a7ed58c635830191bdf853e44b0404d"
-  integrity sha512-Pltx1C6U7ef9jaCCmHIMaJvWmthNuDvWoqgmh1vIu1Q2NsF0SynvAgvCS50R7qLw0mr8mvEuSqi1v4RZvb9K+w==
+"@jelly-swap/aeternity@0.1.37-node":
+  version "0.1.37-node"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/aeternity/-/aeternity-0.1.37-node.tgz#d5c4537846e6fcb3764126d813772013d2b31c2a"
+  integrity sha512-kVze2x97AzAgCUZvwRBMsJUBE/ffUaoJQPH8DjQD3eAWU3JWSLl+QY7bhNY2vQIg6JE0y4w26Ui6UKzxCkSyYQ==
   dependencies:
     "@aeternity/aepp-sdk" "7.1.1"
     "@jelly-swap/types" "^0.1.33"
