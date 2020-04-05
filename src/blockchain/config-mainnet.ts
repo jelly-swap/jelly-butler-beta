@@ -9,6 +9,7 @@ export default {
     ETH: EthereumConfig,
     AE: AeternityConfig,
     DAI: Erc20Config('DAI'),
+    USDC: Erc20Config('USDC'),
     WBTC: Erc20Config('WBTC'),
     TRX: TronConfig,
 };

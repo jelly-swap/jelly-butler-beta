@@ -10,5 +10,6 @@ export default {
     AE: AeternityValidator,
     DAI: Erc20Validator,
     WBTC: Erc20Validator,
+    USDC: Erc20Validator,
     TRX: TronValidator,
 };

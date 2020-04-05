@@ -7,4 +7,5 @@ export default Config;
 
 export const SECONDARY_NETWORKS = {
     WBTC: 'WBTC',
+    USDC: 'USDC',
 };

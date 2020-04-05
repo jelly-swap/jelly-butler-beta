@@ -34,7 +34,7 @@ export const isOutputSwapValid = async swap => {
     }
 
     if (swap.sender.toLowerCase() === swap.receiver.toLowerCase()) {
-        logError(`SENDER_CANNOT_EQUAL_RECEVEIR`, swap);
+        logError(`SENDER_CANNOT_EQUAL_RECEIVER`, swap);
         return false;
     }
 

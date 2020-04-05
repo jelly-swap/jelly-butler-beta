@@ -48,7 +48,7 @@ const getContent = swap => {
 <div>
     <a href="https://jelly.market/">
         <center>
-            <img width="300" height="auto" alt="jelly-hero-3" src="https://jelly.market/images/header/logo.png">
+            <img width="300" height="auto" alt="buter image" src="https://jelly.market//static/jelly-butler-a5ad152c15ed211c462cbfea5457cddb.svg">
         </center>
     </a>
 </div>

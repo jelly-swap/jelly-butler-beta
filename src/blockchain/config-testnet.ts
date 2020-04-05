@@ -68,6 +68,8 @@ export default {
 
     WBTC: Erc20Config('WBTC'),
 
+    USDC: Erc20Config('USDC'),
+
     TRX: {
         ...TronConfig,
         explorer: 'https://shasta.tronscan.org/#/transaction/',
