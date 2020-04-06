@@ -1,7 +1,7 @@
 
 # What is Butler?[](#what-is-butler)
 
-Butler is automated market making software that is used for liquidity provision to JellySwap protocol. Everyone can run Butler instance on his/her own machine and start earning interest from market spreads. Butler supports automatic order matching, withdraws, refunds, portfolio rebalancing, email and slack notifications. Supported coins are BTC, ETH, DAI, AE, WBTC.
+Butler is automated market making software that is used for liquidity provision to JellySwap protocol. Everyone can run Butler instance on his/her own machine and start earning interest from market spreads. Butler supports automatic order matching, withdraws, refunds, portfolio rebalancing, email and slack notifications. Supported coins are BTC, ETH, DAI, AE, WBTC, USDC.
 
 # How to install Butler?[](#how-to-install-butler)
 
@@ -25,7 +25,7 @@ To install Docker on Mac follow this quick guide: [https://docs.docker.com/docke
  **2.  Download Butler**
  Once, you have successfully installed docker on your system you can clone/download this repository.
 
-    git clone https://github.com/jelly-swap/jelly-butler.git
+    git clone https://github.com/jelly-swap/jelly-butler-beta.git
 
 
  **3. Configure Butler**
@@ -46,6 +46,8 @@ To install Docker on Mac follow this quick guide: [https://docs.docker.com/docke
  **4.  Start Butler**
 
 After `.env` and `config.ts` are filled you can run the following command
+
+    chmod 777 wait-for.sh (for linux and macOS)
 
     mkdir logs && docker-compose up -d
 The above mentioned command will start the application in background mode.
