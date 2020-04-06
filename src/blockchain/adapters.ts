@@ -12,6 +12,7 @@ const AllAdapters = {
     ETH: AppConfig.NETWORKS.ETH ? new EthereumAdapter(Config.ETH) : null,
     AE: AppConfig.NETWORKS.AE ? new AeternityAdapter(Config.AE) : null,
     DAI: AppConfig.NETWORKS.DAI ? new Erc20Adapter('DAI', Config.DAI) : null,
+    USDC: AppConfig.NETWORKS.USDC ? new Erc20Adapter('USDC', Config.USDC) : null,
     WBTC: AppConfig.NETWORKS.WBTC ? new Erc20Adapter('WBTC', Config.WBTC) : null,
     TRX: AppConfig.NETWORKS.TRX ? new TronAdapter(Config.TRX) : null,
 };

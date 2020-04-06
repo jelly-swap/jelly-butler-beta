@@ -25,6 +25,7 @@ export default {
     NETWORKS: {
         ETH: true,
         DAI: true,
+        USDC: true,
         WBTC: true,
         BTC: true,
         AE: true,
@@ -68,6 +69,12 @@ export default {
             SECRET: '',
         },
 
+        USDC: {
+            ADDRESS: '',
+            // Ethereum Private Key
+            SECRET: '',
+        },
+
         WBTC: {
             ADDRESS: '',
             // Ethereum Private Key
@@ -95,20 +102,27 @@ export default {
         'ETH-BTC': true,
         'ETH-DAI': true,
         'ETH-AE': true,
+        'ETH-USDC': true,
 
         'BTC-ETH': true,
         'BTC-DAI': true,
         'BTC-AE': true,
+        'BTC-USDC': true,
 
         'DAI-BTC': true,
         'DAI-ETH': true,
 
         'AE-BTC': true,
         'AE-ETH': true,
+
+        'USDC-BTC': true,
+        'USDC-ETH': true,
     },
 
     // Specify the exchange you want to use as a risk management tool.
     // Available options: binance
+    // Spreads are measured in percentage  0.08 = 8% spread on top of the market price
+    // Tolerance option - minimum spread a t which you will take the order 
     // If you enable this option, whenever you execute a swap, a mirror order will be placed on Binance.
     // Example: You swap 1 BTC for 10 ETH. With the 10 ETH you receive you place an order to buy BTC from Binance.
     // If you have gathered enough fees, you will receive more than 1 BTC for the 10 ETH leaving you with profit.
@@ -116,7 +130,7 @@ export default {
 
     // ================== Price configuration ==================
     PRICE: {
-        COINS: ['USDT', 'BTC', 'ETH', 'TRX', 'DAI', 'AE'],
+        COINS: ['USDT', 'BTC', 'ETH', 'TRX', 'DAI', 'AE', 'USDC'],
         SPREAD: {
             DEFAULT: 0.0091,
             'AE-ETH': 0.08,
@@ -166,6 +180,8 @@ export default {
             BTCUSDT: true,
             AEETH: true,
             AEBTC: true,
+            ETHUSDC:true,
+            BTCUSDC:true
         },
         PRECISION: {
             ETH: 3,
@@ -173,6 +189,7 @@ export default {
             BTC: 4,
             USDT: 4,
             AE: 1,
+            USDC: 4,
         },
         DUPLICATE_PRICE: { DAI: 'USDT' },
     },

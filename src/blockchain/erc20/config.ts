@@ -13,11 +13,17 @@ const TokenConfig = {
         decimals: 8,
         address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
     },
+    USDC: {
+        network: 'USDC',
+        decimals: 6,
+        address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    },
 };
 
 const AddressToToken = {
     '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599': TokenConfig.WBTC,
     '0x6b175474e89094c44da98b954eedeac495271d0f': TokenConfig.DAI,
+    '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': TokenConfig.USDC,
 };
 
 export default token => {

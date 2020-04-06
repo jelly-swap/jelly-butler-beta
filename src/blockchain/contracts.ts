@@ -12,6 +12,7 @@ const AllContracts = {
     ETH: AppConfig.NETWORKS?.ETH ? new EthereumContract(Config.ETH) : null,
     AE: AppConfig.NETWORKS?.AE ? new AeternityContract(Config.AE) : null,
     DAI: AppConfig.NETWORKS?.DAI ? new Erc20Contract(Config.DAI) : null,
+    USDC: AppConfig.NETWORKS?.USDC ? new Erc20Contract(Config.USDC) : null,
     WBTC: AppConfig.NETWORKS?.WBTC ? new Erc20Contract(Config.WBTC) : null,
     TRX: AppConfig.NETWORKS?.TRX ? new TronContract(Config.TRX) : null,
 };
