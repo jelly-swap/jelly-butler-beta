@@ -41,7 +41,7 @@ export default class WithdrawHandler {
 
                 if (!isProcessed) {
                     try {
-                        const result = await contract.withdraw({ ...swap, secret: withdraw.secret }, withdraw.secret);
+                        const result = await contract.withdraw({ ...swap, secret: withdraw.secret });
 
                         const transactionHash = result.hash || result;
 

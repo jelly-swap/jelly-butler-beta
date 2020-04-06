@@ -29,10 +29,6 @@ export default class Erc20Contract extends Contract {
         super.subscribe(onMessage, this.filter);
     }
 
-    async newContract(swap) {
-        return await super.newContract(swap, true);
-    }
-
     async getPast(type, filter = this.filter) {
         return await super.getPastEvents(type, filter);
     }

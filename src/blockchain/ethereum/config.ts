@@ -8,7 +8,7 @@ export default {
     explorer: 'https://etherscan.io/tx/',
     REFUND_PERIOD: 10,
     VALID_EXPIRATION: 72000,
-
+    gasMultiplier: 4,
     receiverAddress: AppConfig.BLOCKCHAIN.ETH.ADDRESS,
     PRIVATE_KEY: AppConfig.BLOCKCHAIN.ETH.SECRET,
 };
