@@ -34,11 +34,6 @@ export default class BitcoinContract extends Contract {
         );
     }
 
-    // Mock in order to enable withdraw tracker for BTC
-    async getStatus(ids) {
-        return ids.map(() => 1);
-    }
-
     async getPast(type, __user?, receiver = this.config.receiverAddress) {
         switch (type) {
             case 'new': {

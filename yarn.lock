@@ -59,10 +59,10 @@
     memoizee "^0.4.14"
     websocket "^1.0.31"
 
-"@jelly-swap/bitcoin@^0.1.33":
-  version "0.1.33"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/bitcoin/-/bitcoin-0.1.33.tgz#bd7ca4aff26343005cb77f03e6056a55a71efe1d"
-  integrity sha512-TrlkZaFgZUCE/gB+8ploHrAfgZCXA/CBHTVgCs1C4W3GIWJwyXDaAscbQjaGDTdEgg4vcAqutfRavIeuHf1Dqw==
+"@jelly-swap/bitcoin@^0.1.39":
+  version "0.1.39"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/bitcoin/-/bitcoin-0.1.39.tgz#a37b47e88a4853a1025d8aaaa7cf5d155b4dacbc"
+  integrity sha512-Su8V2y/eAWSS5GJvThzvT1tnOBLjWiJIO0kremJriOciKp+LjAUejOwJ8Oxuulus430+8sc/EFBpWDuaNSKnkw==
   dependencies:
     "@jelly-swap/btc-provider" "^0.1.33"
     "@jelly-swap/btc-wallet" "^0.1.33"
@@ -89,20 +89,20 @@
     bitcoinjs-lib "5.1.6"
     coinselect "3.1.11"
 
-"@jelly-swap/erc20@^0.1.34":
-  version "0.1.34"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/erc20/-/erc20-0.1.34.tgz#b1204120c57d462a70daad5ce4929444da9eb8b4"
-  integrity sha512-m2ftn0oTI3jWTRnBY3E3c5tmMkAdq3ZQDa6v14DDcOO53ck4nxTrZFsPilBZUOkFFJjZUptpD9U0IxXmKRWhaQ==
+"@jelly-swap/erc20@^0.1.39":
+  version "0.1.39"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/erc20/-/erc20-0.1.39.tgz#228ae711b10b09320622ded55aede2eed7aeabe2"
+  integrity sha512-M0dlL0kQlyTWR1nXfBGgAa2yaoLfZ0gxIZuwn0OW7y5Vub/AKfDt0xbgJMwTJZXtWsNFYIL7JuLvH14R0hk7hw==
   dependencies:
-    "@jelly-swap/ethereum" "^0.1.34"
+    "@jelly-swap/ethereum" "^0.1.39"
     "@jelly-swap/types" "^0.1.33"
     "@jelly-swap/utils" "^0.1.33"
     ethers "^4.0.40"
 
-"@jelly-swap/ethereum@^0.1.34":
-  version "0.1.34"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/ethereum/-/ethereum-0.1.34.tgz#61fc7ec7628c651666e171bc95eae4a2865b1747"
-  integrity sha512-eSus4WqjRBtX1OpFM3CQKWwDuNFxS5NIyR/RoO17yCxiEE3CadwcI2Q76//rq+71PHyGzzrSqsxCl7M80FaMlQ==
+"@jelly-swap/ethereum@^0.1.39":
+  version "0.1.39"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/ethereum/-/ethereum-0.1.39.tgz#7f9107da782362870d7f40990e2543a52ff1d8e5"
+  integrity sha512-8PXw1rk7DblwXNhrwXTls9I6jiJYOHw8esELbwNJ6fFU/m4Ar+6zn+9hHd1I4Ongu6zoQnQweDs+jWuNypnk1A==
   dependencies:
     "@jelly-swap/types" "^0.1.33"
     "@jelly-swap/utils" "^0.1.33"
