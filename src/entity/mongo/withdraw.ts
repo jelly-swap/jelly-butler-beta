@@ -1,16 +1,19 @@
 import { Column, Index, Entity, UpdateDateColumn, ObjectIdColumn, ObjectID } from 'typeorm';
 
-@Entity('refund')
-export default class Refund {
+@Entity('withdraw')
+export default class Withdraw {
     @ObjectIdColumn()
-    public id: ObjectID;
+    public _id: ObjectID;
 
     @Column()
     @Index({ unique: true })
-    swapId: string;
+    id: string;
 
     @Column()
     hashLock: string;
+
+    @Column()
+    secret: string;
 
     @Column()
     transactionHash: string;
@@ -28,18 +31,21 @@ export default class Refund {
     createdAt: Date;
 
     constructor(
-        swapId: string,
+        id: string,
         hashLock: string,
+        secret: string,
         transactionHash: string,
         sender: string,
         receiver: string,
         network: string
     ) {
-        this.swapId = swapId;
+        this.id = id;
         this.hashLock = hashLock;
+        this.secret = secret;
         this.transactionHash = transactionHash;
         this.sender = sender;
         this.receiver = receiver;
         this.network = network;
     }
 }
+

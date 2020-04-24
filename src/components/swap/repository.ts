@@ -1,12 +1,13 @@
-import { getMongoRepository } from 'typeorm';
-import Swap from '../../entity/swap';
+import AppConfig from '../../../config';
+import Repository from '../../repository';
+import Swap from '../../entity/sql/swap';
 
 import { logError } from '../../logger';
 
 export default class SwapRepository {
-    private swapRepository = getMongoRepository(Swap);
+    private swapRepository = Repository[AppConfig.ACTIVE_DB]['swap']();
 
-    public async create(swap: Swap) {
+    public async create(swap: any) {
         try {
             await this.swapRepository.save(swap);
         } catch (error) {
