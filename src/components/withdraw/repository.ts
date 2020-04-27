@@ -1,12 +1,13 @@
-import { getMongoRepository } from 'typeorm';
-import Withdraw from '../../entity/withdraw';
+import AppConfig from '../../../config';
+import Repository from '../../repository';
+
 
 import { logError } from '../../logger';
 
 export default class WithdrawRepository {
-    private withdrawRepository = getMongoRepository(Withdraw);
+    private withdrawRepository = Repository[AppConfig.ACTIVE_DB]['withdraw']();
 
-    public async create(withdraw: Withdraw) {
+    public async create(withdraw: any) {
         try {
             await this.withdrawRepository.save(withdraw);
         } catch (error) {

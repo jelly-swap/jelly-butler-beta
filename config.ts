@@ -10,6 +10,8 @@ export default {
     },
 
     // ================== Database configuration ==================
+    //options: mongodb or sqlite
+    ACTIVE_DB: 'sqlite',
     MONGODB: {
         //Docker Setup
         URL: 'mongodb://db:27017/butler',
@@ -19,20 +21,27 @@ export default {
         //Manual setup
         //URL: 'mongodb://localhost:27017/butler',
     },
+    SQLITE: {
+        //Database name
+        database: 'butler.sqlite',
+    },
 
     // Specify the networks you want to support
     // Available options: ETH, BTC, DAI, WBTC, AE
     NETWORKS: {
         ETH: true,
         DAI: true,
-        USDC: true,
-        WBTC: true,
-        BTC: true,
-        AE: true,
+        USDC: false,
+        WBTC: false,
+        BTC: false,
+        AE: false,
+        TRX: false,
     },
 
     // For every enabled network, you should specify an address and a secret
     BLOCKCHAIN: {
+        //ETH provider wallet
+        //Should be different than your ERC20 provider wallet
         ETH: {
             ADDRESS: '',
             // Ethereum Private Key
@@ -63,6 +72,8 @@ export default {
             },
         },
 
+        //Use one common ETH address for all ERC20 tokens
+        //Should be different than your ETH provider wallet
         DAI: {
             ADDRESS: '',
             // Ethereum Private Key
@@ -120,13 +131,13 @@ export default {
     },
 
     // Specify the exchange you want to use as a risk management tool.
-    // Available options: binance
+    // Available options: binance or leave it empty
     // Spreads are measured in percentage  0.08 = 8% spread on top of the market price
-    // Tolerance option - minimum spread a t which you will take the order 
+    // Tolerance option - minimum spread a t which you will take the order
     // If you enable this option, whenever you execute a swap, a mirror order will be placed on Binance.
     // Example: You swap 1 BTC for 10 ETH. With the 10 ETH you receive you place an order to buy BTC from Binance.
     // If you have gathered enough fees, you will receive more than 1 BTC for the 10 ETH leaving you with profit.
-    EXCHANGE: 'binance',
+    EXCHANGE: '',
 
     // ================== Price configuration ==================
     PRICE: {
@@ -180,8 +191,8 @@ export default {
             BTCUSDT: true,
             AEETH: true,
             AEBTC: true,
-            ETHUSDC:true,
-            BTCUSDC:true
+            ETHUSDC: true,
+            BTCUSDC: true,
         },
         PRECISION: {
             ETH: 3,
@@ -191,6 +202,6 @@ export default {
             AE: 1,
             USDC: 4,
         },
-        DUPLICATE_PRICE: { DAI: 'USDT' },
+        DUPLICATE_PRICE: { DAI: 'USDC' },
     },
 };

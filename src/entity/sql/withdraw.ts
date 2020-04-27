@@ -1,9 +1,9 @@
-import { Column, Index, Entity, UpdateDateColumn, ObjectIdColumn, ObjectID } from 'typeorm';
+import { Column, Index, Entity, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('withdraw')
 export default class Withdraw {
-    @ObjectIdColumn()
-    public _id: ObjectID;
+    @PrimaryGeneratedColumn()
+    public _id: number;
 
     @Column()
     @Index({ unique: true })
