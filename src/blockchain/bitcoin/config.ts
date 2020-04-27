@@ -1,5 +1,5 @@
 import { Config } from '@jelly-swap/bitcoin';
-import { Networks } from '@jelly-swap/btc-wallet';
+import { Networks } from '@jelly-swap/btc-utils';
 
 import AppConfig from '../../../config';
 
