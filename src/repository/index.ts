@@ -8,37 +8,13 @@ import MongoRefund from '../entity/mongo/refund';
 
 export default {
     mongodb: {
-        swap: getMongoSwapRepository,
-        withdraw: getMongoWithdrawRepository,
-        refund: getMongoRefundRepository,
+        swap: () => getMongoRepository(MongoSwap),
+        withdraw: () => getMongoRepository(MongoWithdraw),
+        refund: () => getMongoRepository(MongoRefund),
     },
     sqlite: {
-        swap: getSwapRepository,
-        withdraw: getWithdrawRepository,
-        refund: getRefundRepository,
+        swap: () => getRepository(Swap),
+        withdraw: () => getRepository(Withdraw),
+        refund: () => getRepository(Refund),
     },
 };
-
-function getMongoSwapRepository(){
-    return getMongoRepository(MongoSwap);
-}
-
-function getMongoWithdrawRepository() {
-    return getMongoRepository(MongoWithdraw);
-}
-
-function getMongoRefundRepository() {
-    return getMongoRepository(MongoRefund);
-}
-
-function getSwapRepository() {
-    return getRepository(Swap);
-}
-
-function getWithdrawRepository() {
-    return getRepository(Withdraw);
-}
-
-function getRefundRepository() {
-    return getRepository(Refund);
-}

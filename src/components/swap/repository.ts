@@ -1,6 +1,5 @@
 import AppConfig from '../../../config';
 import Repository from '../../repository';
-import Swap from '../../entity/sql/swap';
 
 import { logError } from '../../logger';
 

@@ -1,4 +1,3 @@
-import Withdraw from '../../entity/sql/withdraw';
 import AppConfig from '../../../config';
 import Repository from '../../repository';
 
