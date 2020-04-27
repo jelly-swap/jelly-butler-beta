@@ -26,15 +26,29 @@ export default class BitcoinContract extends Contract {
 
     subscribe() {
         logInfo(`Starting BTC Events`);
-        const filter = subscribeFilter(this.config.receiverAddress);
-        super.subscribe(onMessage, filter);
+        super.subscribe(onMessage, {
+            new: {
+                type: 'getSwapsByReceiverAndBlock',
+                address: this.config.receiverAddress,
+            },
+            withdraw: {
+                type: 'getWithdrawBySenderAndBlock',
+                address: this.config.receiverAddress,
+            },
+        });
     }
 
     async getPast(type, __user?, receiver = this.config.receiverAddress) {
-        const filter = pastFilter(receiver);
-        if (filter) {
-            return await super.getPastEvents(type, filter);
-        }
+        return await super.getPastEvents(type, {
+            new: {
+                type: 'getSwapsByReceiver',
+                address: receiver,
+            },
+            withdraw: {
+                type: 'getWithdrawBySender',
+                address: receiver,
+            },
+        });
     }
 
     async processRefunds() {
@@ -86,32 +100,6 @@ export default class BitcoinContract extends Contract {
         return true;
     }
 }
-
-const subscribeFilter = (address) => {
-    return {
-        new: {
-            type: 'getSwapsByReceiverAndBlock',
-            address,
-        },
-        withdraw: {
-            type: 'getWithdrawBySenderAndBlock',
-            address,
-        },
-    };
-};
-
-const pastFilter = (address) => {
-    return {
-        new: {
-            type: 'getSwapsByReceiver',
-            address,
-        },
-        withdraw: {
-            type: 'getWithdrawBySender',
-            address,
-        },
-    };
-};
 
 const onMessage = (result) => {
     new Emitter().emit(result.eventName, result);
