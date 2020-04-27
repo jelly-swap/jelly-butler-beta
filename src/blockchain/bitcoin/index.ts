@@ -47,10 +47,12 @@ export default class BitcoinContract extends Contract {
 
             try {
                 const events = await super.getPastEvents('new', {
-                    type: 'getExpiredSwaps',
-                    address: this.config.receiverAddress,
-                    startBlock: Number(blockNumber) - 10000,
-                    endBlock: blockNumber,
+                    new: {
+                        type: 'getExpiredSwaps',
+                        address: this.config.receiverAddress,
+                        startBlock: Number(blockNumber) - 10000,
+                        endBlock: blockNumber,
+                    },
                 });
 
                 for (const event of events) {
