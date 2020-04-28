@@ -52,10 +52,10 @@ export default class BitcoinContract extends Contract {
     }
 
     async processRefunds() {
-        const blockNumber = await this.getCurrentBlock();
-
         const process = async () => {
             logInfo('START BTC REFUNDS');
+
+            const blockNumber = await this.getCurrentBlock();
 
             let transactionHash;
 
