@@ -51,10 +51,14 @@ export default class EthereumContract extends Contract {
                 const swaps = await this.getPast('new', { new: { sender: this.config.receiverAddress } });
 
                 for (const event of swaps) {
-                    if (event.status === 4) {
-                        logInfo(`REFUND ETH: ${event.id}`);
-                        transactionHash = await super.refund(event);
-                        this.emailService.send('REFUND', { ...event, transactionHash });
+                    try {
+                        if (event.status === 4) {
+                            logInfo(`REFUND ETH: ${event.id}`);
+                            transactionHash = await super.refund(event);
+                            this.emailService.send('REFUND', { ...event, transactionHash });
+                        }
+                    } catch (err) {
+                        logError(`ETH_REFUND_ERROR: ${err} ${event}`);
                     }
                 }
             } catch (err) {
@@ -68,6 +72,6 @@ export default class EthereumContract extends Contract {
     }
 }
 
-const onMessage = result => {
+const onMessage = (result) => {
     new Emitter().emit(result.eventName, result);
 };

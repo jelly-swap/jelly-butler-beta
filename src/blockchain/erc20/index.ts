@@ -59,10 +59,14 @@ export default class Erc20Contract extends Contract {
                 let transactionHash;
                 const events = await this.getPast('new', { new: { sender: this.config.receiverAddress } });
                 for (const event of events) {
-                    if (event.status === 4) {
-                        logInfo(`REFUND ERC20: ${event.id}`);
-                        transactionHash = await super.refund(event);
-                        this.emailService.send('REFUND', { ...event, transactionHash });
+                    try {
+                        if (event.status === 4) {
+                            logInfo(`REFUND ERC20: ${event.id}`);
+                            transactionHash = await super.refund(event);
+                            this.emailService.send('REFUND', { ...event, transactionHash });
+                        }
+                    } catch (err) {
+                        logError(`ERC20_REFUND_ERROR: ${err} ${event}`);
                     }
                 }
             } catch (err) {
@@ -76,6 +80,6 @@ export default class Erc20Contract extends Contract {
     }
 }
 
-const onMessage = result => {
+const onMessage = (result) => {
     new Emitter().emit(result.eventName, result);
 };

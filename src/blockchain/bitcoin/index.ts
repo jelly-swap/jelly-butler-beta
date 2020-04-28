@@ -70,16 +70,20 @@ export default class BitcoinContract extends Contract {
                 });
 
                 for (const event of events) {
-                    if (event.status === 4) {
-                        logInfo(`REFUND BTC: ${event.id}`);
+                    try {
+                        if (event.status === 4) {
+                            logInfo(`REFUND BTC: ${event.id}`);
 
-                        transactionHash = await super.refund(event);
+                            transactionHash = await super.refund(event);
 
-                        if (transactionHash == 'Swap failed.') {
-                            logInfo(`Refund cannot be executed still!`);
-                        } else {
-                            this.emailService.send('REFUND', { ...event, transactionHash });
+                            if (transactionHash == 'Swap failed.') {
+                                logInfo(`Refund cannot be executed still!`);
+                            } else {
+                                this.emailService.send('REFUND', { ...event, transactionHash });
+                            }
                         }
+                    } catch (err) {
+                        logError(`BTC_REFUND_ERROR: ${err} ${event}`);
                     }
                 }
             } catch (err) {
