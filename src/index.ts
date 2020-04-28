@@ -88,8 +88,6 @@ const validateConfig = () => {
 if (validateConfig()) {
     createConnection()
         .then(async () => {
-            validateConfig();
-
             await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
 
             await createServer(AppConfig.SERVER.PORT);

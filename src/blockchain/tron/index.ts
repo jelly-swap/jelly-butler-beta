@@ -17,7 +17,7 @@ export default class TronContract extends Contract {
 
     async subscribe() {
         logInfo(`Starting TRON Events`);
-        super.subscribe(onMessage, result => filter(result, 'receiver', this.config.receiverAddress));
+        super.subscribe(onMessage, (result) => filter(result, 'receiver', this.config.receiverAddress));
     }
 
     async getAccount(address) {
@@ -25,7 +25,7 @@ export default class TronContract extends Contract {
     }
 
     async getPast(type, user = 'receiver', receiver = this.config.receiverAddress) {
-        return await super.getPastEvents(type, result => filter(result, user, receiver));
+        return await super.getPastEvents(type, (result) => filter(result, user, receiver));
     }
 
     async userWithdraw(swap, secret) {
@@ -48,10 +48,14 @@ export default class TronContract extends Contract {
                 const events = await this.getPast('new', 'sender');
 
                 for (const event of events) {
-                    if (event.status === 4) {
-                        logInfo(`REFUND TRX: ${event.id}`);
-                        transactionHash = await super.refund(event);
-                        this.emailService.send('REFUND', { ...event, transactionHash });
+                    try {
+                        if (event.status === 4) {
+                            logInfo(`REFUND TRX: ${event.id}`);
+                            transactionHash = await super.refund(event);
+                            this.emailService.send('REFUND', { ...event, transactionHash });
+                        }
+                    } catch (err) {
+                        logError(`TRON_REFUND_ERROR: ${err} ${event}`);
                     }
                 }
             } catch (err) {
@@ -65,7 +69,7 @@ export default class TronContract extends Contract {
     }
 }
 
-const onMessage = result => {
+const onMessage = (result) => {
     const emitter = new Emitter();
     emitter.emit(result.eventName, result);
 };
