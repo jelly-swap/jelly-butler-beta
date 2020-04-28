@@ -64,7 +64,7 @@ export default class BitcoinContract extends Contract {
                     new: {
                         type: 'getExpiredSwaps',
                         address: this.config.receiverAddress,
-                        startBlock: Number(blockNumber) - 10000,
+                        startBlock: Number(blockNumber) - this.config.REFUND_BLOCKS,
                         endBlock: blockNumber,
                     },
                 });

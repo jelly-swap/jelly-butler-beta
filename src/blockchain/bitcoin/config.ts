@@ -9,6 +9,7 @@ export default {
     apiProviderUrl: 'https://spacejelly.network/btc/api/v1/btc/',
     explorer: 'https://blockstream.info/tx/',
     REFUND_PERIOD: 10,
+    REFUND_BLOCKS: 500,
     VALID_EXPIRATION: 72000,
     NETWORK: Networks.bitcoin,
 
