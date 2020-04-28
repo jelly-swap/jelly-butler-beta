@@ -35,7 +35,7 @@ export default class AeternityContract extends Contract {
     }
 
     async getStatus(ids) {
-        const fixedIds = ids.map(i => fixHash(i, false));
+        const fixedIds = ids.map((i) => fixHash(i, false));
         return await super.getStatus(fixedIds);
     }
 
@@ -81,18 +81,6 @@ export default class AeternityContract extends Contract {
     }
 }
 
-const onMessage = result => {
+const onMessage = (result) => {
     new Emitter().emit(result.eventName, { ...result, id: fixHash(result.id) });
-};
-
-const mapStatus = status => {
-    return BLOCKCHAIN_STATUS[status];
-};
-
-const BLOCKCHAIN_STATUS = {
-    ACTIVE: 1,
-    REFUNDED: 2,
-    WITHDRAWN: 3,
-    EXPIRED: 4,
-    PENDING: 5,
 };
