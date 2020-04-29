@@ -47,19 +47,19 @@ const validateConfig = () => {
         }
     }
 
-    if (!AppConfig.MONGODB) {
-        logError('CONFIG: Please specify MONGODB settings.');
-        process.exit(1);
-    }
-
-    if (!AppConfig.MONGODB.URL) {
-        logError('CONFIG: Please specify MONGODB URL settings.');
-        process.exit(1);
-    }
-
-    if (!AppConfig.MONGODB.AUTH) {
-        logError('CONFIG: Please specify MONGODB AUTH settings.');
-        process.exit(1);
+    if(AppConfig.ACTIVE_DB == 'mongodb'){
+        if (!AppConfig.MONGODB) {
+            logError('CONFIG: Please specify MONGODB settings.');
+            process.exit(1);
+        }
+        if (!AppConfig.MONGODB.URL) {
+            logError('CONFIG: Please specify MONGODB URL settings.');
+            process.exit(1);
+        }
+        if (!AppConfig.MONGODB.AUTH) {
+            logError('CONFIG: Please specify MONGODB AUTH settings.');
+            process.exit(1);
+        }   
     }
 
     if (!AppConfig.NAME) {

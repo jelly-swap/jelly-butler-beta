@@ -63,7 +63,7 @@ export default class WithdrawHandler {
                         }
                     }
                 } else {
-                    logError('WITHDRAW_ALREADY_PROCESSED', withdraw.id);
+                    logInfo('WITHDRAW_ALREADY_PROCESSED', withdraw.id);
                 }
             }
         } else {
