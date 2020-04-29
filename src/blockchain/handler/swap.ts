@@ -67,7 +67,7 @@ export default class SwapHandler {
                 }
             }
         } else {
-            logError('SWAP_ALREADY_PROCESSED', inputSwap.id);
+            logInfo('SWAP_ALREADY_PROCESSED', inputSwap.id);
         }
     }
 
