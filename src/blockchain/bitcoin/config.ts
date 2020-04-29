@@ -4,7 +4,7 @@ import { Networks } from '@jelly-swap/btc-utils';
 import AppConfig from '../../../config';
 
 export default {
-    ...Config(5400),
+    ...Config(14400),
     providerUrl: 'https://spacejelly.network/btc/api/v1/btc/',
     apiProviderUrl: 'https://spacejelly.network/btc/api/v1/btc/',
     explorer: 'https://blockstream.info/tx/',

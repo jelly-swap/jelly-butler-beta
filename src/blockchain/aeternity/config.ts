@@ -2,7 +2,7 @@ import { Config } from '@jelly-swap/aeternity';
 import AppConfig from '../../../config';
 
 export default {
-    ...Config(3600),
+    ...Config(7200),
     providerUrl: 'https://sdk-mainnet.aepps.com/',
     internalUrl: 'https://sdk-mainnet.aepps.com/',
     compilerUrl: 'https://compiler.aepps.com',

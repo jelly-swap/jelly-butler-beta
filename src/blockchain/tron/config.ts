@@ -2,7 +2,7 @@ import { Config } from '@jelly-swap/tron';
 import AppConfig from '../../../config';
 
 export default {
-    ...Config(3600),
+    ...Config(7200),
     providerUrl: 'https://api.shasta.trongrid.io/',
     contractAddress: 'TPASPFmeWcPcF5CR668P5dgrzK99ELb3pV',
     REFUND_PERIOD: 20,

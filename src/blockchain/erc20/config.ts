@@ -27,7 +27,7 @@ const AddressToToken = {
 };
 
 export default token => {
-    const tokenConfig = Config(token, TokenConfig, AddressToToken, 3600);
+    const tokenConfig = Config(token, TokenConfig, AddressToToken, 7200);
     return {
         ...tokenConfig,
         providerUrl: 'https://mainnet.infura.io/v3/02cf6338c88b42f595f8fd946134fa4b',
