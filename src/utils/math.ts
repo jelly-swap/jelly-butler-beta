@@ -1,21 +1,19 @@
 import BigNumber from 'big.js';
 
 export const add = (a, b) => {
-    return BigNumber(a)
-        .add(b)
-        .toString();
+    return BigNumber(a).add(b).toString();
+};
+
+export const addBig = (a, b) => {
+    return BigNumber(a).add(b);
 };
 
 export const sub = (a, b) => {
-    return BigNumber(a)
-        .sub(b)
-        .toString();
+    return BigNumber(a).sub(b).toString();
 };
 
 export const mul = (a, b) => {
-    return BigNumber(a)
-        .times(b)
-        .toString();
+    return BigNumber(a).times(b).toString();
 };
 
 export const mulDecimals = (a, b) => {
@@ -30,7 +28,7 @@ export const pow = (a, b) => {
     return BigNumber(a).pow(b);
 };
 
-export const sqrt = a => {
+export const sqrt = (a) => {
     return BigNumber(a).sqrt();
 };
 
@@ -50,7 +48,7 @@ export const toFixed = (a, precision) => {
     return BigNumber(a).toFixed(precision);
 };
 
-export const toBigNumber = a => {
+export const toBigNumber = (a) => {
     return BigNumber(a);
 };
 

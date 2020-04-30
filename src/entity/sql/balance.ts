@@ -27,7 +27,7 @@ export default class Balance {
     TRX: number;
 
     @Column()
-    portfolioInDollars: number;
+    portfolioInUsdc: number;
 
     @UpdateDateColumn()
     createdAt: Date;
@@ -40,7 +40,7 @@ export default class Balance {
         WBTC: number,
         AE: number,
         TRX: number,
-        portfolioInDollars: number
+        portfolioInUsdc: number
     ) {
         this.BTC = BTC;
         this.ETH = ETH;
@@ -49,6 +49,6 @@ export default class Balance {
         this.WBTC = WBTC;
         this.AE = AE;
         this.TRX = TRX;
-        this.portfolioInDollars = portfolioInDollars;
+        this.portfolioInUsdc = portfolioInUsdc;
     }
 }

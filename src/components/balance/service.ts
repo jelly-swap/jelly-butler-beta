@@ -4,11 +4,12 @@ import Config from '../../blockchain/config';
 import Contracts from '../../blockchain/contracts';
 import Adapters from '../../blockchain/adapters';
 import Exchange from '../../exchange';
-import { add, toBigNumber, mul } from '../../utils/math';
+import { add, addBig, toBigNumber, mul } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
 import BalanceRepository from './repository';
 
 import { logError, logInfo } from '../../logger';
+import { safeAccess } from '../../utils';
 
 export class BalanceService {
     private static Instance: BalanceService;
@@ -51,32 +52,33 @@ export class BalanceService {
         }
     }
 
-    async saveBalanceHistory(){
-        try{
-            let jellyBalance;
-            let exchangeBalance;
+    async saveBalanceHistory() {
+        try {
             let resultBalance = {};
-            let portfolioInDollars;
-            for(let network in AppConfig.NETWORKS){
-                try{
-                    jellyBalance = this.balances[network]? toBigNumber(this.balances[network]['balance']) : 0;
-                    exchangeBalance = this.exchangeBalances[network]? toBigNumber(this.exchangeBalances[network]['balance']) : 0;
+            let portfolioInUsdc = toBigNumber(0);
+
+            for (let network in AppConfig.NETWORKS) {
+                try {
+                    const jellyBalance = safeAccess(this.balances, [network, 'balance']) || 0;
+
+                    const exchangeBalance = safeAccess(this.exchangeBalances, [network, 'balance']) || 0;
+
+                    const pairPrice = this.priceService.getPairPrice(network, 'USDC');
+
                     resultBalance[network] = add(jellyBalance, exchangeBalance);
-                    portfolioInDollars = add(
-                        portfolioInDollars || 0,
-                        mul(toBigNumber(this.priceService.getPairPrice(network,'USDC')), toBigNumber(resultBalance[network]))
-                    );
-                } catch(err) {
+
+                    portfolioInUsdc = addBig(portfolioInUsdc, mul(pairPrice, resultBalance[network]));
+                } catch (err) {
                     logInfo(`Balance History Service Warning - price missing ${err}`);
                 }
             }
 
-            resultBalance['portfolioInDollars'] = portfolioInDollars;
+            resultBalance = { ...resultBalance, portfolioInUsdc: portfolioInUsdc.toString() };
+
             this.balanceRepository.saveBalance(resultBalance);
-        } catch(err){
+        } catch (err) {
             logError(`Cannot save balance snapshot ${err}`);
         }
-
     }
 
     getBalances() {
