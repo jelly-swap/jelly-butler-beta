@@ -42,6 +42,10 @@ export default class Exchange implements IExchange {
         }
     }
 
+    async getBalance() {
+        return await this.exchange.getBalance();
+    }
+
     fixPrecision(quote, quantity) {
         const precision = safeAccess(AppConfig, [AppConfig.EXCHANGE.toUpperCase(), 'PRECISION', quote]);
 

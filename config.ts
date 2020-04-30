@@ -11,7 +11,7 @@ export default {
 
     // ================== Database configuration ==================
     //options: mongodb or sqlite
-    ACTIVE_DB: 'sqlite',
+    ACTIVE_DB: 'mongodb',
     MONGODB: {
         //Docker Setup
         URL: 'mongodb://db:27017/butler',
@@ -163,6 +163,10 @@ export default {
         USE_FALLBACK: false,
         FALLBACK: 'cryptocompare',
     },
+    // ================== Balance Snapshot ==================
+    // Saves you current balance on every x seconds. 
+    // You can track your portfolio P&L with this option
+    BALANCE_SNAPSHOT_INTERVAL: 3600,
 
     // ================== Email configuration ==================
     // If you enable this option, you will receive an email whenever you process a new swap/withdraw/refund.

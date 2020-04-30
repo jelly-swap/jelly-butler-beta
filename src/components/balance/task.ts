@@ -12,9 +12,14 @@ export default class BalanceTask {
 
     async start() {
         await this.balanceService.update();
+        await this.balanceService.saveBalanceHistory();
 
         setInterval(async () => {
             await this.balanceService.update();
         }, Config.PRICE.UPDATE_INTERVAL * 1000);
+
+        setInterval(async () => {
+            await this.balanceService.saveBalanceHistory();
+        }, Config.BALANCE_SNAPSHOT_INTERVAL * 1000);
     }
 }
