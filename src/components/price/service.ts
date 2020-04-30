@@ -5,6 +5,7 @@ import IPriceProvider from './provider/IPriceProvider';
 
 import { logError, logInfo } from '../../logger';
 import Config from '../../blockchain/config';
+import { safeAccess } from '../../utils';
 import { mul, sub, add, toBigNumber, mulDecimals, divDecimals, greaterThan } from '../../utils/math';
 
 export class PriceService {
@@ -56,25 +57,30 @@ export class PriceService {
     }
 
     isInputPriceValid(swap) {
-        const pairPrice = this.getPairPrice(swap.network, swap.outputNetwork);
+        try {
+            const pairPrice = this.getPairPrice(swap.network, swap.outputNetwork);
 
-        const inputDecimals = Config[swap.network].decimals;
-        const outputDecimals = Config[swap.outputNetwork].decimals;
+            const inputDecimals = Config[swap.network].decimals;
+            const outputDecimals = Config[swap.outputNetwork].decimals;
 
-        const priceInBig = mulDecimals(pairPrice, outputDecimals);
+            const priceInBig = mulDecimals(pairPrice, outputDecimals);
 
-        const outputAmount = mul(priceInBig, divDecimals(swap.inputAmount, inputDecimals));
+            const outputAmount = mul(priceInBig, divDecimals(swap.inputAmount, inputDecimals));
 
-        const requestedAmount = mul(
-            outputAmount,
-            add(
-                1,
-                AppConfig.PRICE.TOLERANCE[swap.network + '-' + swap.outputNetwork] || AppConfig.PRICE.TOLERANCE.DEFAULT
-            )
-        );
-        const outputAmountWithoutFee = sub(swap.outputAmount, mul(swap.outputAmount, AppConfig.FEE));
+            const requestedAmount = mul(
+                outputAmount,
+                add(
+                    1,
+                    AppConfig.PRICE.TOLERANCE[swap.network + '-' + swap.outputNetwork] ||
+                        AppConfig.PRICE.TOLERANCE.DEFAULT
+                )
+            );
+            const outputAmountWithoutFee = sub(swap.outputAmount, mul(swap.outputAmount, AppConfig.FEE));
 
-        return greaterThan(sub(outputAmountWithoutFee, requestedAmount), 0);
+            return greaterThan(sub(outputAmountWithoutFee, requestedAmount), 0);
+        } catch (err) {
+            return false;
+        }
     }
 
     getPrices() {
@@ -88,11 +94,13 @@ export class PriceService {
     getPairPrice(base: string, quote: string) {
         const prices = this.getPrices();
 
-        if (prices[base] && prices[base][quote]) {
-            return toBigNumber(prices[base][quote]).toString();
-        }
+        const price = prices[`${base}-${quote}`];
 
-        return 0;
+        if (price) {
+            return toBigNumber(price).toString();
+        } else {
+            throw new Error('INVALID_PAIR');
+        }
     }
 
     setPrices(prices) {
@@ -102,7 +110,7 @@ export class PriceService {
     setPricesWithSpreadAndFee(prices) {
         const pricesWithSpread = {};
 
-        Object.keys(prices).forEach(pair => {
+        Object.keys(prices).forEach((pair) => {
             pricesWithSpread[pair] = mul(
                 prices[pair],
                 sub(1, add(AppConfig.PRICE.SPREAD[pair] || AppConfig.PRICE.SPREAD.DEFAULT, AppConfig.FEE))
