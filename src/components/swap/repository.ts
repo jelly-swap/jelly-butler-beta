@@ -2,9 +2,20 @@ import AppConfig from '../../../config';
 import Repository from '../../repository';
 
 import { logError } from '../../logger';
+import { safeAccess } from '../../utils';
 
 export default class SwapRepository {
     private swapRepository = Repository[AppConfig.ACTIVE_DB]['swap']();
+
+    constructor() {
+        const getSwapRepository = safeAccess(Repository, [AppConfig.ACTIVE_DB, 'swap']);
+
+        if (!getSwapRepository) {
+            throw new Error('SWAP_REPOSITORY_MISSING');
+        } else {
+            this.swapRepository = getSwapRepository();
+        }
+    }
 
     public async create(swap: any) {
         try {
