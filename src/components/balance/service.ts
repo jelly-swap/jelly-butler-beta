@@ -78,7 +78,7 @@ export class BalanceService {
             }
 
             balances.push({
-                assetName: 'totalValueInUsdc',
+                assetName: 'TOTAL_USDC',
                 amount: portfolioInUsdcTotal.toString(),
                 valueInUsdc: portfolioInUsdcTotal.toString(),
             });
