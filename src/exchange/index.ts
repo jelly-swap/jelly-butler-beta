@@ -42,7 +42,7 @@ export default class Exchange implements IExchange {
         }
     }
 
-    async getBalance(){
+    async getBalance() {
         return await this.exchange.getBalance();
     }
 
