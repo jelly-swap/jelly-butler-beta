@@ -5,7 +5,6 @@ import IPriceProvider from './provider/IPriceProvider';
 
 import { logError, logInfo } from '../../logger';
 import Config from '../../blockchain/config';
-import { safeAccess } from '../../utils';
 import { mul, sub, add, toBigNumber, mulDecimals, divDecimals, greaterThan } from '../../utils/math';
 
 export class PriceService {
