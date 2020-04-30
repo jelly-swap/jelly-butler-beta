@@ -35,7 +35,6 @@ export default {
         WBTC: false,
         BTC: false,
         AE: false,
-        TRX: false,
     },
 
     // For every enabled network, you should specify an address and a secret
@@ -91,12 +90,6 @@ export default {
             // Ethereum Private Key
             SECRET: '',
         },
-
-        TRX: {
-            ADDRESS: '',
-            // Tron Private Key
-            SECRET: '',
-        },
     },
 
     // The amount of fee that is charged by JellySwap protocol.
@@ -141,14 +134,13 @@ export default {
 
     // ================== Price configuration ==================
     PRICE: {
-        COINS: ['USDT', 'BTC', 'ETH', 'TRX', 'DAI', 'AE', 'USDC'],
+        COINS: ['USDT', 'BTC', 'ETH', 'DAI', 'AE', 'USDC'],
         SPREAD: {
             DEFAULT: 0.0091,
             'AE-ETH': 0.08,
             'ETH-AE': 0.08,
             'ETH-BTC': 0.5,
             'BTC-ETH': 0.5,
-            'ETH-TRX': 0.7,
         },
         TOLERANCE: {
             DEFAULT: 0.001,
@@ -156,7 +148,6 @@ export default {
             'ETH-AE': 0.1,
             'ETH-BTC': 0.3,
             'BTC-ETH': 0.3,
-            'ETH-TRX': 0.3,
         },
         PROVIDER: 'cryptocompare',
         UPDATE_INTERVAL: 30,
@@ -164,7 +155,7 @@ export default {
         FALLBACK: 'cryptocompare',
     },
     // ================== Balance Snapshot ==================
-    // Saves you current balance on every x seconds. 
+    // Saves you current balance on every x seconds.
     // You can track your portfolio P&L with this option
     BALANCE_SNAPSHOT_INTERVAL: 3600,
 
@@ -200,7 +191,6 @@ export default {
         },
         PRECISION: {
             ETH: 3,
-            TRX: 0,
             BTC: 4,
             USDT: 4,
             AE: 1,
