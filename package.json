@@ -22,7 +22,6 @@
         "@jelly-swap/btc-web-wallet": "0.1.40",
         "@jelly-swap/erc20": "0.1.40",
         "@jelly-swap/ethereum": "0.1.40",
-        "@jelly-swap/tron": "0.1.40",
         "@jelly-swap/utils": "0.1.40",
         "axios": "^0.19.2",
         "big.js": "^5.2.2",

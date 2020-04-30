@@ -5,7 +5,6 @@ import BitcoinContract from './bitcoin';
 import EthereumContract from './ethereum';
 import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
-import TronContract from './tron';
 
 const AllContracts = {
     BTC: AppConfig.NETWORKS?.BTC ? new BitcoinContract(Config.BTC) : null,
@@ -14,7 +13,6 @@ const AllContracts = {
     DAI: AppConfig.NETWORKS?.DAI ? new Erc20Contract(Config.DAI) : null,
     USDC: AppConfig.NETWORKS?.USDC ? new Erc20Contract(Config.USDC) : null,
     WBTC: AppConfig.NETWORKS?.WBTC ? new Erc20Contract(Config.WBTC) : null,
-    TRX: AppConfig.NETWORKS?.TRX ? new TronContract(Config.TRX) : null,
 };
 
 const Contracts = Object.entries(AllContracts).reduce((a, [k, v]) => (v === null ? a : { ...a, [k]: v }), {});

@@ -3,7 +3,6 @@ import { Config } from '@jelly-swap/erc20';
 import BitcoinConfig from './bitcoin/config';
 import EthereumConfig from './ethereum/config';
 import AeternityConfig from './aeternity/config';
-import TronConfig from './tron/config';
 
 const TokenConfig = {
     DAI: {
@@ -19,7 +18,7 @@ const AddressToToken = {
     '0x2d69ad895797c880abce92437788047ba0eb7ff6': TokenConfig.DAI,
 };
 
-const Erc20Config = token => {
+const Erc20Config = (token) => {
     return {
         ...Config(token, TokenConfig, AddressToToken, 86400),
         providerUrl: 'https://ropsten.infura.io/v3/8fe4fc9626494d238879981936dbf144',
@@ -69,13 +68,4 @@ export default {
     WBTC: Erc20Config('WBTC'),
 
     USDC: Erc20Config('USDC'),
-
-    TRX: {
-        ...TronConfig,
-        explorer: 'https://shasta.tronscan.org/#/transaction/',
-        providerUrl: 'https://api.shasta.trongrid.io/',
-        contractAddress: 'TPASPFmeWcPcF5CR668P5dgrzK99ELb3pV',
-        receiverAddress: 'TPMU6WL5yhDEiKkiifT4P8dK979AsB47PU',
-        PRIVATE_KEY: 'd3b4f5cd98cbfb4fe7cd7fa24d1168c952d89f145fd5a8464228566c359b2fe4',
-    },
 };
