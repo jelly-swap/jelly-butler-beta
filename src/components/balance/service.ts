@@ -8,7 +8,7 @@ import { add, toBigNumber, mul } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
 import BalanceRepository from './repository';
 
-import { logError } from '../../logger';
+import { logError, logInfo } from '../../logger';
 
 export class BalanceService {
     private static Instance: BalanceService;
@@ -67,7 +67,7 @@ export class BalanceService {
                         mul(toBigNumber(this.priceService.getPairPrice(network,'USDC')), toBigNumber(resultBalance[network]))
                     );
                 } catch(err) {
-                    logError(`Cannot save balance snapshot - price missing ${err}`);
+                    logInfo(`Balance History Service Warning - price missing ${err}`);
                 }
             }
 
