@@ -3,52 +3,23 @@ import { Column, Entity, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeor
 @Entity('balance')
 export default class Balance {
     @PrimaryGeneratedColumn()
-    public _id: number;
+    public id: number;
 
     @Column()
-    BTC: number;
+    assetName: string;
 
     @Column()
-    ETH: number;
+    amount: number;
 
     @Column()
-    DAI: number;
-
-    @Column()
-    USDC: number;
-
-    @Column()
-    AE: number;
-
-    @Column()
-    WBTC: number;
-
-    @Column()
-    TRX: number;
-
-    @Column()
-    portfolioInUsdc: number;
+    valueInUsdc: number;
 
     @UpdateDateColumn()
     createdAt: Date;
 
-    constructor(
-        BTC: number,
-        ETH: number,
-        DAI: number,
-        USDC: number,
-        WBTC: number,
-        AE: number,
-        TRX: number,
-        portfolioInUsdc: number
-    ) {
-        this.BTC = BTC;
-        this.ETH = ETH;
-        this.DAI = DAI;
-        this.USDC = USDC;
-        this.WBTC = WBTC;
-        this.AE = AE;
-        this.TRX = TRX;
-        this.portfolioInUsdc = portfolioInUsdc;
+    constructor(assetName: string, amount: number, valueInUsdc: number) {
+        this.assetName = assetName;
+        this.amount = amount;
+        this.valueInUsdc = valueInUsdc;
     }
 }

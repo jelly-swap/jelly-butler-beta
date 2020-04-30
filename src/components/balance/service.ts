@@ -54,8 +54,8 @@ export class BalanceService {
 
     async saveBalanceHistory() {
         try {
-            let resultBalance = {};
-            let portfolioInUsdc = toBigNumber(0);
+            let portfolioInUsdcTotal = toBigNumber(0);
+            const balances = [];
 
             for (let network in AppConfig.NETWORKS) {
                 try {
@@ -65,17 +65,25 @@ export class BalanceService {
 
                     const pairPrice = this.priceService.getPairPrice(network, 'USDC');
 
-                    resultBalance[network] = add(jellyBalance, exchangeBalance);
+                    const amount = add(jellyBalance, exchangeBalance);
 
-                    portfolioInUsdc = addBig(portfolioInUsdc, mul(pairPrice, resultBalance[network]));
+                    const valueInUsdc = mul(pairPrice, amount);
+
+                    balances.push({ assetName: network, amount, valueInUsdc });
+
+                    portfolioInUsdcTotal = addBig(portfolioInUsdcTotal, valueInUsdc);
                 } catch (err) {
                     logInfo(`Balance History Service Warning - price missing ${err}`);
                 }
             }
 
-            resultBalance = { ...resultBalance, portfolioInUsdc: portfolioInUsdc.toString() };
+            balances.push({
+                assetName: 'totalValueInUsdc',
+                amount: portfolioInUsdcTotal.toString(),
+                valueInUsdc: portfolioInUsdcTotal.toString(),
+            });
 
-            this.balanceRepository.saveBalance(resultBalance);
+            this.balanceRepository.saveBalance(balances);
         } catch (err) {
             logError(`Cannot save balance snapshot ${err}`);
         }

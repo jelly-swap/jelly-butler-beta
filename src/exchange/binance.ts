@@ -108,7 +108,7 @@ export default class BinanceExchange implements IExchange {
                     } else {
                         for (let network in AppConfig.NETWORKS) {
                             if (AppConfig.NETWORKS[network] && balances[network]) {
-                                const available = safeAccess(balances, [network, 'avalable']) || 0;
+                                const available = safeAccess(balances, [network, 'available']) || 0;
                                 const onOrder = safeAccess(balances, [network, 'onOrder']) || 0;
                                 filteredBalances[network] = { balance: add(available, onOrder) };
                             }
