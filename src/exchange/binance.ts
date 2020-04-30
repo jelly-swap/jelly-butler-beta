@@ -3,8 +3,9 @@ import Config from '../../config';
 import * as Binance from 'node-binance-api';
 
 import IExchange from './IExchange';
-import { toFixed, div } from '../utils/math';
+import { toFixed, div, add, toBigNumber } from '../utils/math';
 import { logInfo, logError } from '../logger';
+import AppConfig from '../../config';
 
 export default class BinanceExchange implements IExchange {
     private static Instance: BinanceExchange;
@@ -90,7 +91,36 @@ export default class BinanceExchange implements IExchange {
 
             return true;
         } catch (err) {
-            logError('BINANCE_ERROR', err);
+            logError('BINANCE_PLACE_ORDER_ERROR', err);
+            return false;
+        }
+    }
+
+    async getBalance() {
+        try{
+            const filteredBalances = {};
+            return new Promise((resolve, reject) =>{
+                this.binance.balance((error, balances) => {
+                    if (error){
+                        reject(error);
+                    }
+                    else{
+                        for( let network in AppConfig.NETWORKS ){
+                            if(AppConfig.NETWORKS[network] && balances[network]){
+                                filteredBalances[network] = {};
+                                filteredBalances[network]['balance'] = add(
+                                        toBigNumber(balances[network]['available']),
+                                        toBigNumber((balances[network]['onOrder']))
+                                );
+                            }
+                        }
+                        resolve(filteredBalances);
+                    }
+                });
+            })
+        }
+        catch(err){
+            logError('BINANCE_GET_BALANCE_ERROR', err);
             return false;
         }
     }

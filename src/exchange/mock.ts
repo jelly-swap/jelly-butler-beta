@@ -6,4 +6,8 @@ export default class MockExchange implements IExchange {
     async placeOrder(__order) {
         return false;
     }
+
+    async getBalance() {
+        return {};
+    }
 }
