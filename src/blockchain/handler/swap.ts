@@ -80,10 +80,12 @@ export default class SwapHandler {
             try {
                 const swaps = await Contracts[network].getPast('new');
 
-                for (const swap of swaps) {
-                    // if swap is Active
-                    if (equal(swap.status, 1)) {
-                        emitter.emit('NEW_CONTRACT', swap);
+                if (swaps) {
+                    for (const swap of swaps) {
+                        // if swap is Active
+                        if (equal(swap.status, 1)) {
+                            emitter.emit('NEW_CONTRACT', swap);
+                        }
                     }
                 }
             } catch (err) {
