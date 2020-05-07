@@ -1,12 +1,13 @@
-import Config from '../../blockchain/config';
+import getBlockchainConfig from '../../blockchain/config';
 
 import { divDecimals } from '../../utils/math';
 
-export default swap => {
+export default (swap) => {
+    const blockchainConfig = getBlockchainConfig();
     const { network, inputAmount, secret, id, hashLock, transactionHash } = swap;
 
-    const amount = divDecimals(inputAmount, Config[network].decimals).toString();
-    const tx = Config[network].explorer + transactionHash;
+    const amount = divDecimals(inputAmount, blockchainConfig[network].decimals).toString();
+    const tx = blockchainConfig[network].explorer + transactionHash;
 
     const json = {
         tx,
@@ -22,7 +23,7 @@ export default swap => {
     return { json, html };
 };
 
-const getContent = withdraw => {
+const getContent = (withdraw) => {
     return `<html>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

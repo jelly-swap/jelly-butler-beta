@@ -1,8 +1,9 @@
-import Config from '../../blockchain/config';
+import getBlockchainConfig from '../../blockchain/config';
 
 import { divDecimals } from '../../utils/math';
 
-export default swap => {
+export default (swap) => {
+    const blockchainConfig = getBlockchainConfig();
     const {
         network,
         outputNetwork,
@@ -15,9 +16,9 @@ export default swap => {
         expiration,
     } = swap;
 
-    const sendAmount = divDecimals(inputAmount, Config[network].decimals).toString();
-    const receiveAmount = divDecimals(outputAmount, Config[outputNetwork].decimals).toString();
-    const tx = Config[network].explorer + transactionHash;
+    const sendAmount = divDecimals(inputAmount, blockchainConfig[network].decimals).toString();
+    const receiveAmount = divDecimals(outputAmount, blockchainConfig[outputNetwork].decimals).toString();
+    const tx = blockchainConfig[network].explorer + transactionHash;
     const expire = new Date(expiration * 1000).toUTCString();
 
     const json = {
@@ -37,7 +38,7 @@ export default swap => {
     return { json, html };
 };
 
-const getContent = swap => {
+const getContent = (swap) => {
     return `<html>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
