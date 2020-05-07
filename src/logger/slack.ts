@@ -1,11 +1,13 @@
 import * as SlackHook from 'winston-slack-webhook-transport';
-import Config from '../../config';
+import UserConfig from '../config';
 
 export const getSlackTransport = () => {
-    if (Config.SLACK_WEBHOOK_URL) {
+    const userConfig = new UserConfig().getUserConfig();
+
+    if (userConfig.NOTIFICATIONS.SLACK.ENABLED) {
         return new SlackHook({
             level: 'error',
-            webhookUrl: Config.SLACK_WEBHOOK_URL,
+            webhookUrl: userConfig.NOTIFICATIONS.SLACK.WEBHOOK_URL,
         });
     }
 };
