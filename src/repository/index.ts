@@ -9,13 +9,13 @@ import Balance from '../entity/sql/balance';
 import MongoBalance from '../entity/mongo/balance';
 
 export default {
-    mongodb: {
+    MONGODB: {
         swap: () => getMongoRepository(MongoSwap),
         withdraw: () => getMongoRepository(MongoWithdraw),
         refund: () => getMongoRepository(MongoRefund),
         balance: () => getMongoRepository(MongoBalance),
     },
-    sqlite: {
+    SQLITE: {
         swap: () => getRepository(Swap),
         withdraw: () => getRepository(Withdraw),
         refund: () => getRepository(Refund),
