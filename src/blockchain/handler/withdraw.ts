@@ -1,4 +1,4 @@
-import Contracts from '../contracts';
+import getContracts from '../contracts';
 import { sleep } from '../utils';
 
 import { logInfo, logError } from '../../logger';
@@ -19,10 +19,13 @@ export default class WithdrawHandler {
     private withdrawService: WithdrawService;
     private emailService: EmailService;
 
+    private contracts: any;
+
     constructor() {
         this.swapService = new SwapService();
         this.withdrawService = new WithdrawService();
         this.emailService = new EmailService();
+        this.contracts = getContracts();
     }
 
     async onWithdraw(withdraw, maxTries = RETRY_COUNT) {
@@ -31,7 +34,7 @@ export default class WithdrawHandler {
         const swap = await this.swapService.findInputSwapByOutputSwapIdAndOutputNetwork(withdraw.id, withdraw.network);
 
         if (swap) {
-            const contract = Contracts[swap.network];
+            const contract = this.contracts[swap.network];
             logInfo('WITHDRAW_SWAP_FOUND', swap);
 
             const valid = await validateWithdraw(withdraw);
@@ -77,10 +80,10 @@ export default class WithdrawHandler {
 
             const emitter = new Emitter();
 
-            for (const network of Object.keys(Contracts)) {
-                const contract = Contracts[network];
+            for (const network of Object.keys(this.contracts)) {
+                const contract = this.contracts[network];
                 const withdraws = await contract.getPast('withdraw');
-                const ids = withdraws.map(w => w.id);
+                const ids = withdraws.map((w) => w.id);
 
                 try {
                     const statuses = await contract.getStatus(ids);

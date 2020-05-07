@@ -1,5 +1,5 @@
-import Adapters from '../adapters';
-import Contracts from '../contracts';
+import getAdapters from '../adapters';
+import getContracts from '../contracts';
 import { isOutputSwapValid, isInputSwapExpirationValid } from '../validator';
 import { sleep } from '../utils';
 
@@ -19,10 +19,15 @@ export default class SwapHandler {
     private emailService: EmailService;
     private exchange: Exchange;
 
+    private contracts: any;
+    private adapters: any;
+
     constructor() {
         this.swapService = new SwapService();
         this.emailService = new EmailService();
         this.exchange = new Exchange();
+        this.contracts = getContracts();
+        this.adapters = getAdapters();
     }
 
     async onSwap(inputSwap, maxTries = RETRY_COUNT) {
@@ -31,8 +36,8 @@ export default class SwapHandler {
         const isProcessed = await this.swapService.findByIdAndNetwork(inputSwap.id, inputSwap.network);
 
         if (!isProcessed) {
-            const adapter = Adapters[inputSwap.outputNetwork];
-            const contract = Contracts[inputSwap.outputNetwork];
+            const adapter = this.adapters[inputSwap.outputNetwork];
+            const contract = this.contracts[inputSwap.outputNetwork];
 
             const outputSwap = adapter.createSwapFromInput(inputSwap);
 
@@ -76,9 +81,9 @@ export default class SwapHandler {
 
         const emitter = new Emitter();
 
-        for (const network of Object.keys(Contracts)) {
+        for (const network of Object.keys(this.contracts)) {
             try {
-                const swaps = await Contracts[network].getPast('new');
+                const swaps = await this.contracts[network].getPast('new');
 
                 if (swaps) {
                     for (const swap of swaps) {

@@ -12,8 +12,8 @@ export const startHandlers = async () => {
     const withdrawHandler = new WithdrawHandler();
     const refundHandler = new RefundHandler();
 
-    emitter.on('NEW_CONTRACT', async swap => await swapHandler.onSwap(swap));
-    emitter.on('WITHDRAW', async withdraw => await withdrawHandler.onWithdraw(withdraw));
+    emitter.on('NEW_CONTRACT', async (swap) => await swapHandler.onSwap(swap));
+    emitter.on('WITHDRAW', async (withdraw) => await withdrawHandler.onWithdraw(withdraw));
 
     setInterval(async () => {
         await swapHandler.processOldSwaps();
