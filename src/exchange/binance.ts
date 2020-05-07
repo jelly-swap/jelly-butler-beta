@@ -3,28 +3,94 @@ import Config from '../../config';
 import * as Binance from 'node-binance-api';
 
 import IExchange from './IExchange';
-import { toFixed, div, add, toBigNumber } from '../utils/math';
+import { div, add, toFixed, divDecimals } from '../utils/math';
 import { logInfo, logError } from '../logger';
 import AppConfig from '../../config';
 import { safeAccess } from '../utils';
+import { IUserConfig } from '../types/UserConfig';
+import UserConfig from '../config';
 
 export default class BinanceExchange implements IExchange {
     private static Instance: BinanceExchange;
 
     private binance: any;
 
+    private userConfig: IUserConfig;
+
     constructor() {
         if (BinanceExchange.Instance) {
             return BinanceExchange.Instance;
         }
 
+        this.userConfig = new UserConfig().getUserConfig();
+
         this.binance = Binance().options({
-            APIKEY: Config.BINANCE.API_KEY,
-            APISECRET: Config.BINANCE.SECRET_KEY,
+            APIKEY: this.userConfig.EXCHANGE.API_KEY,
+            APISECRET: this.userConfig.EXCHANGE.SECRET_KEY,
             useServerTime: true,
         });
 
         BinanceExchange.Instance = this;
+    }
+
+    async placeOrder(order) {
+        try {
+            const exchangeOrder = this.formatOrder(order);
+
+            if (!exchangeOrder) {
+                logInfo(`BINANCE_INVALID_PAIR ${order.quote + order.base}`);
+                return;
+            }
+
+            const { type, pair, quantity } = exchangeOrder;
+
+            await this.binance[type](pair, quantity, (err, response) => {
+                if (err) {
+                    logError('BINANCE_ORDER_PLACE_ERROR', err);
+                } else {
+                    logInfo(`BINANCE_ORDER_PLACED ${pair} ${quantity} ${response.orderId}`);
+                }
+            });
+
+            return true;
+        } catch (err) {
+            logError('BINANCE_PLACE_ORDER_ERROR', err);
+            return false;
+        }
+    }
+
+    async getBalance() {
+        try {
+            const filteredBalances = {};
+
+            return new Promise((resolve, reject) => {
+                this.binance.balance((error, balances) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        for (const network in AppConfig.NETWORKS) {
+                            if (balances[network]) {
+                                const available = safeAccess(balances, [network, 'available']) || 0;
+                                const onOrder = safeAccess(balances, [network, 'onOrder']) || 0;
+                                filteredBalances[network] = { balance: add(available, onOrder) };
+                            }
+                        }
+                        resolve(filteredBalances);
+                    }
+                });
+            });
+        } catch (err) {
+            logError('BINANCE_GET_BALANCE_ERROR', err);
+            return false;
+        }
+    }
+
+    fixPrecision(quote, quantity) {
+        const precision = safeAccess(AppConfig, ['BINANCE', 'PRECISION', quote]);
+
+        if (precision) {
+            return toFixed(divDecimals(quantity, Config[quote].decimals), precision);
+        }
     }
 
     async getPrices(quotes, bases?) {
@@ -68,58 +134,6 @@ export default class BinanceExchange implements IExchange {
             });
         } catch (err) {
             throw new Error(err);
-        }
-    }
-
-    async placeOrder(order) {
-        try {
-            const exchangeOrder = this.formatOrder(order);
-
-            if (!exchangeOrder) {
-                logInfo(`BINANCE_INVALID_PAIR ${order.quote + order.base}`);
-                return;
-            }
-
-            const { type, pair, quantity } = exchangeOrder;
-
-            await this.binance[type](pair, quantity, (err, response) => {
-                if (err) {
-                    logError('BINANCE_ORDER_PLACE_ERROR', err);
-                } else {
-                    logInfo(`BINANCE_ORDER_PLACED ${pair} ${quantity} ${response.orderId}`);
-                }
-            });
-
-            return true;
-        } catch (err) {
-            logError('BINANCE_PLACE_ORDER_ERROR', err);
-            return false;
-        }
-    }
-
-    async getBalance() {
-        try {
-            const filteredBalances = {};
-
-            return new Promise((resolve, reject) => {
-                this.binance.balance((error, balances) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        for (let network in AppConfig.NETWORKS) {
-                            if (AppConfig.NETWORKS[network] && balances[network]) {
-                                const available = safeAccess(balances, [network, 'available']) || 0;
-                                const onOrder = safeAccess(balances, [network, 'onOrder']) || 0;
-                                filteredBalances[network] = { balance: add(available, onOrder) };
-                            }
-                        }
-                        resolve(filteredBalances);
-                    }
-                });
-            });
-        } catch (err) {
-            logError('BINANCE_GET_BALANCE_ERROR', err);
-            return false;
         }
     }
 

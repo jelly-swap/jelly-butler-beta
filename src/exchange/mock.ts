@@ -10,4 +10,6 @@ export default class MockExchange implements IExchange {
     async getBalance() {
         return {};
     }
+
+    fixPrecision(__quote, __quantity) {}
 }
