@@ -132,7 +132,7 @@ export default {
 
         MONGODB: {
             //Docker Setup
-            URL: 'mongodb://localhost:27017/butler',
+            URL: 'mongodb://db:27017/butler',
             AUTH: 'admin',
             MONGO_PASSWORD: process.env.MONGO_PASSWORD,
 
