@@ -16,8 +16,8 @@ export default () => {
             BTC: Config.BTC && new BitcoinContract(Config.BTC),
             AE: Config.AE && new AeternityContract(Config.AE),
             DAI: Config.DAI && new Erc20Contract(Config.DAI),
-            USDC: Config.DAI && new Erc20Contract(Config.USDC),
-            WBTC: Config.DAI && new Erc20Contract(Config.WBTC),
+            USDC: Config.USDC && new Erc20Contract(Config.USDC),
+            WBTC: Config.WBTC && new Erc20Contract(Config.WBTC),
         };
 
         Contracts = Object.entries(AllContracts).reduce(

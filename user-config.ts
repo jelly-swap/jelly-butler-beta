@@ -63,11 +63,8 @@ export default {
 
         AE: {
             ADDRESS: '',
-            // Aeternity Key Pair
-            SECRET: {
-                publicKey: '',
-                secretKey: '',
-            },
+            // Aeternity Private key
+            SECRET: '',
         },
 
         //Use one common ETH address for all ERC20 tokens

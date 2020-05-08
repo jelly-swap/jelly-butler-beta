@@ -28,8 +28,8 @@ export default () => {
             ...config,
             receiverAddress: address,
             KEY_PAIR: {
-                publicKey: userConfig.WALLETS['AE'].ADDRESS,
-                secretKey: userConfig.WALLETS['AE'].SECRET,
+                publicKey: address,
+                secretKey: secret,
             },
         };
     } else {
