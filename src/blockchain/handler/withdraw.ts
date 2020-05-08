@@ -80,7 +80,7 @@ export default class WithdrawHandler {
 
             const emitter = new Emitter();
 
-            for (const network of Object.keys(this.contracts)) {
+            for (const network in this.contracts) {
                 const contract = this.contracts[network];
                 const withdraws = await contract.getPast('withdraw');
                 const ids = withdraws.map((w) => w.id);

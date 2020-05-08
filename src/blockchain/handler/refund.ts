@@ -5,7 +5,7 @@ export default class RefundHandler {
     async processRefunds() {
         const contracts = getContracts();
 
-        for (const network of Object.keys(contracts)) {
+        for (const network in contracts) {
             if (!SECONDARY_NETWORKS[network]) {
                 await contracts[network].processRefunds();
             }

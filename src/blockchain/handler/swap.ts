@@ -81,7 +81,7 @@ export default class SwapHandler {
 
         const emitter = new Emitter();
 
-        for (const network of Object.keys(this.contracts)) {
+        for (const network in this.contracts) {
             try {
                 const swaps = await this.contracts[network].getPast('new');
 
