@@ -7,7 +7,6 @@ import { div, add, toFixed, divDecimals } from '../utils/math';
 import { logInfo, logError } from '../logger';
 import AppConfig from '../../config';
 import { safeAccess } from '../utils';
-import { IUserConfig } from '../types/UserConfig';
 import UserConfig from '../config';
 
 export default class BinanceExchange implements IExchange {
@@ -15,18 +14,17 @@ export default class BinanceExchange implements IExchange {
 
     private binance: any;
 
-    private userConfig: IUserConfig;
-
     constructor() {
         if (BinanceExchange.Instance) {
             return BinanceExchange.Instance;
         }
 
-        this.userConfig = new UserConfig().getUserConfig();
+        const userConfig = new UserConfig().getUserConfig();
 
+        safeAccess;
         this.binance = Binance().options({
-            APIKEY: this.userConfig.EXCHANGE.API_KEY,
-            APISECRET: this.userConfig.EXCHANGE.SECRET_KEY,
+            APIKEY: safeAccess(userConfig, ['EXCHANGE', 'API_KEY']),
+            APISECRET: safeAccess(userConfig, ['EXCHANGE', 'SECRET_KEY']),
             useServerTime: true,
         });
 

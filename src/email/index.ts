@@ -6,6 +6,7 @@ import RefundEmail from './templates/refund';
 import { logError, logInfo } from '../logger';
 import { IUserConfig } from '../types/UserConfig';
 import UserConfig from '../config';
+import { safeAccess } from '../utils';
 
 export default class EmailService {
     private transport;
@@ -22,10 +23,10 @@ export default class EmailService {
         this.userConfig = new UserConfig().getUserConfig();
 
         this.transport = createTransport({
-            service: this.userConfig.NOTIFICATIONS.EMAIL.SERVICE,
+            service: safeAccess(this.userConfig, ['NOTIFICATIONS', 'EMAIL', 'SERVICE']),
             auth: {
-                user: this.userConfig.NOTIFICATIONS.EMAIL.USERNAME,
-                pass: this.userConfig.NOTIFICATIONS.EMAIL.PASSWORD,
+                user: safeAccess(this.userConfig, ['NOTIFICATIONS', 'EMAIL', 'USERNAME']),
+                pass: safeAccess(this.userConfig, ['NOTIFICATIONS', 'EMAIL', 'PASSWORD']),
             },
         });
 
@@ -61,9 +62,9 @@ export default class EmailService {
 
     private async _send(title, content) {
         const mailOptions = {
-            from: this.userConfig.NOTIFICATIONS.EMAIL.FROM,
-            to: this.userConfig.NOTIFICATIONS.EMAIL.TO,
-            subject: `${this.userConfig.NOTIFICATIONS.EMAIL.SUBJECT} ${title}`,
+            from: safeAccess(this.userConfig, ['NOTIFICATIONS', 'EMAIL', 'FROM']),
+            to: safeAccess(this.userConfig, ['NOTIFICATIONS', 'EMAIL', 'TO']),
+            subject: `${safeAccess(this.userConfig, ['NOTIFICATIONS', 'EMAIL', 'SUBJECT'])} ${title}`,
             text: JSON.stringify(content.json),
             html: content.html,
         };
