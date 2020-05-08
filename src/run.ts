@@ -38,7 +38,6 @@ export const run = (config = userConfig) => {
             await startEventListener();
         })
         .catch((error) => {
-            console.log(error);
             logError(`ERROR: ${error}`);
         });
 };

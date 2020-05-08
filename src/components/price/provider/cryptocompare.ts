@@ -31,7 +31,6 @@ export default class CryptoCompareProvider implements IPriceProvider {
 
             return prices;
         } catch (err) {
-            console.log(err);
             throw new Error(err);
         }
     }
