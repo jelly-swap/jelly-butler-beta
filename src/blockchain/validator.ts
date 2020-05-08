@@ -2,8 +2,9 @@ import * as moment from 'moment';
 
 import Validators from './validators';
 import Config from './config';
+import AppConfig from '../../config';
 
-import { greaterThan, sub } from '../utils/math';
+import { greaterThan, sub, lessThanOrEqual, mul } from '../utils/math';
 import { logError } from '../logger';
 import { PriceService } from '../components/price/service';
 import UserConfig from '../config';
@@ -14,40 +15,106 @@ export const isInputSwapExpirationValid = (swap) => {
     const result = greaterThan(sub(swap.expiration, now), Config[swap.network].VALID_EXPIRATION);
 
     if (!result) {
-        logError(`INVALID_EXPIRATION`, swap);
+        logError(`INPUT_INVALID_EXPIRATION`, swap);
     }
 
     return result;
 };
 
-export const isOutputSwapValid = async (swap) => {
-    const networkValidation = await Validators[swap.network].validateNewContract(swap);
+export const isOutputSwapExpirationValid = (swap) => {
+    const now = getCurrentDate(Config[swap.network].unix);
+    const result = lessThanOrEqual(sub(swap.expiration, now), Config[swap.network].expiration);
 
-    if (!networkValidation) {
-        logError(`CHAIN_VALIDATION_FAILED`, swap);
+    if (!result) {
+        logError(`OUTPUT_INVALID_EXPIRATION`, swap);
+    }
+
+    return result;
+};
+
+export const isInputSwapValid = async (swap) => {
+    const priceService = new PriceService();
+    const inputNetworkValidation = await Validators[swap.network].validateNewContract(swap);
+    const outputNetworkValidation = await Validators[swap.outputNetwork].validateNewContract(swap);
+
+    //Expiration time check
+    if (!isInputSwapExpirationValid(swap)) {
+        logError(`INPUT_INVALID_EXPIRATION`, swap);
+        return false;
+    }
+
+    //Output network check
+    if (!outputNetworkValidation) {
+        logError(`INPUT_SECONDARY_CHAIN_VALIDATION_FAILED`, swap);
+        return false;
+    }
+
+    //Input network check
+    if (!inputNetworkValidation) {
+        logError(`INPUT_CHAIN_VALIDATION_FAILED`, swap);
+        return false;
+    }
+
+    //Receiver address check
+    if (swap.receiver.toLowerCase() != safeAccess(Config, [swap.network, 'receiverAddress']).toLowerCase()) {
+        logError(`INPUT_INVALID_RECEIVER`, swap);
+        return false;
+    }
+
+    //input price validation
+    if(!priceService.isInputPriceValid(swap)){
+        logError(`INPUT_INVALID_PRICE`, swap);
+        return false;
+    }
+
+    return true;
+};
+
+export const isOutputSwapValid = async (swap, takerDesiredAmount) => {
+    const inputNetworkValidation = await Validators[swap.network].validateNewContract(swap);
+    const outputNetworkValidation = await Validators[swap.outputNetwork].validateNewContract(swap);
+
+    //Input network check
+    if (!inputNetworkValidation) {
+        logError(`INPUT_CHAIN_VALIDATION_FAILED`, swap);
+        return false;
+    }
+
+    //Output network check
+    if (!outputNetworkValidation) {
+        logError(`OUTPUT_CHAIN_VALIDATION_FAILED`, swap);
         return false;
     }
 
     //Add exception for ERC20 Tokens
     if (swap.outputAddress.toLowerCase() === Config[swap.network].receiverAddress.toLowerCase()) {
-        logError(`WRONG_OUTPUT_ADDRESS`, swap);
+        logError(`OUTPUT_WRONG_OUTPUT_ADDRESS`, swap);
         return false;
     }
 
+    //Sender and receiver check
     if (swap.sender.toLowerCase() === swap.receiver.toLowerCase()) {
-        logError(`SENDER_CANNOT_EQUAL_RECEIVER`, swap);
+        logError(`OUTPUT_SENDER_CANNOT_EQUAL_RECEIVER`, swap);
         return false;
     }
 
+    //Pair validation
     const isPairValid = isInputPairValid(swap);
     if (!isPairValid) {
-        logError(`INVALID_PAIR`, swap);
+        logError(`OUTPUT_INVALID_PAIR`, swap);
         return false;
     }
 
-    const isPriceValid = new PriceService().isInputPriceValid(swap);
-    if (!isPriceValid) {
-        logError(`WRONG_PRICE`, swap);
+    //Price validation
+    const allowedSlippageAmount = mul(takerDesiredAmount, AppConfig.SLIPPAGE);
+    if(greaterThan(sub(takerDesiredAmount, swap.inputAmount), allowedSlippageAmount) ){
+        logError(`OUTPUT_TOO_HIGH_SLIPPAGE_FOR_TAKER`, swap);
+        return false;
+    }
+
+    //Validate expiration
+    if(!isOutputSwapExpirationValid(swap)){
+        logError(`OUTPUT_INVALID_EXPIRATION`, swap);
         return false;
     }
 

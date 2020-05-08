@@ -1,4 +1,3 @@
-import AppConfig from '../../../config';
 import Repository from '../../repository';
 import { safeAccess } from '../../utils';
 

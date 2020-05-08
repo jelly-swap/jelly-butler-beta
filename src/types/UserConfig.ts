@@ -4,7 +4,6 @@ export interface IUserConfig {
     PAIRS: {
         [key: string]: {
             FEE: number;
-            SLIPPAGE: number;
         };
     };
 
@@ -19,6 +18,7 @@ export interface IUserConfig {
         PROVIDER: string;
         API_KEY: string;
         SECRET_KEY?: string;
+        UPDATE_INTERVAL: number;
     };
 
     EXCHANGE: {

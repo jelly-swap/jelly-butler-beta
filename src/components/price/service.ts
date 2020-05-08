@@ -74,24 +74,54 @@ export class PriceService {
 
     isInputPriceValid(swap) {
         try {
-            const pairPrice = this.getPairPrice(swap.network, swap.outputNetwork);
+            const pairPrice = this.getPairPriceWithSpreadAndFee(swap.network, swap.outputNetwork);
 
             const inputDecimals = this.blockchainConfig[swap.network].decimals;
             const outputDecimals = this.blockchainConfig[swap.outputNetwork].decimals;
 
-            const priceInBig = mulDecimals(pairPrice, outputDecimals);
+            //locked Amount
+            const lockedAmountSlashed = divDecimals(swap.inputAmount, inputDecimals);
 
-            const outputAmount = mul(priceInBig, divDecimals(swap.inputAmount, inputDecimals));
+            //Desired Amount
+            const desiredAmountSlashed = divDecimals(swap.outputAmount, outputDecimals);
 
-            const pairSlippage = this.userConfig.PAIRS[`${swap.network}-${swap.outputNetwork}`].SLIPPAGE || 0;
+            //Current price 
+            const marketActualPrice = mul(lockedAmountSlashed, pairPrice);
 
-            const requestedAmount = mul(outputAmount, add(1, pairSlippage));
+            //MAX Allowed Slippage
+            const maxAllowedSlippage = mul(marketActualPrice, AppConfig.SLIPPAGE);
 
-            const outputAmountWithoutFee = sub(swap.outputAmount, mul(swap.outputAmount, AppConfig.FEE));
+            greaterThan(maxAllowedSlippage, sub(desiredAmountSlashed, marketActualPrice));
 
-            return greaterThan(outputAmountWithoutFee, requestedAmount);
         } catch (err) {
             return false;
+        }
+    }
+
+    adjustPrice(swap){
+        try{
+          const pairPrice = this.getPairPriceWithSpreadAndFee(swap.outputNetwork, swap.network);
+
+          const inputDecimals = this.blockchainConfig[swap.network].decimals;
+          const outputDecimals = this.blockchainConfig[swap.outputNetwork].decimals;
+          
+          // Received amount
+          const receivedAmountSlashed = divDecimals(swap.outputAmount, outputDecimals);
+
+          // Send amount
+          const sendAmountSlashed = mul(receivedAmountSlashed, pairPrice);
+
+          // Send amount big
+          const sendAmountBig = mulDecimals(sendAmountSlashed, inputDecimals);
+
+          return {
+              ...swap,
+              inputAmount: sendAmountBig,
+          };
+
+        }
+        catch(err){
+            throw new Error('CANNOT ADJUST PAIR PRICE');
         }
     }
 
@@ -105,6 +135,18 @@ export class PriceService {
 
     getPairPrice(base: string, quote: string) {
         const prices = this.getPrices();
+
+        const price = prices[`${base}-${quote}`];
+
+        if (price) {
+            return toBigNumber(price).toString();
+        } else {
+            throw new Error('INVALID_PAIR');
+        }
+    }
+
+    getPairPriceWithSpreadAndFee(base: string, quote: string) {
+        const prices = this.getPricesWithSpreadAndFee();
 
         const price = prices[`${base}-${quote}`];
 

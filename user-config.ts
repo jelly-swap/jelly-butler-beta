@@ -6,42 +6,34 @@ export default {
     PAIRS: {
         'BTC-USDC': {
             FEE: 0.01,
-            SLIPPAGE: 0.01,
         },
 
         'BTC-WBTC': {
             FEE: 0.01,
-            SLIPPAGE: 0.01,
         },
 
         'ETH-USDC': {
             FEE: 0.01,
-            SLIPPAGE: 0.01,
         },
 
         'BTC-DAI': {
             FEE: 0.01,
-            SLIPPAGE: 0.01,
         },
 
         'ETH-DAI': {
             FEE: 0.01,
-            SLIPPAGE: 0.01,
         },
 
         'DAI-ETH': {
             FEE: 0.01,
-            SLIPPAGE: 0.01,
         },
 
         'USDC-ETH': {
             FEE: 0.01,
-            SLIPPAGE: 0.01,
         },
 
         'BTC-ETH': {
             FEE: 0.01,
-            SLIPPAGE: 0.01,
         },
     },
 
@@ -67,8 +59,8 @@ export default {
             SECRET: '',
         },
 
-        //Use one common ETH address for all ERC20 tokens
-        //Should be different than your ETH provider wallet
+        //Use one common ETH address for all ERC20 tokens!
+        //Should be different than your ETH provider wallet!
         DAI: {
             ADDRESS: '',
             // Ethereum Private Key
@@ -93,6 +85,7 @@ export default {
         PROVIDER: 'cryptocompare',
         API_KEY: '',
         SECRET_KEY: '',
+        UPDATE_INTERVAL: 30,
     },
 
     // REBALANCE

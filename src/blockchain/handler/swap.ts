@@ -1,6 +1,6 @@
 import getAdapters from '../adapters';
 import getContracts from '../contracts';
-import { isOutputSwapValid, isInputSwapExpirationValid } from '../validator';
+import { isOutputSwapValid, isInputSwapValid } from '../validator';
 import { sleep } from '../utils';
 
 import { logInfo, logError } from '../../logger';
@@ -10,6 +10,7 @@ import EmailService from '../../email';
 import Exchange from '../../exchange';
 import Emitter from '../../emitter';
 import { equal } from '../../utils/math';
+import { PriceService } from '../../components/price/service';
 
 const RETRY_COUNT = 10;
 const RETRY_TIME = 1000 * 10;
@@ -21,6 +22,7 @@ export default class SwapHandler {
 
     private contracts: any;
     private adapters: any;
+    private priceService: PriceService;
 
     constructor() {
         this.swapService = new SwapService();
@@ -28,51 +30,57 @@ export default class SwapHandler {
         this.exchange = new Exchange();
         this.contracts = getContracts();
         this.adapters = getAdapters();
+        this.priceService = new PriceService();
     }
 
     async onSwap(inputSwap, maxTries = RETRY_COUNT) {
-        logInfo(`SWAP_RECEIVED`, inputSwap);
+        try {    
+            logInfo(`SWAP_RECEIVED`, inputSwap);
 
-        const isProcessed = await this.swapService.findByIdAndNetwork(inputSwap.id, inputSwap.network);
+            const isProcessed = await this.swapService.findByIdAndNetwork(inputSwap.id, inputSwap.network);
 
-        if (!isProcessed) {
-            const adapter = this.adapters[inputSwap.outputNetwork];
-            const contract = this.contracts[inputSwap.outputNetwork];
+            if (!isProcessed) {
+                const adapter = this.adapters[inputSwap.outputNetwork];
+                const contract = this.contracts[inputSwap.outputNetwork];
 
-            const outputSwap = adapter.createSwapFromInput(inputSwap);
+                let outputSwap = adapter.createSwapFromInput(inputSwap);
+                outputSwap = this.priceService.adjustPrice(outputSwap);
 
-            const validOutputSwap = await isOutputSwapValid(outputSwap);
+                const validOutputSwap = await isOutputSwapValid(outputSwap, inputSwap.outputAmount);
 
-            const validInputSwap = isInputSwapExpirationValid(inputSwap);
+                const validInputSwap = await isInputSwapValid(inputSwap);
 
-            if (validOutputSwap && validInputSwap) {
-                try {
-                    logInfo('SWAP_OUTPUT', outputSwap);
-                    const result = await contract.newContract(outputSwap);
-                    const transactionHash = result.hash || result;
+                if (validOutputSwap && validInputSwap) {
+                    try {
+                        logInfo('SWAP_OUTPUT', outputSwap);
+                        const result = await contract.newContract(outputSwap);
+                        const transactionHash = result.hash || result;
 
-                    await this.swapService.add(outputSwap.id, inputSwap);
-                    await this.swapService.add(inputSwap.id, { ...outputSwap, transactionHash });
+                        await this.swapService.add(outputSwap.id, inputSwap);
+                        await this.swapService.add(inputSwap.id, { ...outputSwap, transactionHash });
 
-                    this.exchange.placeOrder(inputSwap);
+                        this.exchange.placeOrder(inputSwap);
 
-                    logInfo('SWAP_SENT', transactionHash);
+                        logInfo('SWAP_SENT', transactionHash);
 
-                    await this.emailService.send('SWAP', { ...outputSwap, transactionHash });
-                } catch (err) {
-                    logError('SWAP_BROADCAST_ERROR', inputSwap.id);
-                    logError(`SWAP_ERROR: ${err}`);
-                    if (maxTries > 0) {
-                        logInfo('SWAP_RETRY', inputSwap.id);
-                        await sleep((RETRY_COUNT + 1 - maxTries) * RETRY_TIME);
-                        await this.onSwap(inputSwap, maxTries - 1);
-                    } else {
-                        logError('SWAP_FAILED', inputSwap.id);
+                        await this.emailService.send('SWAP', { ...outputSwap, transactionHash });
+                    } catch (err) {
+                        logError('SWAP_BROADCAST_ERROR', inputSwap.id);
+                        logError(`SWAP_ERROR: ${err}`);
+                        if (maxTries > 0) {
+                            logInfo('SWAP_RETRY', inputSwap.id);
+                            await sleep((RETRY_COUNT + 1 - maxTries) * RETRY_TIME);
+                            await this.onSwap(inputSwap, maxTries - 1);
+                        } else {
+                            logError('SWAP_FAILED', inputSwap.id);
+                        }
                     }
                 }
+            } else {
+                logInfo('SWAP_ALREADY_PROCESSED', inputSwap.id);
             }
-        } else {
-            logInfo('SWAP_ALREADY_PROCESSED', inputSwap.id);
+        } catch(err){
+          logError(`Cannot prepapre swap output ${inputSwap} ${err}`);
         }
     }
 

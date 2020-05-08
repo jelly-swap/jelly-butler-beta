@@ -1,13 +1,18 @@
 import { BalanceService } from './service';
 import Config from '../../../config';
+import UserConfig from '../../config';
+import {IUserConfig} from '../../types/UserConfig';
 
 export default class BalanceTask {
     public name: string;
     private balanceService: BalanceService;
+    private userConfig: IUserConfig;
 
     constructor() {
         this.name = 'Balance Task';
         this.balanceService = new BalanceService();
+        this.userConfig = new UserConfig().getUserConfig();
+
     }
 
     async start() {
@@ -16,7 +21,7 @@ export default class BalanceTask {
 
         setInterval(async () => {
             await this.balanceService.update();
-        }, Config.PRICE.UPDATE_INTERVAL * 1000);
+        }, this.userConfig.PRICE.UPDATE_INTERVAL * 1000);
 
         setInterval(async () => {
             await this.balanceService.saveBalanceHistory();

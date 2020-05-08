@@ -1,5 +1,3 @@
-import AppConfig from '../../../config';
-
 import getBlockchainConfig from '../../blockchain/config';
 import getContracts from '../../blockchain/contracts';
 import getAdapters from '../../blockchain/adapters';

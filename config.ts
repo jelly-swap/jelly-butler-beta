@@ -13,6 +13,10 @@ export default {
     // Currently the usage of JellySwap protocol is free
     FEE: 0.0,
 
+    // Slippage percentage determined by JellySwap Protocol.
+    // Do not change this value or some of your orders could fail
+    SLIPPAGE: 0.03,
+
     // Choose wheter you will cover the fees for the user on their first withdraw or not.
     // If a user wants to swap BTC for ETH, but his ETH wallet is empty, he won't be able to make the withdraw.
     // By enabling this option, you will perform the withraw for the user, only if his address has 0 ETH balance
@@ -25,7 +29,6 @@ export default {
 
     PRICE: {
         COINS: ['ETH', 'BTC', 'AE', 'DAI', 'WBTC', 'USDC', 'USDT'],
-        UPDATE_INTERVAL: 30,
     },
 
     // ================== Binance configuration ==================
