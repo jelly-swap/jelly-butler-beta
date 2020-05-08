@@ -9,6 +9,7 @@ import { mul, sub, add, toBigNumber, mulDecimals, divDecimals, greaterThan } fro
 import UserConfig from '../../config';
 import { IUserConfig } from '../../types/UserConfig';
 import { safeAccess } from '../../utils';
+import { sleep } from '../../blockchain/utils';
 
 export class PriceService {
     private static instance: PriceService;
@@ -34,7 +35,7 @@ export class PriceService {
         PriceService.instance = this;
     }
 
-    async update(provider?: IPriceProvider, maxTries = 3) {
+    async update(provider?: IPriceProvider, maxTries = 5) {
         try {
             let prices = {};
 
@@ -58,12 +59,15 @@ export class PriceService {
                 this.setPricesWithSpreadAndFee(supportedPrices);
             }
         } catch (err) {
-            console.log(err);
             if (maxTries > 0) {
+                await sleep(2000);
                 logError('PRICE_SERVICE_DOWN', err);
-                logInfo(`Starting fallback price service: ${this.userConfig.PRICE.PROVIDER}`);
+                logInfo(`Starting new price service: ${this.userConfig.PRICE.PROVIDER}`);
                 this.priceProvider = new PriceProviders[this.userConfig.PRICE.PROVIDER]();
                 await this.update(this.priceProvider, maxTries - 1);
+            } else {
+                logInfo(`Shutting down the application.`);
+                process.exit(-1);
             }
         }
     }
@@ -85,7 +89,7 @@ export class PriceService {
 
             const outputAmountWithoutFee = sub(swap.outputAmount, mul(swap.outputAmount, AppConfig.FEE));
 
-            return greaterThan(sub(outputAmountWithoutFee, requestedAmount), 0);
+            return greaterThan(outputAmountWithoutFee, requestedAmount);
         } catch (err) {
             return false;
         }
