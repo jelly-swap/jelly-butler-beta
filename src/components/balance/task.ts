@@ -1,7 +1,7 @@
 import { BalanceService } from './service';
 import Config from '../../../config';
 import UserConfig from '../../config';
-import {IUserConfig} from '../../types/UserConfig';
+import { IUserConfig } from '../../types/UserConfig';
 
 export default class BalanceTask {
     public name: string;

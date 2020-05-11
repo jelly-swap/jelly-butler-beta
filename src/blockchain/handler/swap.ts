@@ -9,8 +9,9 @@ import { SwapService } from '../../components/swap/service';
 import EmailService from '../../email';
 import Exchange from '../../exchange';
 import Emitter from '../../emitter';
-import { equal } from '../../utils/math';
+import { equal, divDecimals, mulDecimals, mul } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
+import getBlockchainConfig from '../config';
 
 const RETRY_COUNT = 10;
 const RETRY_TIME = 1000 * 10;
@@ -23,6 +24,7 @@ export default class SwapHandler {
     private contracts: any;
     private adapters: any;
     private priceService: PriceService;
+    private blockchainConfig: any;
 
     constructor() {
         this.swapService = new SwapService();
@@ -31,6 +33,7 @@ export default class SwapHandler {
         this.contracts = getContracts();
         this.adapters = getAdapters();
         this.priceService = new PriceService();
+        this.blockchainConfig = getBlockchainConfig();
     }
 
     async onSwap(inputSwap, maxTries = RETRY_COUNT) {
@@ -43,8 +46,8 @@ export default class SwapHandler {
                 const adapter = this.adapters[inputSwap.outputNetwork];
                 const contract = this.contracts[inputSwap.outputNetwork];
 
-                let outputSwap = adapter.createSwapFromInput(inputSwap);
-                outputSwap = this.priceService.adjustPrice(outputSwap);
+                const outputSwap = adapter.createSwapFromInput(inputSwap);
+                outputSwap.inputAmount = this.getLatestInputAmount(outputSwap);
 
                 const validOutputSwap = await isOutputSwapValid(outputSwap, inputSwap.outputAmount);
 
@@ -79,8 +82,8 @@ export default class SwapHandler {
             } else {
                 logInfo('SWAP_ALREADY_PROCESSED', inputSwap.id);
             }
-        } catch(err){
-          logError(`Cannot prepapre swap output ${inputSwap} ${err}`);
+        } catch(err) {
+          logError(`CANNOT_PREPARE_SWAP_OUTPUT ${inputSwap} ${err}`);
         }
     }
 
@@ -105,5 +108,24 @@ export default class SwapHandler {
                 logError(`TRACK_OLD_SWAPS_ERROR ${network} ${err}`);
             }
         }
+    }
+
+    getLatestInputAmount(swap) {
+        try {
+            const pairPrice = this.priceService.getPairPriceWithSpreadAndFee(swap.outputNetwork, swap.network);
+
+            const inputDecimals = this.blockchainConfig[swap.network].decimals;
+            const outputDecimals = this.blockchainConfig[swap.outputNetwork].decimals;
+
+            const receivedAmountSlashed = divDecimals(swap.outputAmount, outputDecimals);
+
+            const sendAmountSlashed = mul(receivedAmountSlashed, pairPrice);
+
+            const sendAmountBig = mulDecimals(sendAmountSlashed, inputDecimals);
+
+            return sendAmountBig;
+        } catch (err) {
+            throw new Error('CANNOT_GET_LATEST_INPUT_AMOUNT');
+        }   
     }
 }

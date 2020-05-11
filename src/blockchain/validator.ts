@@ -4,11 +4,12 @@ import Validators from './validators';
 import Config from './config';
 import AppConfig from '../../config';
 
-import { greaterThan, sub, lessThanOrEqual, mul } from '../utils/math';
+import { greaterThan, sub, lessThanOrEqual, mul, divDecimals } from '../utils/math';
 import { logError } from '../logger';
 import { PriceService } from '../components/price/service';
 import UserConfig from '../config';
 import { safeAccess } from '../utils';
+import getBlockchainConfig from './config';
 
 export const isInputSwapExpirationValid = (swap) => {
     const now = getCurrentDate(Config[swap.network].unix);
@@ -33,7 +34,6 @@ export const isOutputSwapExpirationValid = (swap) => {
 };
 
 export const isInputSwapValid = async (swap) => {
-    const priceService = new PriceService();
     const inputNetworkValidation = await Validators[swap.network].validateNewContract(swap);
     const outputNetworkValidation = await Validators[swap.outputNetwork].validateNewContract(swap);
 
@@ -62,7 +62,7 @@ export const isInputSwapValid = async (swap) => {
     }
 
     //input price validation
-    if(!priceService.isInputPriceValid(swap)){
+    if(!isInputPriceValid(swap)){
         logError(`INPUT_INVALID_PRICE`, swap);
         return false;
     }
@@ -144,3 +144,26 @@ const getCurrentDate = (unix) => {
     }
     return now;
 };
+
+function isInputPriceValid(swap) {
+    try {
+        const priceService = new PriceService();
+        const blockchainConfig = getBlockchainConfig();
+        const pairPrice = priceService.getPairPriceWithSpreadAndFee(swap.network, swap.outputNetwork);
+
+        const inputDecimals = blockchainConfig[swap.network].decimals;
+        const outputDecimals = blockchainConfig[swap.outputNetwork].decimals;
+
+        const lockedAmountSlashed = divDecimals(swap.inputAmount, inputDecimals);
+
+        const desiredAmountSlashed = divDecimals(swap.outputAmount, outputDecimals);
+
+        const marketActualPrice = mul(lockedAmountSlashed, pairPrice);
+
+        const maxAllowedSlippage = mul(marketActualPrice, AppConfig.SLIPPAGE);
+
+        greaterThan(maxAllowedSlippage, sub(desiredAmountSlashed, marketActualPrice));
+    } catch (err) {
+        return false;
+    }
+}

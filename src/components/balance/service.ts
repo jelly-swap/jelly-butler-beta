@@ -87,7 +87,7 @@ export class BalanceService {
 
                     portfolioInUsdcTotal = addBig(portfolioInUsdcTotal, valueInUsdc);
                 } catch (err) {
-                    logInfo(`Balance History Service Warning - price missing ${err}`);
+                    logInfo(`Balance History Service Warning - price missing ${network}-USDC  ${err}`);
                 }
             }
 
