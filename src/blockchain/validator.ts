@@ -34,34 +34,30 @@ export const isOutputSwapExpirationValid = (swap) => {
 };
 
 export const isInputSwapValid = async (swap) => {
-    const inputNetworkValidation = await Validators[swap.network].validateNewContract(swap);
-    const outputNetworkValidation = await Validators[swap.outputNetwork].validateNewContract(swap);
+    const blockchainConfig = getBlockchainConfig();
+    const inputNetworkValidation = safeAccess(blockchainConfig,[swap.network]);
+    const outputNetworkValidation = safeAccess(blockchainConfig, [swap.outputNetwork]);
 
-    //Expiration time check
     if (!isInputSwapExpirationValid(swap)) {
         logError(`INPUT_INVALID_EXPIRATION`, swap);
         return false;
     }
 
-    //Output network check
     if (!outputNetworkValidation) {
         logError(`INPUT_SECONDARY_CHAIN_VALIDATION_FAILED`, swap);
         return false;
     }
 
-    //Input network check
     if (!inputNetworkValidation) {
         logError(`INPUT_CHAIN_VALIDATION_FAILED`, swap);
         return false;
     }
 
-    //Receiver address check
     if (swap.receiver.toLowerCase() != safeAccess(Config, [swap.network, 'receiverAddress']).toLowerCase()) {
         logError(`INPUT_INVALID_RECEIVER`, swap);
         return false;
     }
 
-    //input price validation
     if(!isInputPriceValid(swap)){
         logError(`INPUT_INVALID_PRICE`, swap);
         return false;
@@ -71,48 +67,42 @@ export const isInputSwapValid = async (swap) => {
 };
 
 export const isOutputSwapValid = async (swap, takerDesiredAmount) => {
-    const inputNetworkValidation = await Validators[swap.network].validateNewContract(swap);
-    const outputNetworkValidation = await Validators[swap.outputNetwork].validateNewContract(swap);
+    const blockchainConfig = getBlockchainConfig();
+    const inputNetworkValidation = safeAccess(blockchainConfig, [swap.network]);
+    const outputNetworkValidation = safeAccess(blockchainConfig, [swap.outputNetwork]);
 
-    //Input network check
     if (!inputNetworkValidation) {
         logError(`INPUT_CHAIN_VALIDATION_FAILED`, swap);
         return false;
     }
 
-    //Output network check
     if (!outputNetworkValidation) {
         logError(`OUTPUT_CHAIN_VALIDATION_FAILED`, swap);
         return false;
     }
 
-    //Add exception for ERC20 Tokens
     if (swap.outputAddress.toLowerCase() === Config[swap.network].receiverAddress.toLowerCase()) {
         logError(`OUTPUT_WRONG_OUTPUT_ADDRESS`, swap);
         return false;
     }
 
-    //Sender and receiver check
     if (swap.sender.toLowerCase() === swap.receiver.toLowerCase()) {
         logError(`OUTPUT_SENDER_CANNOT_EQUAL_RECEIVER`, swap);
         return false;
     }
 
-    //Pair validation
     const isPairValid = isInputPairValid(swap);
     if (!isPairValid) {
         logError(`OUTPUT_INVALID_PAIR`, swap);
         return false;
     }
 
-    //Price validation
     const allowedSlippageAmount = mul(takerDesiredAmount, AppConfig.SLIPPAGE);
     if(greaterThan(sub(takerDesiredAmount, swap.inputAmount), allowedSlippageAmount) ){
         logError(`OUTPUT_TOO_HIGH_SLIPPAGE_FOR_TAKER`, swap);
         return false;
     }
 
-    //Validate expiration
     if(!isOutputSwapExpirationValid(swap)){
         logError(`OUTPUT_INVALID_EXPIRATION`, swap);
         return false;
