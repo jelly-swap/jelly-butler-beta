@@ -40,6 +40,10 @@ export const greaterThan = (a, b) => {
     return BigNumber(a).gt(b);
 };
 
+export const lessThanOrEqual = (a, b) => {
+    return BigNumber(a).lte(b);
+};
+
 export const equal = (a, b) => {
     return BigNumber(a).eq(b);
 };

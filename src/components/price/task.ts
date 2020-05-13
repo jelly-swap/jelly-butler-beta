@@ -1,13 +1,17 @@
 import { PriceService } from './service';
 import Config from '../../../config';
+import UserConfig from '../../config';
+import { IUserConfig } from '../../types/UserConfig';
 
 export default class PriceTask {
     public name: string;
     private priceService: PriceService;
+    private userConfig: IUserConfig;
 
     constructor() {
         this.name = 'Price Task';
         this.priceService = new PriceService();
+        this.userConfig = new UserConfig().getUserConfig();        
     }
 
     async start() {
@@ -15,6 +19,6 @@ export default class PriceTask {
 
         setInterval(async () => {
             await this.priceService.update();
-        }, Config.PRICE.UPDATE_INTERVAL * 1000);
+        }, this.userConfig.PRICE.UPDATE_INTERVAL * 1000);
     }
 }

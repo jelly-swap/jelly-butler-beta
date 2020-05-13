@@ -1,5 +1,3 @@
-import AppConfig from '../../../config';
-
 import getBlockchainConfig from '../../blockchain/config';
 import getContracts from '../../blockchain/contracts';
 import getAdapters from '../../blockchain/adapters';
@@ -89,7 +87,7 @@ export class BalanceService {
 
                     portfolioInUsdcTotal = addBig(portfolioInUsdcTotal, valueInUsdc);
                 } catch (err) {
-                    logInfo(`Balance History Service Warning - price missing ${err}`);
+                    logInfo(`Balance History Service Warning - price missing ${network}-USDC  ${err}`);
                 }
             }
 

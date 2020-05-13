@@ -4,7 +4,6 @@ import PriceProviders from './provider';
 import IPriceProvider from './provider/IPriceProvider';
 
 import { logError, logInfo } from '../../logger';
-import getBlockchainConfig from '../../blockchain/config';
 import { mul, sub, add, toBigNumber, mulDecimals, divDecimals, greaterThan } from '../../utils/math';
 import UserConfig from '../../config';
 import { IUserConfig } from '../../types/UserConfig';
@@ -15,7 +14,6 @@ export class PriceService {
     private static instance: PriceService;
 
     private userConfig: IUserConfig;
-    private blockchainConfig: any;
 
     private priceProvider: IPriceProvider;
 
@@ -27,7 +25,6 @@ export class PriceService {
             return PriceService.instance;
         }
 
-        this.blockchainConfig = getBlockchainConfig();
         this.userConfig = new UserConfig().getUserConfig();
 
         this.priceProvider = new PriceProviders[this.userConfig.PRICE.PROVIDER]();
@@ -72,29 +69,6 @@ export class PriceService {
         }
     }
 
-    isInputPriceValid(swap) {
-        try {
-            const pairPrice = this.getPairPrice(swap.network, swap.outputNetwork);
-
-            const inputDecimals = this.blockchainConfig[swap.network].decimals;
-            const outputDecimals = this.blockchainConfig[swap.outputNetwork].decimals;
-
-            const priceInBig = mulDecimals(pairPrice, outputDecimals);
-
-            const outputAmount = mul(priceInBig, divDecimals(swap.inputAmount, inputDecimals));
-
-            const pairSlippage = this.userConfig.PAIRS[`${swap.network}-${swap.outputNetwork}`].SLIPPAGE || 0;
-
-            const requestedAmount = mul(outputAmount, add(1, pairSlippage));
-
-            const outputAmountWithoutFee = sub(swap.outputAmount, mul(swap.outputAmount, AppConfig.FEE));
-
-            return greaterThan(outputAmountWithoutFee, requestedAmount);
-        } catch (err) {
-            return false;
-        }
-    }
-
     getPrices() {
         return this.prices;
     }
@@ -105,6 +79,18 @@ export class PriceService {
 
     getPairPrice(base: string, quote: string) {
         const prices = this.getPrices();
+
+        const price = prices[`${base}-${quote}`];
+
+        if (price) {
+            return toBigNumber(price).toString();
+        } else {
+            throw new Error('INVALID_PAIR');
+        }
+    }
+
+    getPairPriceWithSpreadAndFee(base: string, quote: string) {
+        const prices = this.getPricesWithSpreadAndFee();
 
         const price = prices[`${base}-${quote}`];
 
