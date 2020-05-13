@@ -1,6 +1,8 @@
 import { Config } from '@jelly-swap/erc20';
 
-import AppConfig from '../../../config';
+import UserConfig from '../../config';
+import { safeAccess } from '../../utils';
+import { logError } from '../../logger';
 
 const TokenConfig = {
     DAI: {
@@ -26,17 +28,30 @@ const AddressToToken = {
     '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': TokenConfig.USDC,
 };
 
-export default token => {
+export default (token) => {
+    const userConfig = new UserConfig().getUserConfig();
+
+    const address = safeAccess(userConfig, ['WALLETS', token, 'ADDRESS']);
+    const secret = safeAccess(userConfig, ['WALLETS', token, 'SECRET']);
+
     const tokenConfig = Config(token, TokenConfig, AddressToToken, 7200);
-    return {
+    const config = {
         ...tokenConfig,
         providerUrl: 'https://mainnet.infura.io/v3/02cf6338c88b42f595f8fd946134fa4b',
         contractAddress: '0x133DbFdf74f565838A2f9413Fb53761a19f06ADF',
         explorer: 'https://etherscan.io/tx/',
         REFUND_PERIOD: 10,
         VALID_EXPIRATION: 72000,
-        gasMultiplier: 4,
-        receiverAddress: AppConfig.BLOCKCHAIN[token].ADDRESS,
-        PRIVATE_KEY: AppConfig.BLOCKCHAIN[token].SECRET,
+        gasMultiplier: 3,
     };
+
+    if (address && secret) {
+        return {
+            ...config,
+            receiverAddress: address,
+            PRIVATE_KEY: secret,
+        };
+    } else {
+        logError(`${token} ADDRESS and SECRET are missing.`);
+    }
 };

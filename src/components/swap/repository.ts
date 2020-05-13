@@ -3,12 +3,15 @@ import Repository from '../../repository';
 
 import { logError } from '../../logger';
 import { safeAccess } from '../../utils';
+import UserConfig from '../../config';
 
 export default class SwapRepository {
-    private swapRepository = Repository[AppConfig.ACTIVE_DB]['swap']();
+    private swapRepository;
 
     constructor() {
-        const getSwapRepository = safeAccess(Repository, [AppConfig.ACTIVE_DB, 'swap']);
+        const userConfig = new UserConfig().getUserConfig();
+
+        const getSwapRepository = safeAccess(Repository, [userConfig.DATABASE.ACTIVE, 'swap']);
 
         if (!getSwapRepository) {
             throw new Error('SWAP_REPOSITORY_MISSING');

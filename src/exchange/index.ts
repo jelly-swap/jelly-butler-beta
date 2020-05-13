@@ -3,23 +3,26 @@ import AppConfig from '../../config';
 import IExchange from './IExchange';
 import Exchanges from './exchanges';
 import { logError } from '../logger';
-import { safeAccess } from '../utils';
-import { toFixed, divDecimals } from '../utils/math';
 
-import Config from '../blockchain/config';
+import { IUserConfig } from '../types/UserConfig';
+import UserConfig from '../config';
 
 export default class Exchange implements IExchange {
     private static Instance: Exchange;
 
     private exchange: IExchange;
 
+    private userConfig: IUserConfig;
+
     constructor() {
         if (Exchange.Instance) {
             return Exchange.Instance;
         }
 
-        if (Exchanges[AppConfig.EXCHANGE]) {
-            this.exchange = new Exchanges[AppConfig.EXCHANGE]();
+        this.userConfig = new UserConfig().getUserConfig();
+
+        if (Exchanges[this.userConfig.EXCHANGE.NAME]) {
+            this.exchange = new Exchanges[this.userConfig.EXCHANGE.NAME]();
         } else {
             this.exchange = new Exchanges.mock();
         }
@@ -47,10 +50,6 @@ export default class Exchange implements IExchange {
     }
 
     fixPrecision(quote, quantity) {
-        const precision = safeAccess(AppConfig, [AppConfig.EXCHANGE.toUpperCase(), 'PRECISION', quote]);
-
-        if (precision) {
-            return toFixed(divDecimals(quantity, Config[quote].decimals), precision);
-        }
+        return this.exchange.fixPrecision(quote, quantity);
     }
 }

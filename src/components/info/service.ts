@@ -1,20 +1,22 @@
 import axios from 'axios';
 import * as moment from 'moment';
 
-import AppConfig from '../../../config';
-
 import { BalanceService } from '../balance/service';
 import { PriceService } from '../price/service';
 import { logError } from '../../logger';
+import { IUserConfig } from '../../types/UserConfig';
+import UserConfig from '../../config';
 
 export default class InfoService {
     private static instance: InfoService;
 
+    private userConfig: IUserConfig;
+
     private balanceService: BalanceService;
     private priceService: PriceService;
 
-    private name = AppConfig.NAME;
-    private pairs = AppConfig.PAIRS;
+    private name: string;
+    private pairs = {};
 
     private prices = {};
     private balances = {};
@@ -25,6 +27,11 @@ export default class InfoService {
         if (InfoService.instance) {
             return InfoService.instance;
         }
+
+        this.userConfig = new UserConfig().getUserConfig();
+
+        this.name = this.userConfig.NAME;
+        this.pairs = this.userConfig.PAIRS;
 
         this.balanceService = new BalanceService();
         this.priceService = new PriceService();
@@ -42,7 +49,7 @@ export default class InfoService {
         try {
             const info = this.getInfo();
 
-            const result = await axios.post(AppConfig.AGGREGATOR_URL, info);
+            const result = await axios.post(this.userConfig.AGGREGATOR_URL, info);
 
             const { valid, message } = result?.data;
             if (!valid) {

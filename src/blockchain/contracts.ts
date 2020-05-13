@@ -1,21 +1,33 @@
-import AppConfig from '../../config';
-import Config, { SECONDARY_NETWORKS } from './config';
+import getConfig, { SECONDARY_NETWORKS } from './config';
 
 import BitcoinContract from './bitcoin';
 import EthereumContract from './ethereum';
 import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
 
-const AllContracts = {
-    BTC: AppConfig.NETWORKS?.BTC ? new BitcoinContract(Config.BTC) : null,
-    ETH: AppConfig.NETWORKS?.ETH ? new EthereumContract(Config.ETH) : null,
-    AE: AppConfig.NETWORKS?.AE ? new AeternityContract(Config.AE) : null,
-    DAI: AppConfig.NETWORKS?.DAI ? new Erc20Contract(Config.DAI) : null,
-    USDC: AppConfig.NETWORKS?.USDC ? new Erc20Contract(Config.USDC) : null,
-    WBTC: AppConfig.NETWORKS?.WBTC ? new Erc20Contract(Config.WBTC) : null,
-};
+let Contracts: any;
 
-const Contracts = Object.entries(AllContracts).reduce((a, [k, v]) => (v === null ? a : { ...a, [k]: v }), {});
+export default () => {
+    if (!Contracts) {
+        const Config = getConfig();
+
+        const AllContracts = {
+            ETH: Config.ETH && new EthereumContract(Config.ETH),
+            BTC: Config.BTC && new BitcoinContract(Config.BTC),
+            AE: Config.AE && new AeternityContract(Config.AE),
+            DAI: Config.DAI && new Erc20Contract(Config.DAI),
+            USDC: Config.USDC && new Erc20Contract(Config.USDC),
+            WBTC: Config.WBTC && new Erc20Contract(Config.WBTC),
+        };
+
+        Contracts = Object.entries(AllContracts).reduce(
+            (a, [k, v]) => (v === undefined ? a : { ...a, [k]: v }),
+            {}
+        ) as any;
+    }
+
+    return Contracts;
+};
 
 export const startEventListener = async () => {
     for (const network of Object.keys(Contracts)) {
@@ -24,5 +36,3 @@ export const startEventListener = async () => {
         }
     }
 };
-
-export default Contracts;

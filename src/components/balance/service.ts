@@ -1,8 +1,9 @@
-import AppConfig from '../../../config';
+import getBlockchainConfig from '../../blockchain/config';
+import getContracts from '../../blockchain/contracts';
+import getAdapters from '../../blockchain/adapters';
 
-import Config from '../../blockchain/config';
-import Contracts from '../../blockchain/contracts';
-import Adapters from '../../blockchain/adapters';
+import getProvidedAssets from '../../config/providedAssets';
+
 import Exchange from '../../exchange';
 import { add, addBig, toBigNumber, mul } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
@@ -20,35 +21,44 @@ export class BalanceService {
     private priceService = new PriceService();
     private balanceRepository = new BalanceRepository();
 
+    private blockchainConfig: any;
+    private contracts: any;
+    private adapters: any;
+    private assets: any;
+
     constructor() {
         if (BalanceService.Instance) {
             return BalanceService.Instance;
         }
+
+        this.blockchainConfig = getBlockchainConfig();
+        this.contracts = getContracts();
+        this.adapters = getAdapters();
+        this.assets = getProvidedAssets();
 
         BalanceService.Instance = this;
     }
 
     async update() {
         try {
-            for (const network of Object.keys(AppConfig.NETWORKS)) {
+            for (const network in this.assets) {
                 try {
-                    if (AppConfig.NETWORKS[network]) {
-                        const address = Config[network].receiverAddress;
+                    const address = this.blockchainConfig[network].receiverAddress;
 
-                        const result = await Contracts[network].getBalance(address, network);
+                    const result = await this.contracts[network].getBalance(address, network);
 
-                        const raw = result.toString();
+                    const raw = result.toString();
 
-                        const balance = Adapters[network].parseFromNative(result || 0).toString();
+                    const balance = this.adapters[network].parseFromNative(result || 0).toString();
 
-                        this.balances[network] = { address, raw, balance };
-                    }
+                    this.balances[network] = { address, raw, balance };
                 } catch (err) {
                     logError(`Cannot get balances ${network} ${err}`);
                 }
             }
 
             this.exchangeBalances = await this.exchange.getBalance();
+
             return this.balances;
         } catch (err) {
             logError(`Cannot get balances ${err}`);
@@ -61,7 +71,7 @@ export class BalanceService {
             let portfolioInUsdcTotal = toBigNumber(0);
             const balances = [];
 
-            for (let network in AppConfig.NETWORKS) {
+            for (const network in this.assets) {
                 try {
                     const jellyBalance = safeAccess(this.balances, [network, 'balance']) || 0;
 
@@ -77,7 +87,7 @@ export class BalanceService {
 
                     portfolioInUsdcTotal = addBig(portfolioInUsdcTotal, valueInUsdc);
                 } catch (err) {
-                    logInfo(`Balance History Service Warning - price missing ${err}`);
+                    logInfo(`Balance History Service Warning - price missing ${network}-USDC  ${err}`);
                 }
             }
 

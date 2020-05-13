@@ -4,14 +4,18 @@ import PriceProviders from './provider';
 import IPriceProvider from './provider/IPriceProvider';
 
 import { logError, logInfo } from '../../logger';
-import Config from '../../blockchain/config';
 import { mul, sub, add, toBigNumber, mulDecimals, divDecimals, greaterThan } from '../../utils/math';
+import UserConfig from '../../config';
+import { IUserConfig } from '../../types/UserConfig';
+import { safeAccess } from '../../utils';
+import { sleep } from '../../blockchain/utils';
 
 export class PriceService {
     private static instance: PriceService;
 
+    private userConfig: IUserConfig;
+
     private priceProvider: IPriceProvider;
-    private fallbackProvider: IPriceProvider;
 
     private prices = {};
     private pricesWithSpreadAndFee = {};
@@ -21,12 +25,14 @@ export class PriceService {
             return PriceService.instance;
         }
 
-        this.priceProvider = new PriceProviders[AppConfig.PRICE.PROVIDER]();
+        this.userConfig = new UserConfig().getUserConfig();
+
+        this.priceProvider = new PriceProviders[this.userConfig.PRICE.PROVIDER]();
 
         PriceService.instance = this;
     }
 
-    async update(provider?: IPriceProvider) {
+    async update(provider?: IPriceProvider, maxTries = 5) {
         try {
             let prices = {};
 
@@ -36,49 +42,30 @@ export class PriceService {
                 prices = await this.priceProvider.getPrices(AppConfig.PRICE.COINS);
             }
 
+            let supportedPrices = {};
+            for (const pair in this.userConfig.PAIRS) {
+                if (prices[pair]) {
+                    supportedPrices[pair] = prices[pair];
+                } else {
+                    logError(`SUPPORTED_PAIR_MISSING_PRICE: ${pair}`);
+                }
+            }
+
             if (Object.values(prices).length > 0) {
-                this.setPrices(prices);
-                this.setPricesWithSpreadAndFee(prices);
+                this.setPrices(supportedPrices);
+                this.setPricesWithSpreadAndFee(supportedPrices);
             }
         } catch (err) {
-            logError('PRICE_SERVICE_DOWN', err);
-
-            if (AppConfig.PRICE.USE_FALLBACK && PriceProviders[AppConfig.PRICE.FALLBACK]) {
-                logInfo(`Starting fallback price service: ${AppConfig.PRICE.FALLBACK}`);
-                this.priceProvider = new PriceProviders[AppConfig.PRICE.PROVIDER]();
-                this.fallbackProvider = new PriceProviders[AppConfig.PRICE.FALLBACK]();
-                await this.update(this.fallbackProvider);
+            if (maxTries > 0) {
+                await sleep(2000);
+                logError('PRICE_SERVICE_DOWN', err);
+                logInfo(`Starting new price service: ${this.userConfig.PRICE.PROVIDER}`);
+                this.priceProvider = new PriceProviders[this.userConfig.PRICE.PROVIDER]();
+                await this.update(this.priceProvider, maxTries - 1);
             } else {
-                // logInfo('Liquidity Node is Shutting Down - No fallback porice provider.......');
-                // process.exit(1);
+                logInfo(`Shutting down the application.`);
+                process.exit(-1);
             }
-        }
-    }
-
-    isInputPriceValid(swap) {
-        try {
-            const pairPrice = this.getPairPrice(swap.network, swap.outputNetwork);
-
-            const inputDecimals = Config[swap.network].decimals;
-            const outputDecimals = Config[swap.outputNetwork].decimals;
-
-            const priceInBig = mulDecimals(pairPrice, outputDecimals);
-
-            const outputAmount = mul(priceInBig, divDecimals(swap.inputAmount, inputDecimals));
-
-            const requestedAmount = mul(
-                outputAmount,
-                add(
-                    1,
-                    AppConfig.PRICE.TOLERANCE[swap.network + '-' + swap.outputNetwork] ||
-                        AppConfig.PRICE.TOLERANCE.DEFAULT
-                )
-            );
-            const outputAmountWithoutFee = sub(swap.outputAmount, mul(swap.outputAmount, AppConfig.FEE));
-
-            return greaterThan(sub(outputAmountWithoutFee, requestedAmount), 0);
-        } catch (err) {
-            return false;
         }
     }
 
@@ -102,6 +89,18 @@ export class PriceService {
         }
     }
 
+    getPairPriceWithSpreadAndFee(base: string, quote: string) {
+        const prices = this.getPricesWithSpreadAndFee();
+
+        const price = prices[`${base}-${quote}`];
+
+        if (price) {
+            return toBigNumber(price).toString();
+        } else {
+            throw new Error('INVALID_PAIR');
+        }
+    }
+
     setPrices(prices) {
         this.prices = prices;
     }
@@ -110,10 +109,8 @@ export class PriceService {
         const pricesWithSpread = {};
 
         Object.keys(prices).forEach((pair) => {
-            pricesWithSpread[pair] = mul(
-                prices[pair],
-                sub(1, add(AppConfig.PRICE.SPREAD[pair] || AppConfig.PRICE.SPREAD.DEFAULT, AppConfig.FEE))
-            );
+            const pairFee = safeAccess(this.userConfig, ['PAIRS', pair, 'FEE']) || 0;
+            pricesWithSpread[pair] = mul(prices[pair], sub(1, add(pairFee, AppConfig.FEE)));
         });
 
         this.pricesWithSpreadAndFee = pricesWithSpread;

@@ -1,11 +1,17 @@
 import TestnetConfig from './config-testnet';
 import MainnetConfig from './config-mainnet';
 
-const Config = process.env.NETWORK === 'testnet' ? TestnetConfig : MainnetConfig;
-
-export default Config;
+let Config;
 
 export const SECONDARY_NETWORKS = {
     WBTC: 'WBTC',
     USDC: 'USDC',
+};
+
+export default () => {
+    if (!Config) {
+        Config = process.env.NETWORK === 'testnet' ? TestnetConfig : MainnetConfig();
+    }
+
+    return Config;
 };

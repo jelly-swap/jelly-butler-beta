@@ -1,32 +1,40 @@
-import AppConfig from '../../config';
-
 import { createTransport } from 'nodemailer';
 
 import SwapEmail from './templates/swap';
 import WithdrawEmail from './templates/withdraw';
 import RefundEmail from './templates/refund';
 import { logError, logInfo } from '../logger';
+import { IUserConfig } from '../types/UserConfig';
+import UserConfig from '../config';
+import { safeAccess } from '../utils';
 
 export default class EmailService {
     private transport;
 
     private static Instance: EmailService;
 
+    private userConfig: IUserConfig;
+
     constructor() {
         if (EmailService.Instance) {
             return EmailService.Instance;
         }
 
+        this.userConfig = new UserConfig().getUserConfig();
+
         this.transport = createTransport({
-            service: AppConfig.EMAIL.SERVICE,
-            auth: { user: AppConfig.EMAIL.USERNAME, pass: AppConfig.EMAIL.PASSWORD },
+            service: safeAccess(this.userConfig, ['NOTIFICATIONS', 'EMAIL', 'SERVICE']),
+            auth: {
+                user: safeAccess(this.userConfig, ['NOTIFICATIONS', 'EMAIL', 'USERNAME']),
+                pass: safeAccess(this.userConfig, ['NOTIFICATIONS', 'EMAIL', 'PASSWORD']),
+            },
         });
 
         EmailService.Instance = this;
     }
 
     async send(topic, data) {
-        if (AppConfig.EMAIL.ENABLED) {
+        if (this.userConfig.NOTIFICATIONS.EMAIL.ENABLED) {
             let result;
 
             switch (topic) {
@@ -54,9 +62,9 @@ export default class EmailService {
 
     private async _send(title, content) {
         const mailOptions = {
-            from: AppConfig.EMAIL.FROM,
-            to: AppConfig.EMAIL.TO,
-            subject: `${AppConfig.EMAIL.SUBJECT} ${title}`,
+            from: safeAccess(this.userConfig, ['NOTIFICATIONS', 'EMAIL', 'FROM']),
+            to: safeAccess(this.userConfig, ['NOTIFICATIONS', 'EMAIL', 'TO']),
+            subject: `${safeAccess(this.userConfig, ['NOTIFICATIONS', 'EMAIL', 'SUBJECT'])} ${title}`,
             text: JSON.stringify(content.json),
             html: content.html,
         };
