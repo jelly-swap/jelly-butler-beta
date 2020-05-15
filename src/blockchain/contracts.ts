@@ -4,6 +4,7 @@ import BitcoinContract from './bitcoin';
 import EthereumContract from './ethereum';
 import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
+import { logInfo, } from '../logger';
 
 let Contracts: any;
 
@@ -30,8 +31,13 @@ export default () => {
 };
 
 export const startEventListener = async () => {
-    for (const network of Object.keys(Contracts)) {
-        if (!SECONDARY_NETWORKS[network]) {
+    let is_secondary_network_active = false;   
+    for (const network in Contracts) {
+        if(is_secondary_network_active && SECONDARY_NETWORKS[network]){
+            logInfo(`Secondary Networks Are Already Active - ${network}`);
+        }
+        else{
+            is_secondary_network_active = !!(SECONDARY_NETWORKS[network]);
             await Contracts[network].subscribe();
         }
     }

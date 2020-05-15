@@ -1,5 +1,6 @@
 import getAdapters from '../adapters';
 import getContracts from '../contracts';
+import { SECONDARY_NETWORKS } from '../config';
 import { isOutputSwapValid, isInputSwapValid } from '../validator';
 import { sleep } from '../utils';
 
@@ -9,7 +10,7 @@ import { SwapService } from '../../components/swap/service';
 import EmailService from '../../email';
 import Exchange from '../../exchange';
 import Emitter from '../../emitter';
-import { equal, divDecimals, mulDecimals, mul } from '../../utils/math';
+import { equal, divDecimals, mulDecimals, mul, toFixed } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
 import getBlockchainConfig from '../config';
 
@@ -46,8 +47,17 @@ export default class SwapHandler {
                 const adapter = this.adapters[inputSwap.outputNetwork];
                 const contract = this.contracts[inputSwap.outputNetwork];
 
-                const outputSwap = adapter.createSwapFromInput(inputSwap);
-                outputSwap.inputAmount = this.getLatestInputAmount(outputSwap);
+                const outputSwap = adapter.createSwapFromInput(
+                    {...inputSwap, outputAmount: this.getLatestOutputAmount(inputSwap)}
+                );
+                console.log('outputSwap - input amount ');
+                console.log(outputSwap.inputAmount);
+
+                console.log('adapter here')
+                console.log(adapter);
+
+                console.log('outputswap here');
+                console.log(outputSwap);
 
                 const validOutputSwap = await isOutputSwapValid(outputSwap, inputSwap.outputAmount);
 
@@ -56,6 +66,7 @@ export default class SwapHandler {
                 if (validOutputSwap && validInputSwap) {
                     try {
                         logInfo('SWAP_OUTPUT', outputSwap);
+
                         const result = await contract.newContract(outputSwap);
                         const transactionHash = result.hash || result;
 
@@ -92,38 +103,44 @@ export default class SwapHandler {
 
         const emitter = new Emitter();
 
+        let is_secondary_network_active = false;
         for (const network in this.contracts) {
-            try {
-                const swaps = await this.contracts[network].getPast('new');
+            if(is_secondary_network_active && SECONDARY_NETWORKS[network]) {
+                logInfo(`Secondary Networks Swaps Are Succesfully Executed - ${network}`);
+            } else {
+                try {
+                    is_secondary_network_active = !!SECONDARY_NETWORKS[network];
+                    const swaps = await this.contracts[network].getPast('new');
 
-                if (swaps) {
-                    for (const swap of swaps) {
-                        // if swap is Active
-                        if (equal(swap.status, 1)) {
-                            emitter.emit('NEW_CONTRACT', swap);
+                    if (swaps) {
+                        for (const swap of swaps) {
+                            // if swap is Active
+                            if (equal(swap.status, 1)) {
+                                emitter.emit('NEW_CONTRACT', swap);
+                            }
                         }
                     }
+                } catch (err) {
+                    logError(`TRACK_OLD_SWAPS_ERROR ${network} ${err}`);
                 }
-            } catch (err) {
-                logError(`TRACK_OLD_SWAPS_ERROR ${network} ${err}`);
             }
         }
     }
 
-    getLatestInputAmount(swap) {
+    getLatestOutputAmount(swap) {
         try {
-            const pairPrice = this.priceService.getPairPriceWithSpreadAndFee(swap.outputNetwork, swap.network);
+            const pairPrice = this.priceService.getPairPriceWithSpreadAndFee(swap.network, swap.outputNetwork);
 
             const inputDecimals = this.blockchainConfig[swap.network].decimals;
             const outputDecimals = this.blockchainConfig[swap.outputNetwork].decimals;
 
-            const receivedAmountSlashed = divDecimals(swap.outputAmount, outputDecimals);
+            const receivedAmountSlashed = divDecimals(swap.inputAmount, inputDecimals);
 
             const sendAmountSlashed = mul(receivedAmountSlashed, pairPrice);
 
-            const sendAmountBig = mulDecimals(sendAmountSlashed, inputDecimals);
+            const sendAmountBig = mulDecimals(sendAmountSlashed, outputDecimals);
 
-            return sendAmountBig;
+            return toFixed(sendAmountBig, 0);
         } catch (err) {
             throw new Error('CANNOT_GET_LATEST_INPUT_AMOUNT');
         }   

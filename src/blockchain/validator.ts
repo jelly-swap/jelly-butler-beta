@@ -1,7 +1,6 @@
 import * as moment from 'moment';
 
 import Validators from './validators';
-import Config from './config';
 import AppConfig from '../../config';
 
 import { greaterThan, sub, lessThanOrEqual, mul, divDecimals } from '../utils/math';
@@ -12,8 +11,9 @@ import { safeAccess } from '../utils';
 import getBlockchainConfig from './config';
 
 export const isInputSwapExpirationValid = (swap) => {
-    const now = getCurrentDate(Config[swap.network].unix);
-    const result = greaterThan(sub(swap.expiration, now), Config[swap.network].VALID_EXPIRATION);
+    const blockchainConfig = getBlockchainConfig();
+    const now = getCurrentDate(blockchainConfig[swap.network].unix);
+    const result = greaterThan(sub(swap.expiration, now), blockchainConfig[swap.network].VALID_EXPIRATION);
 
     if (!result) {
         logError(`INPUT_INVALID_EXPIRATION`, swap);
@@ -23,8 +23,9 @@ export const isInputSwapExpirationValid = (swap) => {
 };
 
 export const isOutputSwapExpirationValid = (swap) => {
-    const now = getCurrentDate(Config[swap.network].unix);
-    const result = lessThanOrEqual(sub(swap.expiration, now), Config[swap.network].expiration);
+    const blockchainConfig = getBlockchainConfig();
+    const now = getCurrentDate(blockchainConfig[swap.network].unix);
+    const result = lessThanOrEqual(sub(swap.expiration, now), blockchainConfig[swap.network].expiration);
 
     if (!result) {
         logError(`OUTPUT_INVALID_EXPIRATION`, swap);
@@ -35,7 +36,7 @@ export const isOutputSwapExpirationValid = (swap) => {
 
 export const isInputSwapValid = async (swap) => {
     const blockchainConfig = getBlockchainConfig();
-    const inputNetworkValidation = safeAccess(blockchainConfig,[swap.network]);
+    const inputNetworkValidation = safeAccess(blockchainConfig, [swap.network]);
     const outputNetworkValidation = safeAccess(blockchainConfig, [swap.outputNetwork]);
 
     if (!isInputSwapExpirationValid(swap)) {
@@ -53,12 +54,12 @@ export const isInputSwapValid = async (swap) => {
         return false;
     }
 
-    if (swap.receiver.toLowerCase() != safeAccess(Config, [swap.network, 'receiverAddress']).toLowerCase()) {
+    if (swap.receiver.toLowerCase() != safeAccess(blockchainConfig, [swap.network, 'receiverAddress']).toLowerCase()) {
         logError(`INPUT_INVALID_RECEIVER`, swap);
         return false;
     }
 
-    if(!isInputPriceValid(swap)){
+    if (!isInputPriceValid(swap)) {
         logError(`INPUT_INVALID_PRICE`, swap);
         return false;
     }
@@ -81,7 +82,10 @@ export const isOutputSwapValid = async (swap, takerDesiredAmount) => {
         return false;
     }
 
-    if (swap.outputAddress.toLowerCase() === Config[swap.network].receiverAddress.toLowerCase()) {
+    if (
+        swap.outputAddress.toLowerCase() ===
+        safeAccess(blockchainConfig, [swap.network, 'receiverAddress']).toLowerCase()
+    ) {
         logError(`OUTPUT_WRONG_OUTPUT_ADDRESS`, swap);
         return false;
     }
@@ -98,12 +102,12 @@ export const isOutputSwapValid = async (swap, takerDesiredAmount) => {
     }
 
     const allowedSlippageAmount = mul(takerDesiredAmount, AppConfig.SLIPPAGE);
-    if(greaterThan(sub(takerDesiredAmount, swap.inputAmount), allowedSlippageAmount) ){
+    if (greaterThan(sub(takerDesiredAmount, swap.inputAmount), allowedSlippageAmount)) {
         logError(`OUTPUT_TOO_HIGH_SLIPPAGE_FOR_TAKER`, swap);
         return false;
     }
 
-    if(!isOutputSwapExpirationValid(swap)){
+    if (!isOutputSwapExpirationValid(swap)) {
         logError(`OUTPUT_INVALID_EXPIRATION`, swap);
         return false;
     }
@@ -152,7 +156,7 @@ function isInputPriceValid(swap) {
 
         const maxAllowedSlippage = mul(marketActualPrice, AppConfig.SLIPPAGE);
 
-        greaterThan(maxAllowedSlippage, sub(desiredAmountSlashed, marketActualPrice));
+        return greaterThan(maxAllowedSlippage, sub(desiredAmountSlashed, marketActualPrice));
     } catch (err) {
         return false;
     }

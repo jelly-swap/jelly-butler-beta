@@ -1,4 +1,5 @@
 import getContracts from '../contracts';
+import { SECONDARY_NETWORKS } from '../config';
 import { sleep } from '../utils';
 
 import { logInfo, logError } from '../../logger';
@@ -80,30 +81,36 @@ export default class WithdrawHandler {
 
             const emitter = new Emitter();
 
+            let is_secondary_network_active = false;
             for (const network in this.contracts) {
-                const contract = this.contracts[network];
-                const withdraws = await contract.getPast('withdraw');
-                const ids = withdraws.map((w) => w.id);
+                if (is_secondary_network_active && SECONDARY_NETWORKS[network]) {
+                    logInfo(`Secondary Networks Swaps Are Succesfully Withdrawn  - ${network}`);
+                } else {
+                    is_secondary_network_active = !!SECONDARY_NETWORKS[network];
+                    const contract = this.contracts[network];
+                    const withdraws = await contract.getPast('withdraw');
+                    const ids = withdraws.map((w) => w.id);
 
-                try {
-                    const statuses = await contract.getStatus(ids);
+                    try {
+                        const statuses = await contract.getStatus(ids);
 
-                    for (const index in withdraws) {
-                        if (equal(statuses[index], 3)) {
-                            const withdraw = withdraws[index];
+                        for (const index in withdraws) {
+                            if (equal(statuses[index], 3)) {
+                                const withdraw = withdraws[index];
 
-                            const isProcessed = await this.withdrawService.findByIdAndNetwork(
-                                withdraw.id,
-                                withdraw.network
-                            );
+                                const isProcessed = await this.withdrawService.findByIdAndNetwork(
+                                    withdraw.id,
+                                    withdraw.network
+                                );
 
-                            if (!isProcessed) {
-                                emitter.emit('WITHDRAW', withdraw);
+                                if (!isProcessed) {
+                                    emitter.emit('WITHDRAW', withdraw);
+                                }
                             }
                         }
+                    } catch (err) {
+                        logError(`TRACK_OLD_WITHDRAWS_PROCESSING_ERROR ${network} ${err}`);
                     }
-                } catch (err) {
-                    logError(`TRACK_OLD_WITHDRAWS_PROCESSING_ERROR ${network} ${err}`);
                 }
             }
         } catch (err) {

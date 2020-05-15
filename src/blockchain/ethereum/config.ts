@@ -16,7 +16,7 @@ export default () => {
         explorer: 'https://etherscan.io/tx/',
         REFUND_PERIOD: 10,
         VALID_EXPIRATION: 72000,
-        gasMultiplier: 3,
+        gasMultiplier: 2,
     };
 
     if (address && secret) {
