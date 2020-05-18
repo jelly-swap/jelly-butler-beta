@@ -4,11 +4,11 @@ import BitcoinContract from './bitcoin';
 import EthereumContract from './ethereum';
 import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
-import { logInfo, } from '../logger';
 
 let Contracts: any;
+let NetworkContracts: any;
 
-export default () => {
+const getContracts = () => {
     if (!Contracts) {
         const Config = getConfig();
 
@@ -30,15 +30,27 @@ export default () => {
     return Contracts;
 };
 
+export const getNetworkContracts = () => {
+    if (!NetworkContracts) {
+        NetworkContracts = Object.entries(Contracts).reduce((a, [k, v]) => {
+            if (SECONDARY_NETWORKS[k]) {
+                a['ERC20'] = v;
+            } else {
+                a[k] = v;
+            }
+            return a;
+        }, {}) as any;
+    }
+
+    return NetworkContracts;
+};
+
 export const startEventListener = async () => {
-    let is_secondary_network_active = false;   
-    for (const network in Contracts) {
-        if(is_secondary_network_active && SECONDARY_NETWORKS[network]){
-            logInfo(`Secondary Networks Are Already Active - ${network}`);
-        }
-        else{
-            is_secondary_network_active = !!(SECONDARY_NETWORKS[network]);
-            await Contracts[network].subscribe();
-        }
+    getContracts();
+    getNetworkContracts();
+    for (const network in NetworkContracts) {
+        await NetworkContracts[network].subscribe();
     }
 };
+
+export default getContracts;
