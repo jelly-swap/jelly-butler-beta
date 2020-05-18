@@ -21,7 +21,7 @@ export default class Exchange implements IExchange {
 
         this.userConfig = new UserConfig().getUserConfig();
 
-        if (Exchanges[this.userConfig.EXCHANGE.NAME]) {
+        if (Exchanges[this.userConfig?.EXCHANGE?.NAME]) {
             this.exchange = new Exchanges[this.userConfig.EXCHANGE.NAME]();
         } else {
             this.exchange = new Exchanges.mock();

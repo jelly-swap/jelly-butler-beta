@@ -34,7 +34,7 @@ export default class EmailService {
     }
 
     async send(topic, data) {
-        if (this.userConfig.NOTIFICATIONS.EMAIL.ENABLED) {
+        if (this.userConfig.NOTIFICATIONS?.EMAIL?.ENABLED) {
             let result;
 
             switch (topic) {
