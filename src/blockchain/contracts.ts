@@ -6,8 +6,9 @@ import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
 
 let Contracts: any;
+let NetworkContracts: any;
 
-export default () => {
+const getContracts = () => {
     if (!Contracts) {
         const Config = getConfig();
 
@@ -29,10 +30,27 @@ export default () => {
     return Contracts;
 };
 
+export const getNetworkContracts = () => {
+    if (!NetworkContracts) {
+        NetworkContracts = Object.entries(Contracts).reduce((a, [k, v]) => {
+            if (SECONDARY_NETWORKS[k]) {
+                a['ERC20'] = v;
+            } else {
+                a[k] = v;
+            }
+            return a;
+        }, {}) as any;
+    }
+
+    return NetworkContracts;
+};
+
 export const startEventListener = async () => {
-    for (const network of Object.keys(Contracts)) {
-        if (!SECONDARY_NETWORKS[network]) {
-            await Contracts[network].subscribe();
-        }
+    getContracts();
+    getNetworkContracts();
+    for (const network in NetworkContracts) {
+        await NetworkContracts[network].subscribe();
     }
 };
+
+export default getContracts;

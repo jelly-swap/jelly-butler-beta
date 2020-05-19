@@ -1,5 +1,6 @@
 import getAdapters from '../adapters';
-import getContracts from '../contracts';
+import getContracts, { getNetworkContracts } from '../contracts';
+import { SECONDARY_NETWORKS } from '../config';
 import { isOutputSwapValid, isInputSwapValid } from '../validator';
 import { sleep } from '../utils';
 
@@ -9,7 +10,7 @@ import { SwapService } from '../../components/swap/service';
 import EmailService from '../../email';
 import Exchange from '../../exchange';
 import Emitter from '../../emitter';
-import { equal, divDecimals, mulDecimals, mul } from '../../utils/math';
+import { equal, divDecimals, mulDecimals, mul, toFixed } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
 import getBlockchainConfig from '../config';
 
@@ -37,7 +38,7 @@ export default class SwapHandler {
     }
 
     async onSwap(inputSwap, maxTries = RETRY_COUNT) {
-        try {    
+        try {
             logInfo(`SWAP_RECEIVED`, inputSwap);
 
             const isProcessed = await this.swapService.findByIdAndNetwork(inputSwap.id, inputSwap.network);
@@ -46,8 +47,10 @@ export default class SwapHandler {
                 const adapter = this.adapters[inputSwap.outputNetwork];
                 const contract = this.contracts[inputSwap.outputNetwork];
 
-                const outputSwap = adapter.createSwapFromInput(inputSwap);
-                outputSwap.inputAmount = this.getLatestInputAmount(outputSwap);
+                const outputSwap = adapter.createSwapFromInput({
+                    ...inputSwap,
+                    outputAmount: this.getLatestOutputAmount(inputSwap),
+                });
 
                 const validOutputSwap = await isOutputSwapValid(outputSwap, inputSwap.outputAmount);
 
@@ -56,6 +59,7 @@ export default class SwapHandler {
                 if (validOutputSwap && validInputSwap) {
                     try {
                         logInfo('SWAP_OUTPUT', outputSwap);
+
                         const result = await contract.newContract(outputSwap);
                         const transactionHash = result.hash || result;
 
@@ -82,8 +86,8 @@ export default class SwapHandler {
             } else {
                 logInfo('SWAP_ALREADY_PROCESSED', inputSwap.id);
             }
-        } catch(err) {
-          logError(`CANNOT_PREPARE_SWAP_OUTPUT ${inputSwap} ${err}`);
+        } catch (err) {
+            logError(`CANNOT_PREPARE_SWAP_OUTPUT ${inputSwap} ${err}`);
         }
     }
 
@@ -91,10 +95,11 @@ export default class SwapHandler {
         logInfo(`TRACK_OLD_SWAPS`);
 
         const emitter = new Emitter();
+        const networkContracts = getNetworkContracts();
 
-        for (const network in this.contracts) {
+        for (const network in networkContracts) {
             try {
-                const swaps = await this.contracts[network].getPast('new');
+                const swaps = await networkContracts[network].getPast('new');
 
                 if (swaps) {
                     for (const swap of swaps) {
@@ -110,22 +115,22 @@ export default class SwapHandler {
         }
     }
 
-    getLatestInputAmount(swap) {
+    getLatestOutputAmount(swap) {
         try {
-            const pairPrice = this.priceService.getPairPriceWithSpreadAndFee(swap.outputNetwork, swap.network);
+            const pairPrice = this.priceService.getPairPriceWithSpreadAndFee(swap.network, swap.outputNetwork);
 
             const inputDecimals = this.blockchainConfig[swap.network].decimals;
             const outputDecimals = this.blockchainConfig[swap.outputNetwork].decimals;
 
-            const receivedAmountSlashed = divDecimals(swap.outputAmount, outputDecimals);
+            const receivedAmountSlashed = divDecimals(swap.inputAmount, inputDecimals);
 
             const sendAmountSlashed = mul(receivedAmountSlashed, pairPrice);
 
-            const sendAmountBig = mulDecimals(sendAmountSlashed, inputDecimals);
+            const sendAmountBig = mulDecimals(sendAmountSlashed, outputDecimals);
 
-            return sendAmountBig;
+            return toFixed(sendAmountBig, 0);
         } catch (err) {
             throw new Error('CANNOT_GET_LATEST_INPUT_AMOUNT');
-        }   
+        }
     }
 }

@@ -1,4 +1,5 @@
-import getContracts from '../contracts';
+import getContracts, { getNetworkContracts } from '../contracts';
+import { SECONDARY_NETWORKS } from '../config';
 import { sleep } from '../utils';
 
 import { logInfo, logError } from '../../logger';
@@ -79,9 +80,10 @@ export default class WithdrawHandler {
             logInfo(`TRACK_OLD_WITHDRAWS`);
 
             const emitter = new Emitter();
+            const networkContracts = getNetworkContracts();
 
-            for (const network in this.contracts) {
-                const contract = this.contracts[network];
+            for (const network in networkContracts) {
+                const contract = networkContracts[network];
                 const withdraws = await contract.getPast('withdraw');
                 const ids = withdraws.map((w) => w.id);
 

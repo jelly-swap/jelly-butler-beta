@@ -1,14 +1,11 @@
-import getContracts from '../contracts';
-import { SECONDARY_NETWORKS } from '../config';
+import { getNetworkContracts } from '../contracts';
 
 export default class RefundHandler {
     async processRefunds() {
-        const contracts = getContracts();
+        const contracts = getNetworkContracts();
 
         for (const network in contracts) {
-            if (!SECONDARY_NETWORKS[network]) {
-                await contracts[network].processRefunds();
-            }
+            await contracts[network].processRefunds();
         }
     }
 }
