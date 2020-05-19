@@ -1,5 +1,5 @@
 import getAdapters from '../adapters';
-import getContracts from '../contracts';
+import getContracts, { getNetworkContracts } from '../contracts';
 import { SECONDARY_NETWORKS } from '../config';
 import { isOutputSwapValid, isInputSwapValid } from '../validator';
 import { sleep } from '../utils';
@@ -38,7 +38,7 @@ export default class SwapHandler {
     }
 
     async onSwap(inputSwap, maxTries = RETRY_COUNT) {
-        try {    
+        try {
             logInfo(`SWAP_RECEIVED`, inputSwap);
 
             const isProcessed = await this.swapService.findByIdAndNetwork(inputSwap.id, inputSwap.network);
@@ -47,17 +47,10 @@ export default class SwapHandler {
                 const adapter = this.adapters[inputSwap.outputNetwork];
                 const contract = this.contracts[inputSwap.outputNetwork];
 
-                const outputSwap = adapter.createSwapFromInput(
-                    {...inputSwap, outputAmount: this.getLatestOutputAmount(inputSwap)}
-                );
-                console.log('outputSwap - input amount ');
-                console.log(outputSwap.inputAmount);
-
-                console.log('adapter here')
-                console.log(adapter);
-
-                console.log('outputswap here');
-                console.log(outputSwap);
+                const outputSwap = adapter.createSwapFromInput({
+                    ...inputSwap,
+                    outputAmount: this.getLatestOutputAmount(inputSwap),
+                });
 
                 const validOutputSwap = await isOutputSwapValid(outputSwap, inputSwap.outputAmount);
 
@@ -93,8 +86,8 @@ export default class SwapHandler {
             } else {
                 logInfo('SWAP_ALREADY_PROCESSED', inputSwap.id);
             }
-        } catch(err) {
-          logError(`CANNOT_PREPARE_SWAP_OUTPUT ${inputSwap} ${err}`);
+        } catch (err) {
+            logError(`CANNOT_PREPARE_SWAP_OUTPUT ${inputSwap} ${err}`);
         }
     }
 
@@ -102,27 +95,22 @@ export default class SwapHandler {
         logInfo(`TRACK_OLD_SWAPS`);
 
         const emitter = new Emitter();
+        const networkContracts = getNetworkContracts();
 
-        let is_secondary_network_active = false;
-        for (const network in this.contracts) {
-            if(is_secondary_network_active && SECONDARY_NETWORKS[network]) {
-                logInfo(`Secondary Networks Swaps Are Succesfully Executed - ${network}`);
-            } else {
-                try {
-                    is_secondary_network_active = !!SECONDARY_NETWORKS[network];
-                    const swaps = await this.contracts[network].getPast('new');
+        for (const network in networkContracts) {
+            try {
+                const swaps = await networkContracts[network].getPast('new');
 
-                    if (swaps) {
-                        for (const swap of swaps) {
-                            // if swap is Active
-                            if (equal(swap.status, 1)) {
-                                emitter.emit('NEW_CONTRACT', swap);
-                            }
+                if (swaps) {
+                    for (const swap of swaps) {
+                        // if swap is Active
+                        if (equal(swap.status, 1)) {
+                            emitter.emit('NEW_CONTRACT', swap);
                         }
                     }
-                } catch (err) {
-                    logError(`TRACK_OLD_SWAPS_ERROR ${network} ${err}`);
                 }
+            } catch (err) {
+                logError(`TRACK_OLD_SWAPS_ERROR ${network} ${err}`);
             }
         }
     }
@@ -143,6 +131,6 @@ export default class SwapHandler {
             return toFixed(sendAmountBig, 0);
         } catch (err) {
             throw new Error('CANNOT_GET_LATEST_INPUT_AMOUNT');
-        }   
+        }
     }
 }
