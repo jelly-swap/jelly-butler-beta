@@ -56,7 +56,7 @@ export const isInputSwapValid = async (swap) => {
         return false;
     }
 
-    if (compareAddress(swap.receiver, safeAccess(userConfig, ['WALLETS', swap.network, 'ADDRESS']))) {
+    if (!compareAddress(swap.receiver, safeAccess(userConfig, ['WALLETS', swap.network, 'ADDRESS']))) {
         logError(`INPUT_INVALID_RECEIVER`, swap);
         return false;
     }
