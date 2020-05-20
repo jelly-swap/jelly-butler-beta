@@ -32,7 +32,7 @@ export class PriceService {
         PriceService.instance = this;
     }
 
-    async update(provider?: IPriceProvider, maxTries = 5) {
+    async update(provider?: IPriceProvider, maxTries = 40) {
         try {
             let prices = {};
 
@@ -57,13 +57,13 @@ export class PriceService {
             }
         } catch (err) {
             if (maxTries > 0) {
-                await sleep(2000);
+                await sleep(15000);
                 logError('PRICE_SERVICE_DOWN', err);
                 logInfo(`Starting new price service: ${this.userConfig.PRICE.PROVIDER}`);
                 this.priceProvider = new PriceProviders[this.userConfig.PRICE.PROVIDER]();
                 await this.update(this.priceProvider, maxTries - 1);
             } else {
-                logInfo(`Shutting down the application.`);
+                logInfo(`Shutting down the application after 10 minutes without price provider.`);
                 process.exit(-1);
             }
         }
