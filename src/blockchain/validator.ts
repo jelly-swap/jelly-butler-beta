@@ -10,6 +10,7 @@ import UserConfig from '../config';
 import { safeAccess } from '../utils';
 import getBlockchainConfig from './config';
 import { compareAddress } from './utils';
+import getSupportedNetworks from '../config/supportedNetworks';
 
 export const isInputSwapExpirationValid = (swap) => {
     const blockchainConfig = getBlockchainConfig();
@@ -40,6 +41,13 @@ export const isInputSwapValid = async (swap) => {
     const blockchainConfig = getBlockchainConfig();
     const inputNetworkValidation = safeAccess(blockchainConfig, [swap.network]);
     const outputNetworkValidation = safeAccess(blockchainConfig, [swap.outputNetwork]);
+    const supportedNetworks = getSupportedNetworks();
+    const receivers = new UserConfig().getReceivers(Object.keys(supportedNetworks));
+
+    if (receivers.findIndex((item) => swap.sender.toLowerCase() == item.toLowerCase()) !== -1) {
+        logError(`INPUT_SENDER_EQUAL_BUTLER_RECEIVER`, swap);
+        return false;
+    }
 
     if (!isInputSwapExpirationValid(swap)) {
         logError(`INPUT_INVALID_EXPIRATION`, swap);
