@@ -9,6 +9,7 @@ import { PriceService } from '../components/price/service';
 import UserConfig from '../config';
 import { safeAccess } from '../utils';
 import getBlockchainConfig from './config';
+import { compareAddress } from './utils';
 
 export const isInputSwapExpirationValid = (swap) => {
     const blockchainConfig = getBlockchainConfig();
@@ -35,6 +36,7 @@ export const isOutputSwapExpirationValid = (swap) => {
 };
 
 export const isInputSwapValid = async (swap) => {
+    const userConfig = new UserConfig().getUserConfig();
     const blockchainConfig = getBlockchainConfig();
     const inputNetworkValidation = safeAccess(blockchainConfig, [swap.network]);
     const outputNetworkValidation = safeAccess(blockchainConfig, [swap.outputNetwork]);
@@ -54,7 +56,7 @@ export const isInputSwapValid = async (swap) => {
         return false;
     }
 
-    if (swap.receiver.toLowerCase() != safeAccess(blockchainConfig, [swap.network, 'receiverAddress']).toLowerCase()) {
+    if (!compareAddress(swap.receiver, safeAccess(userConfig, ['WALLETS', swap.network, 'ADDRESS']))) {
         logError(`INPUT_INVALID_RECEIVER`, swap);
         return false;
     }
@@ -68,6 +70,7 @@ export const isInputSwapValid = async (swap) => {
 };
 
 export const isOutputSwapValid = async (swap, takerDesiredAmount) => {
+    const userConfig = new UserConfig().getUserConfig();
     const blockchainConfig = getBlockchainConfig();
     const inputNetworkValidation = safeAccess(blockchainConfig, [swap.network]);
     const outputNetworkValidation = safeAccess(blockchainConfig, [swap.outputNetwork]);
@@ -82,15 +85,12 @@ export const isOutputSwapValid = async (swap, takerDesiredAmount) => {
         return false;
     }
 
-    if (
-        swap.outputAddress.toLowerCase() ===
-        safeAccess(blockchainConfig, [swap.network, 'receiverAddress']).toLowerCase()
-    ) {
+    if (compareAddress(swap.outputAddress, safeAccess(userConfig, ['WALLETS', swap.network, 'ADDRESS']))) {
         logError(`OUTPUT_WRONG_OUTPUT_ADDRESS`, swap);
         return false;
     }
 
-    if (swap.sender.toLowerCase() === swap.receiver.toLowerCase()) {
+    if (compareAddress(swap.sender, swap.receiver)) {
         logError(`OUTPUT_SENDER_CANNOT_EQUAL_RECEIVER`, swap);
         return false;
     }
