@@ -6,20 +6,25 @@ import EmailService from '../../email';
 import { greaterThan } from '../../utils/math';
 import { logInfo, logError } from '../../logger';
 
+import { SECONDARY_NETWORKS } from '../config';
+import UserConfig from '../../config';
+
 export default class Erc20Contract extends Contract {
     private emailService: EmailService;
+    private receivers: string[];
     private filter: any;
 
     constructor(config) {
         super(new Providers.WalletProvider(config.PRIVATE_KEY, config.providerUrl), config);
         this.emailService = new EmailService();
+        this.receivers = new UserConfig().getReceivers(Object.keys(SECONDARY_NETWORKS));
 
         this.filter = {
             new: {
-                receiver: this.config.receiverAddress,
+                receiver: this.receivers,
             },
             withdraw: {
-                sender: this.config.receiverAddress,
+                sender: this.receivers,
             },
         };
     }
@@ -57,7 +62,7 @@ export default class Erc20Contract extends Contract {
             logInfo('START ERC20 REFUNDS');
             try {
                 let transactionHash;
-                const events = await this.getPast('new', { new: { sender: this.config.receiverAddress } });
+                const events = await this.getPast('new', { new: { sender: this.receivers } });
                 for (const event of events) {
                     try {
                         if (event.status === 4) {

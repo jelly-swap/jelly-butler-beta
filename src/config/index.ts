@@ -1,5 +1,6 @@
 import userConfig from '../../user-config';
 import { IUserConfig } from '../types/UserConfig';
+import { safeAccess } from '../utils';
 
 export default class UserConfig {
     private static instance: UserConfig;
@@ -22,5 +23,19 @@ export default class UserConfig {
 
     getUserConfig(): IUserConfig {
         return this.config;
+    }
+
+    getReceivers(assets: string[]) {
+        const wallets = safeAccess(this.config, ['WALLETS']);
+
+        return assets.reduce((p, c) => {
+            const receiver = wallets[c].ADDRESS;
+
+            if (receiver) {
+                p.push(receiver);
+            }
+
+            return p;
+        }, []);
     }
 }
