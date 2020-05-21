@@ -15,10 +15,7 @@ export default class InfoTask {
 
         setInterval(async () => {
             await this.infoService.update();
-        }, 50 * 1000);
-
-        setInterval(async () => {
             await this.infoService.iAmAlive();
-        }, 30 * 1000);
+        }, 10 * 1000);
     }
 }
