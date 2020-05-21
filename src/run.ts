@@ -17,6 +17,8 @@ import userConfig from '../user-config';
 import getDbConfig from './config/database';
 import UserConfig from './config';
 
+import { PK_MATCH_ADDRESS } from './blockchain/utils';
+
 export const run = (config = userConfig) => {
     new UserConfig().setUserConfig(config);
 
@@ -25,19 +27,45 @@ export const run = (config = userConfig) => {
         ...config.DATABASE[config.DATABASE.ACTIVE],
     });
 
-    createConnection(dbConfig as any)
-        .then(async () => {
-            getContracts();
+    validateAddresses(config).then((result) => {
+        if (result) {
+            createConnection(dbConfig as any)
+                .then(async () => {
+                    getContracts();
 
-            await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
+                    await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
 
-            await createServer(config.SERVER.PORT);
+                    await createServer(config.SERVER.PORT);
 
-            await startHandlers();
+                    await startHandlers();
 
-            await startEventListener();
-        })
-        .catch((error) => {
-            logError(`ERROR: ${error}`);
-        });
+                    await startEventListener();
+                })
+                .catch((error) => {
+                    logError(`ERROR: ${error}`);
+                });
+        }
+    });
+};
+
+const validateAddresses = async (config) => {
+    for (const network in config.WALLETS) {
+        const { ADDRESS, SECRET } = config.WALLETS[network];
+
+        if (ADDRESS && SECRET) {
+            const result = await PK_MATCH_ADDRESS[network](SECRET, ADDRESS);
+
+            if (!result) {
+                logError(
+                    `The SECRET you have provided for ${network} network does not match the ADDRESS.
+                    \r\n${SECRET} does not match ${ADDRESS}.
+                    \r\nFix the problem and start Butler again.`
+                );
+
+                return false;
+            }
+        }
+    }
+
+    return true;
 };
