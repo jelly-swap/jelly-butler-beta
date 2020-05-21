@@ -4,35 +4,11 @@ export default {
 
     // Traiding pairs
     PAIRS: {
-        'BTC-USDC': {
-            FEE: 0.01,
-        },
-
-        'BTC-WBTC': {
-            FEE: 0.01,
-        },
-
-        'ETH-USDC': {
-            FEE: 0.01,
-        },
-
-        'BTC-DAI': {
-            FEE: 0.01,
-        },
-
-        'ETH-DAI': {
-            FEE: 0.01,
-        },
-
-        'DAI-ETH': {
-            FEE: 0.01,
-        },
-
-        'USDC-ETH': {
-            FEE: 0.01,
-        },
-
         'BTC-ETH': {
+            FEE: 0.01,
+        },
+
+        'ETH-BTC': {
             FEE: 0.01,
         },
     },
@@ -82,7 +58,7 @@ export default {
 
     // PRICE PROVIDER
     PRICE: {
-        PROVIDER: 'cryptocompare',
+        PROVIDER: 'CryptoCompare',
         API_KEY: '',
         SECRET_KEY: '',
         UPDATE_INTERVAL: 30,
