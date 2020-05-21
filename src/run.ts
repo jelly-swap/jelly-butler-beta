@@ -10,7 +10,7 @@ import InfoTask from './components/info/task';
 
 import { startHandlers } from './blockchain/handler';
 
-import { logError } from './logger';
+import { logError, logInfo } from './logger';
 import getContracts, { startEventListener } from './blockchain/contracts';
 import userConfig from '../user-config';
 
@@ -49,6 +49,7 @@ export const run = (config = userConfig) => {
 };
 
 const validateAddresses = async (config) => {
+    logInfo('Validating...');
     for (const network in config.WALLETS) {
         const { ADDRESS, SECRET } = config.WALLETS[network];
 
