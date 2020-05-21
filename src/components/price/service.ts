@@ -18,6 +18,7 @@ export class PriceService {
     private priceProvider: IPriceProvider;
 
     private prices = {};
+    private allPrices = {};
     private pricesWithSpreadAndFee = {};
 
     constructor() {
@@ -52,6 +53,7 @@ export class PriceService {
             }
 
             if (Object.values(prices).length > 0) {
+                this.setAllPrices(prices);
                 this.setPrices(supportedPrices);
                 this.setPricesWithSpreadAndFee(supportedPrices);
             }
@@ -73,12 +75,16 @@ export class PriceService {
         return this.prices;
     }
 
+    getAllPrices() {
+        return this.allPrices;
+    }
+
     getPricesWithSpreadAndFee() {
         return this.pricesWithSpreadAndFee;
     }
 
     getPairPrice(base: string, quote: string) {
-        const prices = this.getPrices();
+        const prices = this.getAllPrices();
 
         const price = prices[`${base}-${quote}`];
 
@@ -103,6 +109,10 @@ export class PriceService {
 
     setPrices(prices) {
         this.prices = prices;
+    }
+
+    setAllPrices(prices) {
+        this.allPrices = prices;
     }
 
     setPricesWithSpreadAndFee(prices) {

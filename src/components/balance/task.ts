@@ -12,7 +12,6 @@ export default class BalanceTask {
         this.name = 'Balance Task';
         this.balanceService = new BalanceService();
         this.userConfig = new UserConfig().getUserConfig();
-
     }
 
     async start() {
