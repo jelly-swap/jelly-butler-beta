@@ -19,8 +19,7 @@ export default () => {
         contractAddress: 'ct_jmRkfpzmn7KZbXbkEL9wueJkb1vaFzMnVFJMFjAnJgj1CTtQe',
         explorer: 'https://explorer.aepps.com/transactions/',
         REFUND_PERIOD: 10,
-        //Expiration is in milliseconds
-        VALID_EXPIRATION: 72000000,
+        VALID_EXPIRATION: 72000,
     };
 
     if (address && secret) {

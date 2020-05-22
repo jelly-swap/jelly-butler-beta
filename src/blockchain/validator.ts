@@ -15,7 +15,11 @@ import getSupportedNetworks from '../config/supportedNetworks';
 export const isInputSwapExpirationValid = (swap) => {
     const blockchainConfig = getBlockchainConfig();
     const now = getCurrentDate(blockchainConfig[swap.network].unix);
-    const result = greaterThan(sub(swap.expiration, now), blockchainConfig[swap.network].VALID_EXPIRATION);
+    const unixMultiplier = getUnixMultiplier(blockchainConfig[swap.network].unix);
+    const result = greaterThan(
+        sub(swap.expiration, now),
+        mul(blockchainConfig[swap.network].VALID_EXPIRATION, unixMultiplier)
+    );
 
     if (!result) {
         logError(`INPUT_INVALID_EXPIRATION`, swap);
@@ -27,7 +31,11 @@ export const isInputSwapExpirationValid = (swap) => {
 export const isOutputSwapExpirationValid = (swap) => {
     const blockchainConfig = getBlockchainConfig();
     const now = getCurrentDate(blockchainConfig[swap.network].unix);
-    const result = lessThanOrEqual(sub(swap.expiration, now), blockchainConfig[swap.network].expiration);
+    const unixMultiplier = getUnixMultiplier(blockchainConfig[swap.network].unix);
+    const result = lessThanOrEqual(
+        sub(swap.expiration, now),
+        mul(blockchainConfig[swap.network].expiration, unixMultiplier)
+    );
 
     if (!result) {
         logError(`OUTPUT_INVALID_EXPIRATION`, swap);
@@ -146,6 +154,13 @@ const getCurrentDate = (unix) => {
         return Math.floor(now / 1000);
     }
     return now;
+};
+
+const getUnixMultiplier = (unix) => {
+    if (unix) {
+        return 1;
+    }
+    return 1000;
 };
 
 function isInputPriceValid(swap) {
