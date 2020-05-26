@@ -11,14 +11,11 @@ export default class InfoTask {
     }
 
     async start() {
-        await this.infoService.update();
+        await this.infoService.register();
 
         setInterval(async () => {
             await this.infoService.update();
-        }, 10 * 1000);
-
-        setInterval(async () => {
             await this.infoService.iAmAlive();
-        }, 5 * 1000);
+        }, 10 * 1000);
     }
 }

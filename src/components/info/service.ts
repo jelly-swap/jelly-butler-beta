@@ -39,6 +39,23 @@ export default class InfoService {
         InfoService.instance = this;
     }
 
+    async register() {
+        try {
+            this.update();
+
+            const info = this.getInfo();
+
+            const result = await axios.post(`${this.userConfig.AGGREGATOR_URL}/register`, info);
+
+            const { valid, message } = result?.data;
+            if (!valid) {
+                logError(`CANNOT_CONNECT_TO_NETWORK: ${message}`);
+            }
+        } catch (err) {
+            logError(`REGISTER_ERROR: ${err}`);
+        }
+    }
+
     async update() {
         this.prices = this.priceService.getPricesWithSpreadAndFee();
         this.balances = this.balanceService.getBalances();
@@ -49,11 +66,16 @@ export default class InfoService {
         try {
             const info = this.getInfo();
 
-            const result = await axios.post(this.userConfig.AGGREGATOR_URL, info);
+            const result = await axios.post(`${this.userConfig.AGGREGATOR_URL}/update`, info);
 
             const { valid, message } = result?.data;
+
             if (!valid) {
                 logError(`CANNOT_CONNECT_TO_NETWORK: ${message}`);
+
+                if (message === 'NOT_REGISTERED') {
+                    await this.register();
+                }
             }
         } catch (err) {
             logError(`I_AM_ALIVE_ERROR: ${err}`);
