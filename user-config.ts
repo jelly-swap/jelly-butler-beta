@@ -95,7 +95,7 @@ export default {
     SERVER: { PORT: 9000 },
 
     // ================== Database configuration ==================
-    //options: mongodb or sqlite
+    //options: MONGODB or SQLITE
     DATABASE: {
         ACTIVE: 'SQLITE',
 
