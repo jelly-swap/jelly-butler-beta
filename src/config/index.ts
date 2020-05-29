@@ -29,10 +29,12 @@ export default class UserConfig {
         const wallets = safeAccess(this.config, ['WALLETS']);
 
         return assets.reduce((p, c) => {
-            const receiver = wallets[c].ADDRESS;
+            if (wallets[c]) {
+                const receiver = wallets[c].ADDRESS;
 
-            if (receiver) {
-                p.push(receiver);
+                if (receiver) {
+                    p.push(receiver);
+                }
             }
 
             return p;
