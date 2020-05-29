@@ -11,7 +11,8 @@ export default () => {
 
     const config = {
         ...Config(7200),
-        providerUrl: 'https://mainnet.infura.io/v3/ee13a282868d4e7cb7d9a9543958631d',
+        providerUrl:
+            userConfig.BLOCKCHAIN_PROVIDER?.INFURA || 'https://mainnet.infura.io/v3/ee13a282868d4e7cb7d9a9543958631d',
         contractAddress: '0x471B080EffB2bc6fb33c8c6FE6ce1AB46F9f522b',
         explorer: 'https://etherscan.io/tx/',
         REFUND_PERIOD: 10,

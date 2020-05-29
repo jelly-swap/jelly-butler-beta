@@ -37,7 +37,8 @@ export default (token) => {
     const tokenConfig = Config(token, TokenConfig, AddressToToken, 7200);
     const config = {
         ...tokenConfig,
-        providerUrl: 'https://mainnet.infura.io/v3/02cf6338c88b42f595f8fd946134fa4b',
+        providerUrl:
+            userConfig.BLOCKCHAIN_PROVIDER?.INFURA || 'https://mainnet.infura.io/v3/02cf6338c88b42f595f8fd946134fa4b',
         contractAddress: '0x133DbFdf74f565838A2f9413Fb53761a19f06ADF',
         explorer: 'https://etherscan.io/tx/',
         REFUND_PERIOD: 10,
