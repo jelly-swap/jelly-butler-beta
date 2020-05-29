@@ -7,4 +7,10 @@ export default [
         controller: BalanceController,
         action: 'getBalances',
     },
+    {
+        method: 'get',
+        route: '/api/v1/balanceAll',
+        controller: BalanceController,
+        action: 'getAllBalances',
+    },
 ];

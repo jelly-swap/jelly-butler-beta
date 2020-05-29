@@ -23,8 +23,9 @@ export default class BinanceExchange implements IExchange {
 
         safeAccess;
         this.binance = Binance().options({
-            APIKEY: safeAccess(userConfig, ['EXCHANGE', 'API_KEY']),
-            APISECRET: safeAccess(userConfig, ['EXCHANGE', 'SECRET_KEY']),
+            APIKEY: safeAccess(userConfig, ['EXCHANGE', 'API_KEY']) || safeAccess(userConfig, ['PRICE', 'API_KEY']),
+            APISECRET:
+                safeAccess(userConfig, ['EXCHANGE', 'SECRET_KEY']) || safeAccess(userConfig, ['PRICE', 'SECRET_KEY']),
             useServerTime: true,
         });
 

@@ -14,6 +14,10 @@ export interface IUserConfig {
         };
     };
 
+    BLOCKCHAIN_PROVIDER?: {
+        INFURA?: string;
+    };
+
     PRICE: {
         PROVIDER: string;
         API_KEY: string;

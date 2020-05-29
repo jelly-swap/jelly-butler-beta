@@ -4,7 +4,7 @@ import PriceProviders from './provider';
 import IPriceProvider from './provider/IPriceProvider';
 
 import { logError, logInfo } from '../../logger';
-import { mul, sub, add, toBigNumber, mulDecimals, divDecimals, greaterThan } from '../../utils/math';
+import { mul, sub, add, toBigNumber } from '../../utils/math';
 import UserConfig from '../../config';
 import { IUserConfig } from '../../types/UserConfig';
 import { safeAccess } from '../../utils';
@@ -18,7 +18,6 @@ export class PriceService {
     private priceProvider: IPriceProvider;
 
     private prices = {};
-    private allPrices = {};
     private pricesWithSpreadAndFee = {};
 
     constructor() {
@@ -43,19 +42,15 @@ export class PriceService {
                 prices = await this.priceProvider.getPrices(AppConfig.PRICE.COINS);
             }
 
-            let supportedPrices = {};
             for (const pair in this.userConfig.PAIRS) {
-                if (prices[pair]) {
-                    supportedPrices[pair] = prices[pair];
-                } else {
+                if (!prices[pair]) {
                     logError(`SUPPORTED_PAIR_MISSING_PRICE: ${pair}`);
                 }
             }
 
             if (Object.values(prices).length > 0) {
-                this.setAllPrices(prices);
-                this.setPrices(supportedPrices);
-                this.setPricesWithSpreadAndFee(supportedPrices);
+                this.setPrices(prices);
+                this.setPricesWithSpreadAndFee(prices);
             }
         } catch (err) {
             if (maxTries > 0) {
@@ -75,16 +70,12 @@ export class PriceService {
         return this.prices;
     }
 
-    getAllPrices() {
-        return this.allPrices;
-    }
-
     getPricesWithSpreadAndFee() {
         return this.pricesWithSpreadAndFee;
     }
 
     getPairPrice(base: string, quote: string) {
-        const prices = this.getAllPrices();
+        const prices = this.getPrices();
 
         const price = prices[`${base}-${quote}`];
 
@@ -109,10 +100,6 @@ export class PriceService {
 
     setPrices(prices) {
         this.prices = prices;
-    }
-
-    setAllPrices(prices) {
-        this.allPrices = prices;
     }
 
     setPricesWithSpreadAndFee(prices) {

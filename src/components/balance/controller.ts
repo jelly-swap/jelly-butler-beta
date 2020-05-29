@@ -11,4 +11,8 @@ export class BalanceController {
     async getBalances(request: Request, response: Response, next: NextFunction) {
         return this.balanceService.getBalances();
     }
+
+    async getAllBalances(request: Request, response: Response, next: NextFunction) {
+        return this.balanceService.getAllBalances();
+    }
 }
