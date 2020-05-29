@@ -90,12 +90,12 @@ export default {
 
     // ================== ADVANCED ==================
 
-    AGGREGATOR_URL: 'https://network.jelly.market/api/v1/info/update',
+    AGGREGATOR_URL: 'https://network.jelly.market/api/v1/info',
 
     SERVER: { PORT: 9000 },
 
     // ================== Database configuration ==================
-    //options: mongodb or sqlite
+    //options: MONGODB or SQLITE
     DATABASE: {
         ACTIVE: 'SQLITE',
 
