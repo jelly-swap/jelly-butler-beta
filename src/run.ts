@@ -18,7 +18,6 @@ import getDbConfig from './config/database';
 import UserConfig from './config';
 
 import { PK_MATCH_ADDRESS, compareAddress } from './blockchain/utils';
-import { Address } from '@jelly-swap/btc-utils';
 
 export const run = (config = userConfig) => {
     new UserConfig().setUserConfig(config);
@@ -51,10 +50,13 @@ export const run = (config = userConfig) => {
 
 const validateAddresses = async (config) => {
     logInfo('Validating...');
+
+    const ethAddress = config.WALLETS?.ETH?.ADDRESS;
+
     for (const network in config.WALLETS) {
         const { ADDRESS, SECRET } = config.WALLETS[network];
 
-        if (network != 'ETH' && config.WALLETS['ETH']?.ADDRESS && compareAddress(config.WALLETS['ETH']?.ADDRESS, ADDRESS)) {
+        if (network !== 'ETH' && ethAddress && compareAddress(ethAddress, ADDRESS)) {
             logError('It is not allowed to have the same wallet for ETH and any ERC20');
             return false;
         }
