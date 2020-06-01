@@ -54,7 +54,7 @@ const validateAddresses = async (config) => {
     for (const network in config.WALLETS) {
         const { ADDRESS, SECRET } = config.WALLETS[network];
 
-        if (network != 'ETH' && config.WALLETS['ETH'].ADDRESS && compareAddress(config.WALLETS['ETH'].ADDRESS, ADDRESS)) {
+        if (network != 'ETH' && config.WALLETS['ETH']?.ADDRESS && compareAddress(config.WALLETS['ETH']?.ADDRESS, ADDRESS)) {
             logError('It is not allowed to have the same wallet for ETH and any ERC20');
             return false;
         }
