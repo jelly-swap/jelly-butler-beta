@@ -21,12 +21,14 @@ export default class WithdrawHandler {
     private emailService: EmailService;
 
     private contracts: any;
+    private localCache: any;
 
     constructor() {
         this.swapService = new SwapService();
         this.withdrawService = new WithdrawService();
         this.emailService = new EmailService();
         this.contracts = getContracts();
+        this.localCache = {};
     }
 
     async onWithdraw(withdraw, maxTries = RETRY_COUNT) {
@@ -43,18 +45,29 @@ export default class WithdrawHandler {
             if (valid) {
                 const isProcessed = await this.withdrawService.findByIdAndNetwork(withdraw.id, withdraw.network);
 
-                if (!isProcessed) {
+                if (!isProcessed && !this.localCache[withdraw.id]) {
                     try {
+                        this.localCache[withdraw.id] = true;
                         const result = await contract.withdraw({ ...swap, secret: withdraw.secret });
 
                         const transactionHash = result.hash || result;
 
-                        await this.withdrawService.add(withdraw);
+                        try {
+                            await this.withdrawService.add(withdraw);
 
-                        logInfo('WITHDRAW_SENT', { ...withdraw, transactionHash });
+                            logInfo('WITHDRAW_SENT', { ...withdraw, transactionHash });
 
-                        await this.emailService.send('WITHDRAW', { ...swap, transactionHash, secret: withdraw.secret });
+                            await this.emailService.send('WITHDRAW', {
+                                ...swap,
+                                transactionHash,
+                                secret: withdraw.secret,
+                            });
+                        } catch (err) {
+                            logError(`WITHDRAW_SERVICE_ERROR: ${err}`);
+                        }
                     } catch (err) {
+                        this.localCache[withdraw.id] = false;
+
                         logError('WITHDRAW_BROADCAST_ERROR', withdraw.id);
                         logError(`WITHDRAW_ERROR: ${err}`);
 
@@ -79,7 +92,6 @@ export default class WithdrawHandler {
         try {
             logInfo(`TRACK_OLD_WITHDRAWS`);
 
-            const emitter = new Emitter();
             const networkContracts = getNetworkContracts();
 
             for (const network in networkContracts) {
@@ -100,7 +112,7 @@ export default class WithdrawHandler {
                             );
 
                             if (!isProcessed) {
-                                emitter.emit('WITHDRAW', withdraw);
+                                this.onWithdraw(withdraw);
                             }
                         }
                     }
