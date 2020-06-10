@@ -42,7 +42,7 @@ export const run = (config = userConfig) => {
                     await startEventListener();
                 })
                 .catch((error) => {
-                    logError(`ERROR: ${error}`);
+                    logError(`DB_ERROR`, error);
                 });
         }
     });

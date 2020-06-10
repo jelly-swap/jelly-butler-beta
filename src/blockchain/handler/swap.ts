@@ -1,10 +1,9 @@
 import getAdapters from '../adapters';
 import getContracts, { getNetworkContracts } from '../contracts';
-import { SECONDARY_NETWORKS } from '../config';
 import { isOutputSwapValid, isInputSwapValid } from '../validator';
 import { sleep } from '../utils';
 
-import { logInfo, logError } from '../../logger';
+import { logInfo, logError, logWarn } from '../../logger';
 
 import { SwapService } from '../../components/swap/service';
 import EmailService from '../../email';
@@ -84,7 +83,7 @@ export default class SwapHandler {
                         this.localCache[inputSwap.id] = false;
 
                         logError('SWAP_BROADCAST_ERROR', inputSwap.id);
-                        logError(`SWAP_ERROR: ${err}`);
+                        logError(`SWAP_ERROR`, err);
                         if (maxTries > 0) {
                             logInfo('SWAP_RETRY', inputSwap.id);
                             await sleep((RETRY_COUNT + 1 - maxTries) * RETRY_TIME);
@@ -95,10 +94,10 @@ export default class SwapHandler {
                     }
                 }
             } else {
-                logInfo('SWAP_ALREADY_PROCESSED', inputSwap.id);
+                logWarn('SWAP_ALREADY_PROCESSED', inputSwap.id);
             }
         } catch (err) {
-            logError(`CANNOT_PREPARE_SWAP_OUTPUT ${inputSwap} ${err}`);
+            logError(`CANNOT_PREPARE_SWAP_OUTPUT`, { inputSwap, err });
         }
     }
 
@@ -120,7 +119,7 @@ export default class SwapHandler {
                     }
                 }
             } catch (err) {
-                logError(`TRACK_OLD_SWAPS_ERROR ${network} ${err}`);
+                logError(`TRACK_OLD_SWAPS_ERROR`, { network, err });
             }
         }
     }

@@ -71,11 +71,11 @@ export default class Erc20Contract extends Contract {
                             this.emailService.send('REFUND', { ...event, transactionHash });
                         }
                     } catch (err) {
-                        logError(`ERC20_REFUND_ERROR: ${err} ${event}`);
+                        logError(`ERC20_REFUND_ERROR`, { err, event });
                     }
                 }
             } catch (err) {
-                logError(`ERC20_REFUND_ERROR: ${err}`);
+                logError(`ERC20_REFUND_ERROR`, err);
             }
         };
 

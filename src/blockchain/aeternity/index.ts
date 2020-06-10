@@ -67,11 +67,11 @@ export default class AeternityContract extends Contract {
                             this.emailService.send('REFUND', { ...event, transactionHash });
                         }
                     } catch (err) {
-                        logError(`AE_REFUND_ERROR: ${err} ${event}`);
+                        logError(`AE_REFUND_ERROR`, { err, event });
                     }
                 }
             } catch (err) {
-                logError(`AE_REFUND_ERROR: ${err}`);
+                logError(`AE_REFUND_ERROR`, err);
             }
         };
 

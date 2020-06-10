@@ -23,7 +23,7 @@ export default class BalanceRepository {
         try {
             await this.balanceRepository.save(balance);
         } catch (error) {
-            logError(`Error while saving the Balance: ${error}`);
+            logError(`BALANCE_REPOSITORY_ERROR`, error);
         }
     }
 

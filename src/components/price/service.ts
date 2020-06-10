@@ -44,7 +44,7 @@ export class PriceService {
 
             for (const pair in this.userConfig.PAIRS) {
                 if (!prices[pair]) {
-                    logError(`SUPPORTED_PAIR_MISSING_PRICE: ${pair}`);
+                    logError(`SUPPORTED_PAIR_MISSING_PRICE`, pair);
                 }
             }
 

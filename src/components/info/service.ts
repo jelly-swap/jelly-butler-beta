@@ -49,10 +49,10 @@ export default class InfoService {
 
             const { valid, message } = result?.data;
             if (!valid) {
-                logError(`CANNOT_CONNECT_TO_NETWORK: ${message}`);
+                logError(`CANNOT_CONNECT_TO_NETWORK`, message);
             }
         } catch (err) {
-            logError(`REGISTER_ERROR: ${err}`);
+            logError(`REGISTER_ERROR`, err);
         }
     }
 
@@ -71,14 +71,14 @@ export default class InfoService {
             const { valid, message } = result?.data;
 
             if (!valid) {
-                logError(`CANNOT_CONNECT_TO_NETWORK: ${message}`);
+                logError(`CANNOT_CONNECT_TO_NETWORK`, message);
 
                 if (message === 'NOT_REGISTERED') {
                     await this.register();
                 }
             }
         } catch (err) {
-            logError(`I_AM_ALIVE_ERROR: ${err}`);
+            logError(`I_AM_ALIVE_ERROR`, err);
         }
     }
 

@@ -9,7 +9,7 @@ export class WithdrawController {
         if (AppConfig.COVER_FEES) {
             const { swap, secret } = request.body;
             const result = await contracts[swap.network].userWithdraw(swap, secret);
-            logInfo(`USER_WITHDRAW_TX: ${result}`);
+            logInfo(`USER_WITHDRAW_TX`, result);
             return result;
         } else {
             return false;
