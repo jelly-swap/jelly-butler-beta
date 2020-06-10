@@ -83,7 +83,7 @@ export default class WithdrawHandler {
                 }
             }
         } else {
-            logError('WITHDRAW_SWAP_NOT_FOUND', withdraw.id);
+            logWarn('WITHDRAW_SWAP_NOT_FOUND', withdraw.id);
         }
     }
 
