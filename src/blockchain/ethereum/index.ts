@@ -58,11 +58,11 @@ export default class EthereumContract extends Contract {
                             this.emailService.send('REFUND', { ...event, transactionHash });
                         }
                     } catch (err) {
-                        logError(`ETH_REFUND_ERROR: ${err} ${event}`);
+                        logError(`ETH_REFUND_ERROR`, { err, event });
                     }
                 }
             } catch (err) {
-                logError(`ETH_REFUND_ERROR: ${err}`);
+                logError(`ETH_REFUND_ERROR`, err);
             }
         };
 

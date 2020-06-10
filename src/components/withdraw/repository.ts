@@ -24,7 +24,7 @@ export default class WithdrawRepository {
         try {
             await this.withdrawRepository.save(withdraw);
         } catch (error) {
-            logError(`Error while saving the Withdraw: ${error}`);
+            logError(`WITHDRAW_REPOSITORY_ERROR`, error);
         }
     }
 

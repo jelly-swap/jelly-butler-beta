@@ -24,7 +24,7 @@ export default class SwapRepository {
         try {
             await this.swapRepository.save(swap);
         } catch (error) {
-            logError(`Error while saving the Swap: ${error}`);
+            logError(`SWAP_REPOSITORY_ERROR`, error);
         }
     }
 

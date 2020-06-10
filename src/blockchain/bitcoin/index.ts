@@ -84,12 +84,12 @@ export default class BitcoinContract extends Contract {
                                 }
                             }
                         } catch (err) {
-                            logError(`BTC_REFUND_ERROR: ${err} ${event}`);
+                            logError(`BTC_REFUND_ERROR`, { err, event });
                         }
                     }
                 }
             } catch (err) {
-                logError(`BTC_REFUND_ERROR: ${err}`);
+                logError(`BTC_REFUND_ERROR`, err);
             }
         };
 

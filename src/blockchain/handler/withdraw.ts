@@ -1,8 +1,7 @@
 import getContracts, { getNetworkContracts } from '../contracts';
-import { SECONDARY_NETWORKS } from '../config';
 import { sleep } from '../utils';
 
-import { logInfo, logError } from '../../logger';
+import { logInfo, logError, logWarn } from '../../logger';
 
 import { SwapService } from '../../components/swap/service';
 import { WithdrawService } from '../../components/withdraw/service';
@@ -69,7 +68,7 @@ export default class WithdrawHandler {
                         this.localCache[withdraw.id] = false;
 
                         logError('WITHDRAW_BROADCAST_ERROR', withdraw.id);
-                        logError(`WITHDRAW_ERROR: ${err}`);
+                        logError(`WITHDRAW_ERROR`, err);
 
                         if (maxTries > 0) {
                             logInfo('WITHDRAW_RETRY', withdraw.id);
@@ -80,7 +79,7 @@ export default class WithdrawHandler {
                         }
                     }
                 } else {
-                    logInfo('WITHDRAW_ALREADY_PROCESSED', withdraw.id);
+                    logWarn('WITHDRAW_ALREADY_PROCESSED', withdraw.id);
                 }
             }
         } else {
@@ -117,11 +116,11 @@ export default class WithdrawHandler {
                         }
                     }
                 } catch (err) {
-                    logError(`TRACK_OLD_WITHDRAWS_PROCESSING_ERROR ${network} ${err}`);
+                    logError(`TRACK_OLD_WITHDRAWS_PROCESSING_ERROR`, { network, err });
                 }
             }
         } catch (err) {
-            logError(`TRACK_OLD_WITHDRAWS_ERROR ${err}`);
+            logError(`TRACK_OLD_WITHDRAWS_ERROR`, err);
         }
     }
 }

@@ -10,7 +10,7 @@ import { add, addBig, toBigNumber, mul } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
 import BalanceRepository from './repository';
 
-import { logError, logInfo } from '../../logger';
+import { logError, logWarn } from '../../logger';
 import { safeAccess } from '../../utils';
 
 export class BalanceService {
@@ -63,13 +63,13 @@ export class BalanceService {
                         this.providedBalances[network] = this.allBalances[network];
                     }
                 } catch (err) {
-                    logError(`Cannot get balances ${network} ${err}`);
+                    logError(`CANNOT_GET_BALANCES`, { network, err });
                 }
             }
 
             this.exchangeBalances = await this.exchange.getBalance();
         } catch (err) {
-            logError(`Cannot get balances ${err}`);
+            logError(`CANNOT_GET_BALANCES`, err);
         }
     }
 
@@ -89,7 +89,7 @@ export class BalanceService {
                     balances.push({ assetName: network, amount, valueInUsdc });
                     portfolioInUsdcTotal = addBig(portfolioInUsdcTotal, valueInUsdc);
                 } catch (err) {
-                    logInfo(`Balance History Service Warning - price missing ${network}-USDC  ${err}`);
+                    logWarn(`BALANCE_HISTORY_PRICE_${network}-USDC`, err);
                 }
             }
 
@@ -101,7 +101,7 @@ export class BalanceService {
 
             this.balanceRepository.saveBalance(balances);
         } catch (err) {
-            logError(`Cannot save balance snapshot ${err}`);
+            logError(`CANNOT_SAVE_BALANCES`, err);
         }
     }
 
