@@ -27,6 +27,8 @@ export default class SwapHandler {
     private priceService: PriceService;
     private blockchainConfig: any;
 
+    private localCache: any;
+
     constructor() {
         this.swapService = new SwapService();
         this.emailService = new EmailService();
@@ -35,6 +37,7 @@ export default class SwapHandler {
         this.adapters = getAdapters();
         this.priceService = new PriceService();
         this.blockchainConfig = getBlockchainConfig();
+        this.localCache = {};
     }
 
     async onSwap(inputSwap, maxTries = RETRY_COUNT) {
@@ -43,7 +46,7 @@ export default class SwapHandler {
 
             const isProcessed = await this.swapService.findByIdAndNetwork(inputSwap.id, inputSwap.network);
 
-            if (!isProcessed) {
+            if (!isProcessed && !this.localCache[inputSwap.id]) {
                 const adapter = this.adapters[inputSwap.outputNetwork];
                 const contract = this.contracts[inputSwap.outputNetwork];
 
@@ -60,18 +63,26 @@ export default class SwapHandler {
                     try {
                         logInfo('SWAP_OUTPUT', outputSwap);
 
+                        this.localCache[inputSwap.id] = true;
                         const result = await contract.newContract(outputSwap);
+
                         const transactionHash = result.hash || result;
 
-                        await this.swapService.add(outputSwap.id, inputSwap);
-                        await this.swapService.add(inputSwap.id, { ...outputSwap, transactionHash });
+                        try {
+                            await this.swapService.add(outputSwap.id, inputSwap);
+                            await this.swapService.add(inputSwap.id, { ...outputSwap, transactionHash });
 
-                        this.exchange.placeOrder(inputSwap);
+                            this.exchange.placeOrder(inputSwap);
 
-                        logInfo('SWAP_SENT', transactionHash);
+                            logInfo('SWAP_SENT', transactionHash);
 
-                        await this.emailService.send('SWAP', { ...outputSwap, transactionHash });
+                            await this.emailService.send('SWAP', { ...outputSwap, transactionHash });
+                        } catch (err) {
+                            logError(`SWAP_SERVICE_ERROR: ${err}`);
+                        }
                     } catch (err) {
+                        this.localCache[inputSwap.id] = false;
+
                         logError('SWAP_BROADCAST_ERROR', inputSwap.id);
                         logError(`SWAP_ERROR: ${err}`);
                         if (maxTries > 0) {
@@ -94,7 +105,6 @@ export default class SwapHandler {
     async processOldSwaps() {
         logInfo(`TRACK_OLD_SWAPS`);
 
-        const emitter = new Emitter();
         const networkContracts = getNetworkContracts();
 
         for (const network in networkContracts) {
@@ -105,7 +115,7 @@ export default class SwapHandler {
                     for (const swap of swaps) {
                         // if swap is Active
                         if (equal(swap.status, 1)) {
-                            emitter.emit('NEW_CONTRACT', swap);
+                            this.onSwap(swap);
                         }
                     }
                 }
