@@ -49,12 +49,13 @@
     memoizee "^0.4.14"
     websocket "^1.0.31"
 
-"@jelly-swap/bitcoin@0.1.40":
-  version "0.1.40"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/bitcoin/-/bitcoin-0.1.40.tgz#fbb48c500f70fd6fa878e7bfbb6038dc465bcbb6"
+"@jelly-swap/bitcoin@0.1.42":
+  version "0.1.42"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/bitcoin/-/bitcoin-0.1.42.tgz#7fab51b3d67a69c25595fb07b91829ca2e55d818"
+  integrity sha512-dCEZWL5jBdeiV/nCnIxfqXWlDNWdlUK6V4W8VCdoZlLFMoic8gBDCMuc1Nz7N40bQAOJ/1zaqSf4CQ7YiRcPAg==
   dependencies:
-    "@jelly-swap/types" "^0.1.40"
-    "@jelly-swap/utils" "^0.1.40"
+    "@jelly-swap/types" "^0.1.42"
+    "@jelly-swap/utils" "^0.1.41"
     bignumber.js "^9.0.0"
     bitcoinjs-lib "5.1.6"
 
@@ -69,39 +70,56 @@
   version "0.1.40"
   resolved "https://registry.yarnpkg.com/@jelly-swap/btc-utils/-/btc-utils-0.1.40.tgz#ba8bfa438920d751a6f1873e787434a824741ee2"
 
-"@jelly-swap/btc-web-wallet@0.1.40":
-  version "0.1.40"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/btc-web-wallet/-/btc-web-wallet-0.1.40.tgz#601254ba7bb9ebdba4a94456491700ebe1287daa"
+"@jelly-swap/btc-web-wallet@0.1.42":
+  version "0.1.42"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/btc-web-wallet/-/btc-web-wallet-0.1.42.tgz#9ae7e15af28690aff8e320e961645aa83ff8465e"
+  integrity sha512-glug+H6TWEB3BOe6gP/B9wH4jiFAIGlHE23u07H7c3B+DHnNunBBIU6mkMO4J0veh+1xImT7vrjaPvnSCw9A2w==
   dependencies:
     "@jelly-swap/btc-utils" "^0.1.40"
-    "@jelly-swap/types" "^0.1.40"
+    "@jelly-swap/types" "^0.1.42"
     bignumber.js "^9.0.0"
     bip39 "3.0.2"
     bitcoinjs-lib "5.1.6"
+    bitcoinjs-message "^2.1.0"
     coinselect "3.1.11"
 
-"@jelly-swap/erc20@0.1.40":
-  version "0.1.40"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/erc20/-/erc20-0.1.40.tgz#d7f183f9090497a69ca9098d3fac4663ce698f89"
+"@jelly-swap/erc20@0.1.42":
+  version "0.1.42"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/erc20/-/erc20-0.1.42.tgz#87795fede43ef1ebb05efdb1f75a81d516f1b15a"
+  integrity sha512-7ch72Oa+IyC0QXicYvwJ04u0EREBSxTXxR9TjedO/K235iu7ErcLx/TksrgbeR+PLjgQYREsGcowAwO51VWEOg==
   dependencies:
-    "@jelly-swap/ethereum" "^0.1.40"
-    "@jelly-swap/types" "^0.1.40"
-    "@jelly-swap/utils" "^0.1.40"
+    "@jelly-swap/ethereum" "^0.1.42"
+    "@jelly-swap/types" "^0.1.42"
+    "@jelly-swap/utils" "^0.1.41"
     ethers "^4.0.40"
 
-"@jelly-swap/ethereum@0.1.40", "@jelly-swap/ethereum@^0.1.40":
-  version "0.1.40"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/ethereum/-/ethereum-0.1.40.tgz#9433939c579c069fa379bca1d7667e4f21748a53"
+"@jelly-swap/ethereum@0.1.42", "@jelly-swap/ethereum@^0.1.42":
+  version "0.1.42"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/ethereum/-/ethereum-0.1.42.tgz#3bba4991cc916ac12ca88eef6d9ea58455b7dc0b"
+  integrity sha512-nH9yk6v86uqa9aJwbbXbAuAn4QyLBsqLO7RWs5cUVq1qb4M0uCO8VsTPGbFKbwvliqR8nXuFm4urN3bQoYItLg==
   dependencies:
-    "@jelly-swap/types" "^0.1.40"
-    "@jelly-swap/utils" "^0.1.40"
+    "@jelly-swap/types" "^0.1.42"
+    "@jelly-swap/utils" "^0.1.41"
     ethers "^4.0.40"
 
-"@jelly-swap/types@^0.1.33", "@jelly-swap/types@^0.1.40":
+"@jelly-swap/types@^0.1.33":
   version "0.1.40"
   resolved "https://registry.yarnpkg.com/@jelly-swap/types/-/types-0.1.40.tgz#040a680464a961da07db0b41249a9e084fae7e7f"
 
-"@jelly-swap/utils@0.1.40", "@jelly-swap/utils@^0.1.33", "@jelly-swap/utils@^0.1.40":
+"@jelly-swap/types@^0.1.42":
+  version "0.1.42"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/types/-/types-0.1.42.tgz#1f8f6221348a83c90369004e308788c68a3d784c"
+  integrity sha512-I4g7WobrriCyrr2MAW74xhefs5qBdBJnln3aRVD7yWVRozvzwIeeI0fTWLGVAAAgClGISRcRIseXBY1EjDZCvw==
+
+"@jelly-swap/utils@0.1.41", "@jelly-swap/utils@^0.1.41":
+  version "0.1.41"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/utils/-/utils-0.1.41.tgz#f875212d9a3e2002759aa3c98e27faccf841ccd1"
+  integrity sha512-8jfBeY2jGY/llGancgy9RospuFuFLVzg9XGVnTgmJauvduJjrMrugNFaAn4lTSQou7zOJ65d/8ukVKND4+z/3w==
+  dependencies:
+    create-hash "^1.2.0"
+    moment "^2.24.0"
+
+"@jelly-swap/utils@^0.1.33":
   version "0.1.40"
   resolved "https://registry.yarnpkg.com/@jelly-swap/utils/-/utils-0.1.40.tgz#8b9bd042529c36e4c1c136da559bc36e54374fa1"
   dependencies:
@@ -433,7 +451,7 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bech32@^1.1.2:
+bech32@^1.1.2, bech32@^1.1.3:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/bech32/-/bech32-1.1.4.tgz#e38c9f37bf179b8eb16ae3a772b40c356d4832e9"
 
@@ -449,7 +467,7 @@ bignumber.js@^9.0.0:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.0.0.tgz#805880f84a329b5eac6e7cb6f8274b6d82bdf075"
 
-bindings@^1.3.0:
+bindings@^1.3.0, bindings@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
   dependencies:
@@ -484,7 +502,7 @@ bip39@3.0.2:
     pbkdf2 "^3.0.9"
     randombytes "^2.0.1"
 
-bip66@^1.1.0:
+bip66@^1.1.0, bip66@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/bip66/-/bip66-1.1.5.tgz#01fa8748785ca70955d5011217d1b3139969ca22"
   dependencies:
@@ -514,6 +532,18 @@ bitcoinjs-lib@5.1.6:
     typeforce "^1.11.3"
     varuint-bitcoin "^1.0.4"
     wif "^2.0.1"
+
+bitcoinjs-message@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/bitcoinjs-message/-/bitcoinjs-message-2.1.0.tgz#5fe36a7d92473bdc929d9183416970bbef1690ad"
+  integrity sha512-xVL2YvyAJUI8ZwfNpi6Ju5zda3+QYGHTLUvISDb0VHWbsWn9Zyvd1o8XHRC/0r+DNwDIwenpXDSPl1XLCMGnMA==
+  dependencies:
+    bech32 "^1.1.3"
+    bs58check "^2.1.2"
+    buffer-equals "^1.0.3"
+    create-hash "^1.1.2"
+    secp256k1 "^3.0.1"
+    varuint-bitcoin "^1.0.1"
 
 bl@^2.2.0:
   version "2.2.0"
@@ -556,13 +586,25 @@ brorand@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
 
+browserify-aes@^1.0.6:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/browserify-aes/-/browserify-aes-1.2.0.tgz#326734642f403dabc3003209853bb70ad428ef48"
+  integrity sha512-+7CHXqGuspUn/Sl5aO7Ea0xWGAtETPXNSAjHo48JfLdPWcMng33Xe4znFvQweqc/uzk5zSOI3H52CYnjCfb5hA==
+  dependencies:
+    buffer-xor "^1.0.3"
+    cipher-base "^1.0.0"
+    create-hash "^1.1.0"
+    evp_bytestokey "^1.0.3"
+    inherits "^2.0.1"
+    safe-buffer "^5.0.1"
+
 bs58@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/bs58/-/bs58-4.0.1.tgz#be161e76c354f6f788ae4071f63f34e8c4f0a42a"
   dependencies:
     base-x "^3.0.2"
 
-bs58check@<3.0.0, bs58check@^2.0.0, bs58check@^2.1.1:
+bs58check@<3.0.0, bs58check@^2.0.0, bs58check@^2.1.1, bs58check@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/bs58check/-/bs58check-2.1.2.tgz#53b018291228d82a5aa08e7d796fdafda54aebfc"
   dependencies:
@@ -574,9 +616,19 @@ bson@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/bson/-/bson-1.1.4.tgz#f76870d799f15b854dffb7ee32f0a874797f7e89"
 
+buffer-equals@^1.0.3:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/buffer-equals/-/buffer-equals-1.0.4.tgz#0353b54fd07fd9564170671ae6f66b9cf10d27f5"
+  integrity sha1-A1O1T9B/2VZBcGca5vZrnPENJ/U=
+
 buffer-from@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.1.tgz#32713bc028f75c02fdb710d7c7bcec1f2c6070ef"
+
+buffer-xor@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/buffer-xor/-/buffer-xor-1.0.3.tgz#26e61ed1422fb70dd42e6e36729ed51d855fe8d9"
+  integrity sha1-JuYe0UIvtw3ULm42cp7VHYVf6Nk=
 
 buffer@^5.1.0:
   version "5.6.0"
@@ -630,7 +682,7 @@ chownr@^1.1.1:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.4.tgz#6fc9d7b42d32a583596337666e7d08084da2cc6b"
 
-cipher-base@^1.0.1, cipher-base@^1.0.3:
+cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/cipher-base/-/cipher-base-1.0.4.tgz#8760e4ecc272f4c363532f926d874aae2c1397de"
   dependencies:
@@ -892,6 +944,15 @@ dotenv@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.2.0.tgz#941c0410535d942c8becf28d3f357dbd9d476064"
 
+drbg.js@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/drbg.js/-/drbg.js-1.0.1.tgz#3e36b6c42b37043823cdbc332d58f31e2445480b"
+  integrity sha1-Pja2xCs3BDgjzbwzLVjzHiRFSAs=
+  dependencies:
+    browserify-aes "^1.0.6"
+    create-hash "^1.1.2"
+    create-hmac "^1.1.4"
+
 ecc-jsbn@~0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"
@@ -909,7 +970,7 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
-elliptic@6.5.2, elliptic@^6.4.0:
+elliptic@6.5.2, elliptic@^6.4.0, elliptic@^6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.2.tgz#05c5678d7173c049d8ca433552224a495d0e3762"
   dependencies:
@@ -1021,6 +1082,14 @@ event-emitter@^0.3.5:
   dependencies:
     d "1"
     es5-ext "~0.10.14"
+
+evp_bytestokey@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/evp_bytestokey/-/evp_bytestokey-1.0.3.tgz#7fcbdb198dc71959432efe13842684e0525acb02"
+  integrity sha512-/f2Go4TognH/KvCISP7OUsHn85hT9nUkxxA9BEWxFn+Oj9o8ZNLm/40hdlgSLyuOimsrTKLUMEorQexp/aPQeA==
+  dependencies:
+    md5.js "^1.3.4"
+    safe-buffer "^5.1.1"
 
 express@^4.17.1:
   version "4.17.1"
@@ -2008,6 +2077,20 @@ scrypt-js@2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/scrypt-js/-/scrypt-js-2.0.4.tgz#32f8c5149f0797672e551c07e230f834b6af5f16"
 
+secp256k1@^3.0.1:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/secp256k1/-/secp256k1-3.8.0.tgz#28f59f4b01dbee9575f56a47034b7d2e3b3b352d"
+  integrity sha512-k5ke5avRZbtl9Tqx/SA7CbY3NF6Ro+Sj9cZxezFzuBlLDmyqPiL8hJJ+EmzD8Ig4LUDByHJ3/iPOVoRixs/hmw==
+  dependencies:
+    bindings "^1.5.0"
+    bip66 "^1.1.5"
+    bn.js "^4.11.8"
+    create-hash "^1.2.0"
+    drbg.js "^1.0.1"
+    elliptic "^6.5.2"
+    nan "^2.14.0"
+    safe-buffer "^5.1.2"
+
 semver@^5.1.0, semver@^5.3.0:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.7.1.tgz#a954f931aeba508d307bbf069eff0c01c96116f7"
@@ -2415,7 +2498,7 @@ uuid@^7.0.0:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
 
-varuint-bitcoin@^1.0.4:
+varuint-bitcoin@^1.0.1, varuint-bitcoin@^1.0.4:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/varuint-bitcoin/-/varuint-bitcoin-1.1.2.tgz#e76c138249d06138b480d4c5b40ef53693e24e92"
   dependencies:
