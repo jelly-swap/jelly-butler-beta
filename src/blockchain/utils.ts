@@ -10,6 +10,7 @@ import BitcoinProvider from '@jelly-swap/btc-provider';
 // Aeternity
 import { Crypto } from '@aeternity/aepp-sdk';
 import * as nacl from 'tweetnacl';
+import { SECONDARY_NETWORKS } from './config';
 
 export const compareAddress = (a1: string, a2: string) => {
     return a1.toLowerCase() === a2.toLowerCase();
@@ -39,11 +40,16 @@ export const aeAddressMatch = async (privateKey, address) => {
     return `ak_${Crypto.encodeBase58Check(publicBuffer)}` === address;
 };
 
+const getErc20Matcher = () => {
+    return Object.keys(SECONDARY_NETWORKS).reduce((object, token) => {
+        object[token] = ethAddressMatch;
+        return object;
+    }, {});
+};
+
 export const PK_MATCH_ADDRESS = {
+    ...getErc20Matcher(),
     ETH: ethAddressMatch,
-    DAI: ethAddressMatch,
-    USDC: ethAddressMatch,
-    WBTC: ethAddressMatch,
     BTC: btcAddressMatch,
     AE: aeAddressMatch,
 };

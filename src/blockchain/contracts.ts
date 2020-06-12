@@ -8,17 +8,24 @@ import Erc20Contract from './erc20';
 let Contracts: any;
 let NetworkContracts: any;
 
+const getErc20Contracts = (config) => {
+    return Object.keys(SECONDARY_NETWORKS).reduce((object, token) => {
+        if (config[token]) {
+            object[token] = new Erc20Contract(config[token]);
+        }
+        return object;
+    }, {});
+};
+
 const getContracts = () => {
     if (!Contracts) {
         const Config = getConfig();
 
         const AllContracts = {
+            ...getErc20Contracts(Config),
             ETH: Config.ETH && new EthereumContract(Config.ETH),
             BTC: Config.BTC && new BitcoinContract(Config.BTC),
             AE: Config.AE && new AeternityContract(Config.AE),
-            DAI: Config.DAI && new Erc20Contract(Config.DAI),
-            USDC: Config.USDC && new Erc20Contract(Config.USDC),
-            WBTC: Config.WBTC && new Erc20Contract(Config.WBTC),
         };
 
         Contracts = Object.entries(AllContracts).reduce(
