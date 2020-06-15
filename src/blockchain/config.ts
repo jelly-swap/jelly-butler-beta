@@ -7,6 +7,7 @@ export const SECONDARY_NETWORKS = {
     WBTC: 'WBTC',
     USDC: 'USDC',
     DAI: 'DAI',
+    'BTC++': 'BTC++',
 };
 
 export default () => {
