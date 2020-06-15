@@ -51,6 +51,10 @@ export default class BitcoinContract extends Contract {
         });
     }
 
+    async signMessage(message: string) {
+        return this.wallet.signMessage(message, this.config.receiverAddress);
+    }
+
     async processRefunds() {
         const process = async () => {
             logInfo('START BTC REFUNDS');

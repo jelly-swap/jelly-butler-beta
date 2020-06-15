@@ -1,4 +1,5 @@
-import { Contract, Providers } from '@jelly-swap/ethereum';
+import { Contract } from '@jelly-swap/ethereum';
+import { WalletProvider } from '@jelly-swap/ethereum/dist/providers';
 
 import Emitter from '../../emitter';
 import { greaterThan } from '../../utils/math';
@@ -7,10 +8,13 @@ import EmailService from '../../email';
 
 export default class EthereumContract extends Contract {
     private emailService: EmailService;
+    private wallet: WalletProvider;
     private filter: any;
 
     constructor(config) {
-        super(new Providers.WalletProvider(config.PRIVATE_KEY, config.providerUrl), config);
+        const _wallet = new WalletProvider(config.PRIVATE_KEY, config.providerUrl);
+        super(_wallet, config);
+        this.wallet = _wallet;
         this.emailService = new EmailService();
 
         this.filter = {
@@ -21,6 +25,10 @@ export default class EthereumContract extends Contract {
                 sender: this.config.receiverAddress,
             },
         };
+    }
+
+    async signMessage(message: string) {
+        return await this.wallet.signMessage(message);
     }
 
     async subscribe() {

@@ -1,11 +1,14 @@
 import axios from 'axios';
 import * as moment from 'moment';
 
+import getContracts from '../../blockchain/contracts';
+
 import { BalanceService } from '../balance/service';
 import { PriceService } from '../price/service';
 import { logError } from '../../logger';
 import { IUserConfig } from '../../types/UserConfig';
 import UserConfig from '../../config';
+import { safeAccess } from '../../utils';
 
 export default class InfoService {
     private static instance: InfoService;
@@ -41,7 +44,7 @@ export default class InfoService {
 
     async register() {
         try {
-            this.update();
+            await this.update();
 
             const info = this.getInfo();
 
@@ -60,6 +63,25 @@ export default class InfoService {
         this.prices = this.priceService.getPricesWithSpreadAndFee();
         this.balances = this.balanceService.getBalances();
         this.updated = moment().valueOf();
+        await this.getSignatures();
+    }
+
+    async getSignatures() {
+        const contracts = getContracts();
+        for (const network of Object.keys(this.balances)) {
+            const message = `${this.name} is LP for ${network} at Jelly v0.1 at ${this.updated}`;
+
+            const signMessageFunction = safeAccess(contracts, [network, 'signMessage']);
+
+            if (signMessageFunction) {
+                try {
+                    const sig = await contracts[network].signMessage(message);
+                    this.balances[network]['signature'] = sig;
+                } catch (err) {
+                    logError('Cannot sign message', err);
+                }
+            }
+        }
     }
 
     async iAmAlive() {

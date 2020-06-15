@@ -1,4 +1,5 @@
-import { Contract, Providers } from '@jelly-swap/erc20';
+import { Contract } from '@jelly-swap/erc20';
+import { WalletProvider } from '@jelly-swap/ethereum/dist/providers';
 
 import Emitter from '../../emitter';
 import EmailService from '../../email';
@@ -11,11 +12,15 @@ import UserConfig from '../../config';
 
 export default class Erc20Contract extends Contract {
     private emailService: EmailService;
+    private wallet: WalletProvider;
+
     private receivers: string[];
     private filter: any;
 
     constructor(config) {
-        super(new Providers.WalletProvider(config.PRIVATE_KEY, config.providerUrl), config);
+        const _wallet = new WalletProvider(config.PRIVATE_KEY, config.providerUrl);
+        super(_wallet, config);
+        this.wallet = _wallet;
         this.emailService = new EmailService();
         this.receivers = new UserConfig().getReceivers(Object.keys(SECONDARY_NETWORKS));
 
@@ -27,6 +32,10 @@ export default class Erc20Contract extends Contract {
                 sender: this.receivers,
             },
         };
+    }
+
+    async signMessage(message: string) {
+        return await this.wallet.signMessage(message);
     }
 
     subscribe() {
