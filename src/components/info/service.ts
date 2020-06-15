@@ -78,7 +78,7 @@ export default class InfoService {
                     const sig = await contracts[network].signMessage(message);
                     this.balances[network]['signature'] = sig;
                 } catch (err) {
-                    logError('Cannot sign message', err);
+                    logError(`Cannot sign message ${network} : ${err}`);
                 }
             }
         }
