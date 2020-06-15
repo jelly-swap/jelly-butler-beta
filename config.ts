@@ -32,6 +32,8 @@ export default {
         COINS: ['ETH', 'BTC', 'AE', 'DAI', 'WBTC', 'USDC', 'USDT', 'BTC++'],
     },
 
+    DUPLICATE_PRICE: { DAI: 'USDC', WBTC: 'BTC', 'BTC++': 'BTC' },
+
     // ================== Binance configuration ==================
     BINANCE: {
         PAIRS: {
@@ -49,6 +51,5 @@ export default {
             AE: 1,
             USDC: 4,
         },
-        DUPLICATE_PRICE: { DAI: 'USDC', WBTC: 'BTC', 'BTC++': 'BTC' },
     },
 };

@@ -117,8 +117,8 @@ export default class BinanceExchange implements IExchange {
                             }
                         }
 
-                        Object.keys(Config.BINANCE.DUPLICATE_PRICE).forEach((t) => {
-                            const d = Config.BINANCE.DUPLICATE_PRICE[t];
+                        Object.keys(Config.DUPLICATE_PRICE).forEach((t) => {
+                            const d = Config.DUPLICATE_PRICE[t];
                             Object.keys(prices).forEach((p) => {
                                 prices[p.replace(d, t)] = prices[p];
                             });
@@ -137,8 +137,8 @@ export default class BinanceExchange implements IExchange {
     }
 
     formatOrder(order) {
-        const quote = Config.BINANCE.DUPLICATE_PRICE[order.quote] || order.quote;
-        const base = Config.BINANCE.DUPLICATE_PRICE[order.base] || order.base;
+        const quote = Config.DUPLICATE_PRICE[order.quote] || order.quote;
+        const base = Config.DUPLICATE_PRICE[order.base] || order.base;
 
         if (Config.BINANCE.PAIRS[quote + base]) {
             return {
