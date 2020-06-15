@@ -22,8 +22,8 @@ const TokenConfig = {
     },
     'BTC++': {
         network: 'BTC++',
-        decimals: 0,
-        address: '',
+        decimals: 18,
+        address: '0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd',
     },
 };
 
