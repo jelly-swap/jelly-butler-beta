@@ -1,13 +1,15 @@
 import axios from 'axios';
 import * as moment from 'moment';
 
+import UserConfig from '../../config';
+
 import getContracts from '../../blockchain/contracts';
+import getSupportedNetworks from '../../config/supportedNetworks';
 
 import { BalanceService } from '../balance/service';
 import { PriceService } from '../price/service';
 import { logError } from '../../logger';
 import { IUserConfig } from '../../types/UserConfig';
-import UserConfig from '../../config';
 import { safeAccess } from '../../utils';
 
 export default class InfoService {
@@ -23,6 +25,7 @@ export default class InfoService {
 
     private prices = {};
     private balances = {};
+    private addresses = {};
 
     private updated;
 
@@ -32,6 +35,8 @@ export default class InfoService {
         }
 
         this.userConfig = new UserConfig().getUserConfig();
+
+        this.addresses = this.getAddresses();
 
         this.name = this.userConfig.NAME;
         this.pairs = this.userConfig.PAIRS;
@@ -64,6 +69,19 @@ export default class InfoService {
         this.balances = this.balanceService.getBalances();
         this.updated = moment().valueOf();
         await this.getSignatures();
+    }
+
+    getAddresses() {
+        const allAssets = getSupportedNetworks();
+        return Object.keys(allAssets).reduce((result, asset) => {
+            const address = safeAccess(this.userConfig, ['WALLETS', asset, 'ADDRESS']);
+
+            if (address) {
+                result[asset] = address;
+            }
+
+            return result;
+        }, {});
     }
 
     async getSignatures() {
@@ -109,6 +127,7 @@ export default class InfoService {
             name: this.name,
             pairs: this.pairs,
             prices: this.prices,
+            addresses: this.addresses,
             balances: this.balances,
             updated: this.updated,
         };
