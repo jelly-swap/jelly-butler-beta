@@ -10,7 +10,7 @@ import InfoTask from './components/info/task';
 
 import { startHandlers } from './blockchain/handler';
 
-import { logError, logInfo } from './logger';
+import { logError, logInfo, setLoggerConfig } from './logger';
 import getContracts, { startEventListener } from './blockchain/contracts';
 import userConfig from '../user-config';
 
@@ -19,7 +19,11 @@ import UserConfig from './config';
 
 import { PK_MATCH_ADDRESS, compareAddress } from './blockchain/utils';
 
-export const run = (config = userConfig) => {
+export const run = (config = userConfig, combinedFile?: string, errorFile?: string) => {
+    if (combinedFile && errorFile) {
+        setLoggerConfig(combinedFile, errorFile);
+    }
+
     new UserConfig().setUserConfig(config);
 
     const dbConfig = getDbConfig({
@@ -27,25 +31,29 @@ export const run = (config = userConfig) => {
         ...config.DATABASE[config.DATABASE.ACTIVE],
     });
 
-    validateAddresses(config).then((result) => {
-        if (result) {
-            createConnection(dbConfig as any)
-                .then(async () => {
-                    getContracts();
+    validateAddresses(config)
+        .then((result) => {
+            if (result) {
+                createConnection(dbConfig as any)
+                    .then(async () => {
+                        getContracts();
 
-                    await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
+                        await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
 
-                    await createServer(config.SERVER.PORT);
+                        await createServer(config.SERVER.PORT);
 
-                    await startHandlers();
+                        await startHandlers();
 
-                    await startEventListener();
-                })
-                .catch((error) => {
-                    logError(`DB_ERROR`, error);
-                });
-        }
-    });
+                        await startEventListener();
+                    })
+                    .catch((error) => {
+                        logError(`DB_ERROR`, error);
+                    });
+            }
+        })
+        .catch((error) => {
+            logError(`Validate error: ${error}`);
+        });
 };
 
 const validateAddresses = async (config) => {
@@ -62,15 +70,20 @@ const validateAddresses = async (config) => {
         }
 
         if (ADDRESS && SECRET) {
-            const result = await PK_MATCH_ADDRESS[network](SECRET, ADDRESS);
+            try {
+                const result = await PK_MATCH_ADDRESS[network](SECRET, ADDRESS);
 
-            if (!result) {
-                logError(
-                    `The SECRET you have provided for ${network} network does not match the ADDRESS.
+                if (!result) {
+                    logError(
+                        `The SECRET you have provided for ${network} network does not match the ADDRESS.
                     \r\n${SECRET} does not match ${ADDRESS}.
                     \r\nFix the problem and start Butler again.`
-                );
+                    );
 
+                    return false;
+                }
+            } catch (error) {
+                logError(`Invalid Address or Private Key for ${network} network.`);
                 return false;
             }
         }

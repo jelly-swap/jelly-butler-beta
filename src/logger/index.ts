@@ -38,7 +38,7 @@ const fileFormat = format.combine(...baseFormat);
 
 const consoleFormat = format.combine(format.colorize(), ...baseFormat);
 
-const logger = createLogger({
+let logger = createLogger({
     exitOnError: false,
     levels: config.levels,
     transports: [
@@ -56,6 +56,27 @@ const logger = createLogger({
         }),
     ],
 });
+
+export const setLoggerConfig = (combinedFile: string, errorFile: string) => {
+    logger = createLogger({
+        exitOnError: false,
+        levels: config.levels,
+        transports: [
+            new transports.Console({ format: consoleFormat }),
+
+            new transports.File({
+                filename: combinedFile,
+                format: fileFormat,
+            }),
+
+            new transports.File({
+                filename: errorFile,
+                format: fileFormat,
+                level: 'error',
+            }),
+        ],
+    });
+};
 
 if (getSlackTransport()) {
     logger.add(getSlackTransport());
