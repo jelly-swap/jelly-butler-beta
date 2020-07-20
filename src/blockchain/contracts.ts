@@ -5,6 +5,10 @@ import EthereumContract from './ethereum';
 import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
 
+import Emitter from '../emitter';
+import { subscribe, fetchSwaps } from '../webSocket';
+import { cmpIgnoreCase } from '../utils';
+
 let Contracts: any;
 let NetworkContracts: any;
 
@@ -52,12 +56,51 @@ export const getNetworkContracts = () => {
     return NetworkContracts;
 };
 
-export const startEventListener = async () => {
-    getContracts();
-    getNetworkContracts();
-    for (const network in NetworkContracts) {
-        await NetworkContracts[network].subscribe();
-    }
+export const startEventListener = async (wallets) => {
+    // TODO: In case we want to use getPast from here
+
+    // const addresses = Object.keys(wallets)
+    //     .map((wallet) => wallets[wallet].ADDRESS)
+    //     .filter(Boolean)
+    //     .join(';');
+
+    // const swaps = await fetchSwaps(addresses);
+
+    subscribe();
+
+    handleMessage(wallets);
+};
+
+const handleMessage = (wallets) => {
+    new Emitter().on('WS_EVENT', (message) => {
+        const { topic, data } = JSON.parse(message);
+        const { sender, receiver, network, outputNetwork } = data;
+
+        switch (topic) {
+            case 'Swap': {
+                const receiverAddress = wallets[outputNetwork]?.ADDRESS;
+
+                console.log(receiverAddress, receiver);
+
+                if (receiverAddress && cmpIgnoreCase(receiverAddress, receiver)) {
+                    new Emitter().emit('NEW_CONTRACT', data);
+                    break;
+                }
+            }
+
+            case 'Withdraw': {
+                const senderAddress = wallets[network]?.ADDRESS;
+
+                if (sender && cmpIgnoreCase(senderAddress, sender)) {
+                    new Emitter().emit('WITHDRAW', data);
+                    break;
+                }
+            }
+
+            default:
+                break;
+        }
+    });
 };
 
 export default getContracts;

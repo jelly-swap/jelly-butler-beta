@@ -16,24 +16,10 @@ export default class EthereumContract extends Contract {
         super(_wallet, config);
         this.wallet = _wallet;
         this.emailService = new EmailService();
-
-        this.filter = {
-            new: {
-                receiver: this.config.receiverAddress,
-            },
-            withdraw: {
-                sender: this.config.receiverAddress,
-            },
-        };
     }
 
     async signMessage(message: string) {
         return await this.wallet.signMessage(message);
-    }
-
-    async subscribe() {
-        logInfo(`Starting ETH Events - ${this.config.contractAddress}`);
-        super.subscribe(onMessage, this.filter);
     }
 
     async getPast(type: string, filter = this.filter) {
@@ -79,7 +65,3 @@ export default class EthereumContract extends Contract {
         }, this.config.REFUND_PERIOD * 1000 * 60);
     }
 }
-
-const onMessage = (result) => {
-    new Emitter().emit(result.eventName, result);
-};

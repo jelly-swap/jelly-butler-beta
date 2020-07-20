@@ -14,20 +14,6 @@ export default class AeternityContract extends Contract {
     constructor(config) {
         super(new Providers.HTTP(config, config.KEY_PAIR), config);
         this.emailService = new EmailService();
-
-        this.filter = {
-            new: {
-                receiver: this.config.receiverAddress,
-            },
-            withdraw: {
-                sender: this.config.receiverAddress,
-            },
-        };
-    }
-
-    async subscribe() {
-        logInfo(`Starting AE Events - ${this.config.contractAddress}`);
-        super.subscribe(onMessage, this.filter);
     }
 
     async getPast(type, filter = this.filter) {
@@ -80,7 +66,3 @@ export default class AeternityContract extends Contract {
         }, this.config.REFUND_PERIOD * 1000 * 60);
     }
 }
-
-const onMessage = (result) => {
-    new Emitter().emit(result.eventName, { ...result, id: fixHash(result.id) });
-};

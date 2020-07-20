@@ -24,20 +24,6 @@ export default class BitcoinContract extends Contract {
         return txHash;
     }
 
-    subscribe() {
-        logInfo(`Starting BTC Events`);
-        super.subscribe(onMessage, {
-            new: {
-                type: 'getSwapsByReceiverAndBlock',
-                address: this.config.receiverAddress,
-            },
-            withdraw: {
-                type: 'getWithdrawBySenderAndBlock',
-                address: this.config.receiverAddress,
-            },
-        });
-    }
-
     async getPast(type, __user?, receiver = this.config.receiverAddress) {
         return await super.getPastEvents(type, {
             new: {
@@ -110,7 +96,3 @@ export default class BitcoinContract extends Contract {
         return true;
     }
 }
-
-const onMessage = (result) => {
-    new Emitter().emit(result.eventName, result);
-};

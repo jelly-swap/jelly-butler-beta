@@ -44,7 +44,7 @@ export const run = (config = userConfig, combinedFile?: string, errorFile?: stri
 
                         await startHandlers();
 
-                        await startEventListener();
+                        await startEventListener(config.WALLETS);
                     })
                     .catch((error) => {
                         logError(`DB_ERROR`, error);

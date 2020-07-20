@@ -7,3 +7,5 @@ export const safeAccess = (object, path) => {
           )
         : null;
 };
+
+export const cmpIgnoreCase = (a1, a2) => a1?.toLowerCase() === a2?.toLowerCase();

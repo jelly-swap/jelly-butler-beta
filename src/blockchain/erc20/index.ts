@@ -23,24 +23,10 @@ export default class Erc20Contract extends Contract {
         this.wallet = _wallet;
         this.emailService = new EmailService();
         this.receivers = new UserConfig().getReceivers(Object.keys(SECONDARY_NETWORKS));
-
-        this.filter = {
-            new: {
-                receiver: this.receivers,
-            },
-            withdraw: {
-                sender: this.receivers,
-            },
-        };
     }
 
     async signMessage(message: string) {
         return await this.wallet.signMessage(message);
-    }
-
-    subscribe() {
-        logInfo(`Starting ERC20 Events - ${this.config.contractAddress}`);
-        super.subscribe(onMessage, this.filter);
     }
 
     async getPast(type, filter = this.filter) {
@@ -93,7 +79,3 @@ export default class Erc20Contract extends Contract {
         }, this.config.REFUND_PERIOD * 1000 * 60);
     }
 }
-
-const onMessage = (result) => {
-    new Emitter().emit(result.eventName, result);
-};
