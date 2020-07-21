@@ -91,8 +91,18 @@ const getPastSwaps = async (wallets) => {
 
     const swaps = await fetchSwaps(addresses);
 
-    const oldSwaps = swaps.filter(({ status }) => status === ACTIVE_STATUS);
-    const oldWithdraws = swaps.filter(({ status }) => status === WITHDRAWN_STATUS);
+    // Old status === ACTIVE_STATS ( 1 ) && receiver === lp address
+    const oldSwaps = swaps.filter(
+        ({ status, receiver, network }) =>
+            status === ACTIVE_STATUS && cmpIgnoreCase(receiver, wallets[network]?.ADDRESS)
+    );
+
+    // Old withdraws === ACTIVE_STATS ( 3 ) && sender === lp address
+    const oldWithdraws = swaps.filter(
+        ({ status, sender, network }) => status === WITHDRAWN_STATUS && cmpIgnoreCase(sender, wallets[network]?.ADDRESS)
+    );
+
+    // Old expiredSwaps === ACTIVE_STATS ( 4 ) && sender === lp address
     const expiredSwaps = swaps.filter(
         ({ sender, network, status }) => status === EXPIRED_STATUS && cmpIgnoreCase(sender, wallets[network]?.ADDRESS)
     );
