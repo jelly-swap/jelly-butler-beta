@@ -6,7 +6,7 @@ import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
 
 import Emitter from '../emitter';
-import { subscribe, fetchSwaps } from '../webSocket';
+import { subscribe, fetchSwaps } from '../tracker';
 import { cmpIgnoreCase } from '../utils';
 
 let Contracts: any;
@@ -57,18 +57,47 @@ export const getNetworkContracts = () => {
 };
 
 export const startEventListener = async (wallets) => {
-    // TODO: In case we want to use getPast from here
+    const MINUTES_10 = 10 * 1000 * 60;
 
-    // const addresses = Object.keys(wallets)
-    //     .map((wallet) => wallets[wallet].ADDRESS)
-    //     .filter(Boolean)
-    //     .join(';');
+    setTimeout(() => {
+        getPastSwaps(wallets);
+    }, 0);
 
-    // const swaps = await fetchSwaps(addresses);
+    // Get past swaps
+    setInterval(() => {
+        getPastSwaps(wallets);
+    }, MINUTES_10);
 
+    // Subscribe to WS
     subscribe();
 
+    // Process WS Message
     handleMessage(wallets);
+};
+
+const getPastSwaps = async (wallets) => {
+    const SWAP_STATUSES = {
+        ACTIVE_STATUS: 1,
+        WITHDRAWN_STATUS: 3,
+        EXPIRED_STATUS: 4,
+    };
+
+    const { ACTIVE_STATUS, WITHDRAWN_STATUS, EXPIRED_STATUS } = SWAP_STATUSES;
+
+    const addresses = Object.keys(wallets)
+        .map((wallet) => wallets[wallet].ADDRESS)
+        .filter(Boolean)
+        .join(';');
+
+    const swaps = await fetchSwaps(addresses);
+
+    const oldSwaps = swaps.filter(({ status }) => status === ACTIVE_STATUS);
+    const oldWithdraws = swaps.filter(({ status }) => status === WITHDRAWN_STATUS);
+    const expiredSwaps = swaps.filter(
+        ({ sender, network, status }) => status === EXPIRED_STATUS && cmpIgnoreCase(sender, wallets[network]?.ADDRESS)
+    );
+
+    new Emitter().emit('PROCESS_PAST_SWAPS', { oldSwaps, oldWithdraws, expiredSwaps });
 };
 
 const handleMessage = (wallets) => {
@@ -79,8 +108,6 @@ const handleMessage = (wallets) => {
         switch (topic) {
             case 'Swap': {
                 const receiverAddress = wallets[outputNetwork]?.ADDRESS;
-
-                console.log(receiverAddress, receiver);
 
                 if (receiverAddress && cmpIgnoreCase(receiverAddress, receiver)) {
                     new Emitter().emit('NEW_CONTRACT', data);

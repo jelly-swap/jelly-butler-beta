@@ -1,11 +1,11 @@
 import { getNetworkContracts } from '../contracts';
 
 export default class RefundHandler {
-    async processRefunds() {
+    async processRefunds(expiredSwaps) {
         const contracts = getNetworkContracts();
 
-        for (const network in contracts) {
-            await contracts[network].processRefunds();
+        for (const swap of expiredSwaps) {
+            await contracts[swap.network].processRefunds();
         }
     }
 }

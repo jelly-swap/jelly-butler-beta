@@ -87,40 +87,21 @@ export default class WithdrawHandler {
         }
     }
 
-    async processOldWithdraws() {
+    async processOldWithdraws(withdraws) {
+        logInfo(`TRACK_OLD_WITHDRAWS`);
+
         try {
-            logInfo(`TRACK_OLD_WITHDRAWS`);
+            for (const index in withdraws) {
+                const withdraw = withdraws[index];
 
-            const networkContracts = getNetworkContracts();
+                const isProcessed = await this.withdrawService.findByIdAndNetwork(withdraw.id, withdraw.network);
 
-            for (const network in networkContracts) {
-                const contract = networkContracts[network];
-                const withdraws = await contract.getPast('withdraw');
-                const ids = withdraws.map((w) => w.id);
-
-                try {
-                    const statuses = await contract.getStatus(ids);
-
-                    for (const index in withdraws) {
-                        if (equal(statuses[index], 3)) {
-                            const withdraw = withdraws[index];
-
-                            const isProcessed = await this.withdrawService.findByIdAndNetwork(
-                                withdraw.id,
-                                withdraw.network
-                            );
-
-                            if (!isProcessed) {
-                                this.onWithdraw(withdraw);
-                            }
-                        }
-                    }
-                } catch (err) {
-                    logError(`TRACK_OLD_WITHDRAWS_PROCESSING_ERROR`, { network, err });
+                if (!isProcessed) {
+                    this.onWithdraw(withdraw);
                 }
             }
         } catch (err) {
-            logError(`TRACK_OLD_WITHDRAWS_ERROR`, err);
+            logError(`TRACK_OLD_WITHDRAWS_PROCESSING_ERROR`, { err });
         }
     }
 }

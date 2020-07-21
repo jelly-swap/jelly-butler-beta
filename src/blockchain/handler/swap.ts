@@ -8,7 +8,7 @@ import { logInfo, logError, logWarn } from '../../logger';
 import { SwapService } from '../../components/swap/service';
 import EmailService from '../../email';
 import Exchange from '../../exchange';
-import Emitter from '../../emitter';
+
 import { equal, divDecimals, mulDecimals, mul, toFixed } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
 import getBlockchainConfig from '../config';
@@ -101,25 +101,10 @@ export default class SwapHandler {
         }
     }
 
-    async processOldSwaps() {
-        logInfo(`TRACK_OLD_SWAPS`);
-
-        const networkContracts = getNetworkContracts();
-
-        for (const network in networkContracts) {
-            try {
-                const swaps = await networkContracts[network].getPast('new');
-
-                if (swaps) {
-                    for (const swap of swaps) {
-                        // if swap is Active
-                        if (equal(swap.status, 1)) {
-                            this.onSwap(swap);
-                        }
-                    }
-                }
-            } catch (err) {
-                logError(`TRACK_OLD_SWAPS_ERROR`, { network, err });
+    async processOldSwaps(swaps) {
+        if (swaps) {
+            for (const swap of swaps) {
+                this.onSwap(swap);
             }
         }
     }
