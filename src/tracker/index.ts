@@ -43,3 +43,16 @@ export const fetchSwaps = async (login) => {
         return [];
     }
 };
+
+export const fetchWithdraws = async () => {
+    try {
+        // TODO: Change endpoint to jelly-tracker
+
+        const res = await axios.get(`http://localhost:8080/withdraws`);
+
+        return res.data;
+    } catch (error) {
+        console.log('FETCH_WITHDRAWS_ERROR: ', error);
+        return [];
+    }
+};

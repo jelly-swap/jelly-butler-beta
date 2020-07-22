@@ -6,7 +6,7 @@ import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
 
 import Emitter from '../emitter';
-import { subscribe, fetchSwaps } from '../tracker';
+import { subscribe, fetchSwaps, fetchWithdraws } from '../tracker';
 import { cmpIgnoreCase } from '../utils';
 
 let Contracts: any;
@@ -90,19 +90,18 @@ const getPastSwaps = async (wallets) => {
         .join(';');
 
     const swaps = await fetchSwaps(addresses);
+    const withdraws = await fetchWithdraws();
 
-    // Old status === ACTIVE_STATS ( 1 ) && receiver === lp address
+    // Old status === ACTIVE_STATUS ( 1 ) && receiver === lp address
     const oldSwaps = swaps.filter(
         ({ status, receiver, network }) =>
             status === ACTIVE_STATUS && cmpIgnoreCase(receiver, wallets[network]?.ADDRESS)
     );
 
-    // Old withdraws === ACTIVE_STATS ( 3 ) && sender === lp address
-    const oldWithdraws = swaps.filter(
-        ({ status, sender, network }) => status === WITHDRAWN_STATUS && cmpIgnoreCase(sender, wallets[network]?.ADDRESS)
-    );
+    // Old withdraws === WITHDRAWN_STATUS ( 3 ) && sender === lp address
+    const oldWithdraws = withdraws.filter(({ sender, network }) => cmpIgnoreCase(sender, wallets[network]?.ADDRESS));
 
-    // Old expiredSwaps === ACTIVE_STATS ( 4 ) && sender === lp address
+    // Old expiredSwaps === EXPIRED_STATUS ( 4 ) && sender === lp address
     const expiredSwaps = swaps.filter(
         ({ sender, network, status }) => status === EXPIRED_STATUS && cmpIgnoreCase(sender, wallets[network]?.ADDRESS)
     );
