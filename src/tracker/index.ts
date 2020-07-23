@@ -1,26 +1,26 @@
+import moment from 'moment';
+
 import { fetchSwaps, fetchWithdraws } from './service';
 import { subscribe } from './ws';
 import { EventSwap, ActiveExpiredSwaps } from './types';
 
 import Emitter from '../emitter';
 import { cmpIgnoreCase } from '../utils';
+import getConfig from '../blockchain/config';
 
 export default async (wallets) => {
-    const MINUTES_10 = 10 * 1000 * 60;
+    const MINUTES_15 = 15 * 1000 * 60;
 
     const lpAddresses = getLpAddresses(wallets);
 
     await processPastEvents(lpAddresses, wallets);
 
-    // Get past swaps
     setInterval(() => {
         processPastEvents(lpAddresses, wallets);
-    }, MINUTES_10);
+    }, MINUTES_15);
 
-    // Process WS Message
     handleMessage(wallets);
 
-    // Subscribe to WS
     subscribe();
 };
 
@@ -31,10 +31,12 @@ const SWAP_STATUSES = {
 };
 
 const processPastEvents = async (lpAddresses, wallets) => {
-    const fetchedWithdraws = await fetchWithdraws(lpAddresses);
+    const past5Days = moment().subtract(5, 'days').unix();
+
+    const fetchedWithdraws = await fetchWithdraws(lpAddresses, past5Days);
     const withdraws = getWithdraws(fetchedWithdraws, wallets);
 
-    const fetchedSwaps = await fetchSwaps(lpAddresses);
+    const fetchedSwaps = await fetchSwaps(lpAddresses, past5Days);
     const swaps = getActiveAndExpiredSwaps(fetchedSwaps, wallets);
 
     new Emitter().emit('PROCESS_PAST_SWAPS', { withdraws, ...swaps });
@@ -75,25 +77,35 @@ const getWithdraws = (withdraws, wallets) => {
 };
 
 const getActiveAndExpiredSwaps = (swaps, wallets) => {
+    const last12Hours = moment().subtract(12, 'hours').unix();
+    const config = getConfig();
+
     return swaps.reduce(
         (p: ActiveExpiredSwaps, c: EventSwap) => {
             const { sender, receiver, network, status } = c;
             const lpAddress = wallets[network]?.ADDRESS;
 
-            switch (status) {
-                case SWAP_STATUSES.ACTIVE_STATUS: {
-                    if (cmpIgnoreCase(receiver, lpAddress)) {
-                        p.activeSwaps.push(c);
+            if (lpAddress && config[c.network]) {
+                switch (status) {
+                    case SWAP_STATUSES.ACTIVE_STATUS: {
+                        if (cmpIgnoreCase(receiver, lpAddress)) {
+                            const expiration = config[c.network].unix ? c.expiration : c.expiration / 1000;
+                            if (expiration > last12Hours) {
+                                p.activeSwaps.push(c);
+                            }
+                        }
+                        break;
                     }
-                    break;
-                }
 
-                case SWAP_STATUSES.EXPIRED_STATUS: {
-                    if (cmpIgnoreCase(sender, lpAddress)) {
-                        p.expiredSwaps.push(c);
+                    case SWAP_STATUSES.EXPIRED_STATUS: {
+                        if (cmpIgnoreCase(sender, lpAddress)) {
+                            p.expiredSwaps.push(c);
+                        }
                     }
                 }
             }
+
+            return p;
         },
         { activeSwaps: [], expiredSwaps: [] } as ActiveExpiredSwaps
     );

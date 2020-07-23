@@ -104,7 +104,7 @@ export default class SwapHandler {
     async processOldSwaps(swaps) {
         if (swaps) {
             for (const swap of swaps) {
-                this.onSwap(swap);
+                await this.onSwap(swap);
             }
         }
     }

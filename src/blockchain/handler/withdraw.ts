@@ -95,7 +95,7 @@ export default class WithdrawHandler {
                 const isProcessed = await this.withdrawService.findByIdAndNetwork(withdraw.id, withdraw.network);
 
                 if (!isProcessed) {
-                    this.onWithdraw(withdraw);
+                    await this.onWithdraw(withdraw);
                 }
             }
         } catch (err) {

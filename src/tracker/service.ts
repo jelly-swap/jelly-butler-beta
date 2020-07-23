@@ -1,30 +1,28 @@
 import axios from 'axios';
+import { logError } from '../logger';
 
-export const fetchSwaps = async (login) => {
+export const fetchSwaps = async (login, expiration = 1) => {
     try {
-        if (login) {
-            const res = await axios.get(
-                `https://jelly-tracker.herokuapp.com/api/v1/swaps/address/${login}/expiration/1`
-            );
+        const res = await axios.get(
+            `https://jelly-tracker.herokuapp.com/api/v1/swaps/receiver/${login}/expiration/${expiration}`
+        );
 
-            return res.data;
-        } else {
-            return [];
-        }
+        return res.data;
     } catch (error) {
-        console.log('FETCH_SWAPS_ERROR: ', error);
+        logError('FETCH_SWAPS_ERROR: ', error);
         return [];
     }
 };
 
-export const fetchWithdraws = async (login) => {
+export const fetchWithdraws = async (login, expiration = 1) => {
     try {
-        // TODO: Change endpoint to jelly-tracker
-        const res = await axios.get(`http://localhost:8080/withdraws`);
+        const res = await axios.get(
+            `https://jelly-tracker.herokuapp.com/api/v1/withdraws/sender/${login}/expiration/${expiration}`
+        );
 
         return res.data;
     } catch (error) {
-        console.log('FETCH_WITHDRAWS_ERROR: ', error);
+        logError('FETCH_WITHDRAWS_ERROR: ', error);
         return [];
     }
 };

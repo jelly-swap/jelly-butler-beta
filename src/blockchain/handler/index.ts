@@ -14,9 +14,9 @@ export const startHandlers = async () => {
 
     emitter.on('WITHDRAW', async (withdraw) => await withdrawHandler.onWithdraw(withdraw));
 
-    emitter.on('PROCESS_PAST_SWAPS', async ({ oldSwaps, oldWithdraws, expiredSwaps }) => {
-        await swapHandler.processOldSwaps(oldSwaps);
-        await withdrawHandler.processOldWithdraws(oldWithdraws);
+    emitter.on('PROCESS_PAST_SWAPS', async ({ activeSwaps, withdraws, expiredSwaps }) => {
+        await swapHandler.processOldSwaps(activeSwaps);
+        await withdrawHandler.processOldWithdraws(withdraws);
         await refundHandler.processRefunds(expiredSwaps);
     });
 };
