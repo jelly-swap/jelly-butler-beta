@@ -11,7 +11,8 @@ import InfoTask from './components/info/task';
 import { startHandlers } from './blockchain/handler';
 
 import { logError, logInfo, setLoggerConfig } from './logger';
-import getContracts, { startEventListener } from './blockchain/contracts';
+import getContracts from './blockchain/contracts';
+import startEventListener from './tracker';
 import userConfig from '../user-config';
 
 import getDbConfig from './config/database';
