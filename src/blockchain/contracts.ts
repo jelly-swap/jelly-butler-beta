@@ -5,10 +5,6 @@ import EthereumContract from './ethereum';
 import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
 
-import Emitter from '../emitter';
-import { subscribe, fetchSwaps, fetchWithdraws } from '../tracker';
-import { cmpIgnoreCase } from '../utils';
-
 let Contracts: any;
 let NetworkContracts: any;
 
@@ -54,89 +50,6 @@ export const getNetworkContracts = () => {
     }
 
     return NetworkContracts;
-};
-
-export const startEventListener = async (wallets) => {
-    const MINUTES_10 = 10 * 1000 * 60;
-
-    setTimeout(() => {
-        getPastSwaps(wallets);
-    }, 0);
-
-    // Get past swaps
-    setInterval(() => {
-        getPastSwaps(wallets);
-    }, MINUTES_10);
-
-    // Subscribe to WS
-    subscribe();
-
-    // Process WS Message
-    handleMessage(wallets);
-};
-
-const getPastSwaps = async (wallets) => {
-    const SWAP_STATUSES = {
-        ACTIVE_STATUS: 1,
-        WITHDRAWN_STATUS: 3,
-        EXPIRED_STATUS: 4,
-    };
-
-    const { ACTIVE_STATUS, WITHDRAWN_STATUS, EXPIRED_STATUS } = SWAP_STATUSES;
-
-    const addresses = Object.keys(wallets)
-        .map((wallet) => wallets[wallet].ADDRESS)
-        .filter(Boolean)
-        .join(';');
-
-    const swaps = await fetchSwaps(addresses);
-    const withdraws = await fetchWithdraws();
-
-    // Old status === ACTIVE_STATUS ( 1 ) && receiver === lp address
-    const oldSwaps = swaps.filter(
-        ({ status, receiver, network }) =>
-            status === ACTIVE_STATUS && cmpIgnoreCase(receiver, wallets[network]?.ADDRESS)
-    );
-
-    // Old withdraws === WITHDRAWN_STATUS ( 3 ) && sender === lp address
-    const oldWithdraws = withdraws.filter(({ sender, network }) => cmpIgnoreCase(sender, wallets[network]?.ADDRESS));
-
-    // Old expiredSwaps === EXPIRED_STATUS ( 4 ) && sender === lp address
-    const expiredSwaps = swaps.filter(
-        ({ sender, network, status }) => status === EXPIRED_STATUS && cmpIgnoreCase(sender, wallets[network]?.ADDRESS)
-    );
-
-    new Emitter().emit('PROCESS_PAST_SWAPS', { oldSwaps, oldWithdraws, expiredSwaps });
-};
-
-const handleMessage = (wallets) => {
-    new Emitter().on('WS_EVENT', (message) => {
-        const { topic, data } = JSON.parse(message);
-        const { sender, receiver, network, outputNetwork } = data;
-
-        switch (topic) {
-            case 'Swap': {
-                const receiverAddress = wallets[outputNetwork]?.ADDRESS;
-
-                if (receiverAddress && cmpIgnoreCase(receiverAddress, receiver)) {
-                    new Emitter().emit('NEW_CONTRACT', data);
-                    break;
-                }
-            }
-
-            case 'Withdraw': {
-                const senderAddress = wallets[network]?.ADDRESS;
-
-                if (sender && cmpIgnoreCase(senderAddress, sender)) {
-                    new Emitter().emit('WITHDRAW', data);
-                    break;
-                }
-            }
-
-            default:
-                break;
-        }
-    });
 };
 
 export default getContracts;
