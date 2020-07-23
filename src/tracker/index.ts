@@ -45,10 +45,10 @@ const processPastEvents = async (lpAddresses, wallets) => {
 const handleMessage = (wallets) => {
     new Emitter().on('WS_EVENT', (message) => {
         const { topic, data } = JSON.parse(message);
-        const { sender, receiver, network, outputNetwork } = data;
 
         switch (topic) {
             case 'Swap': {
+                const { receiver, outputNetwork } = data;
                 const lpAddress = wallets[outputNetwork]?.ADDRESS;
 
                 if (lpAddress && cmpIgnoreCase(lpAddress, receiver)) {
@@ -58,6 +58,7 @@ const handleMessage = (wallets) => {
             }
 
             case 'Withdraw': {
+                const { sender, network } = data;
                 const lpAddress = wallets[network]?.ADDRESS;
 
                 if (lpAddress && cmpIgnoreCase(lpAddress, sender)) {
