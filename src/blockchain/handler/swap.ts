@@ -1,5 +1,5 @@
 import getAdapters from '../adapters';
-import getContracts, { getNetworkContracts } from '../contracts';
+import getContracts from '../contracts';
 import { isOutputSwapValid, isInputSwapValid } from '../validator';
 import { sleep } from '../utils';
 
@@ -9,7 +9,7 @@ import { SwapService } from '../../components/swap/service';
 import EmailService from '../../email';
 import Exchange from '../../exchange';
 
-import { equal, divDecimals, mulDecimals, mul, toFixed } from '../../utils/math';
+import { divDecimals, mulDecimals, mul, toFixed } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
 import getBlockchainConfig from '../config';
 
@@ -104,7 +104,7 @@ export default class SwapHandler {
     async processOldSwaps(swaps) {
         if (swaps) {
             for (const swap of swaps) {
-                this.onSwap(swap);
+                await this.onSwap(swap);
             }
         }
     }

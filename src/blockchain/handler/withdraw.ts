@@ -8,8 +8,6 @@ import { WithdrawService } from '../../components/withdraw/service';
 
 import { validateWithdraw } from '../validator';
 import EmailService from '../../email';
-import Emitter from '../../emitter';
-import { equal } from '../../utils/math';
 
 const RETRY_COUNT = 10;
 const RETRY_TIME = 1000 * 10;
@@ -97,7 +95,7 @@ export default class WithdrawHandler {
                 const isProcessed = await this.withdrawService.findByIdAndNetwork(withdraw.id, withdraw.network);
 
                 if (!isProcessed) {
-                    this.onWithdraw(withdraw);
+                    await this.onWithdraw(withdraw);
                 }
             }
         } catch (err) {

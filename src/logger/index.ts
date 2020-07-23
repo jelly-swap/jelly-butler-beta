@@ -1,6 +1,4 @@
 import { transports, format, createLogger, addColors } from 'winston';
-import { getSlackTransport } from './slack';
-import e = require('express');
 
 const config = {
     levels: {
@@ -77,10 +75,6 @@ export const setLoggerConfig = (combinedFile: string, errorFile: string) => {
         ],
     });
 };
-
-if (getSlackTransport()) {
-    logger.add(getSlackTransport());
-}
 
 export const logWarn = (msg, data?) => log('warn', msg, data);
 

@@ -2,18 +2,11 @@ import { Contract } from '@jelly-swap/bitcoin';
 import { Wallet } from '@jelly-swap/btc-web-wallet';
 import { BitcoinProvider } from '@jelly-swap/btc-provider';
 
-import Emitter from '../../emitter';
-import { logInfo, logError } from '../../logger';
-import EmailService from '../../email';
-
 export default class BitcoinContract extends Contract {
-    private emailService: EmailService;
-
     constructor(config) {
         const provider = new BitcoinProvider(config.providerUrl);
         const wallet = new Wallet(config.SEED, provider, config.NETWORK, 'bech32');
         super(wallet, config);
-        this.emailService = new EmailService();
     }
 
     async newContract(outputSwap) {
@@ -24,75 +17,11 @@ export default class BitcoinContract extends Contract {
         return txHash;
     }
 
-    async getPast(type, __user?, receiver = this.config.receiverAddress) {
-        return await super.getPastEvents(type, {
-            new: {
-                type: 'getSwapsByReceiver',
-                address: receiver,
-            },
-            withdraw: {
-                type: 'getWithdrawBySender',
-                address: receiver,
-            },
-        });
-    }
-
     async signMessage(message: string) {
         return this.wallet.signMessage(message, this.config.receiverAddress);
     }
 
-    async processRefunds() {
-        const process = async () => {
-            logInfo('START BTC REFUNDS');
-
-            const blockNumber = await this.getCurrentBlock();
-
-            let transactionHash;
-
-            try {
-                const events = await super.getPastEvents('new', {
-                    new: {
-                        type: 'getExpiredSwaps',
-                        address: this.config.receiverAddress,
-                        startBlock: Number(blockNumber) - this.config.REFUND_BLOCKS,
-                        endBlock: blockNumber,
-                    },
-                });
-
-                if (events) {
-                    for (const event of events) {
-                        try {
-                            if (event.status === 4) {
-                                logInfo(`REFUND BTC: ${event.id}`);
-
-                                transactionHash = await super.refund(event);
-
-                                if (transactionHash == 'Swap failed.') {
-                                    logInfo(`Refund cannot be executed still!`);
-                                } else {
-                                    this.emailService.send('REFUND', { ...event, transactionHash });
-                                }
-                            }
-                        } catch (err) {
-                            logError(`BTC_REFUND_ERROR`, { err, event });
-                        }
-                    }
-                }
-            } catch (err) {
-                logError(`BTC_REFUND_ERROR`, err);
-            }
-        };
-
-        setInterval(async () => {
-            await process();
-        }, this.config.REFUND_PERIOD * 1000 * 60);
-    }
-
     async userWithdraw(__swap, __secret) {
         // Can't do withdraw on user's behalf.
-    }
-
-    async isValidForRefund() {
-        return true;
     }
 }
