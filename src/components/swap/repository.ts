@@ -1,4 +1,4 @@
-import AppConfig from '../../../config';
+import { SwapModel } from './model';
 import Repository from '../../repository';
 
 import { logError } from '../../logger';
@@ -22,7 +22,23 @@ export default class SwapRepository {
 
     public async create(swap: any) {
         try {
-            await this.swapRepository.save(swap);
+            await this.swapRepository.save(
+                new SwapModel(
+                    swap.id,
+                    swap.outputSwapId,
+                    swap.hashLock,
+                    swap.transactionHash,
+                    swap.sender,
+                    swap.receiver,
+                    swap.refundAddress,
+                    swap.outputAddress,
+                    swap.inputAmount,
+                    swap.outputAmount,
+                    swap.expiration,
+                    swap.network,
+                    swap.outputNetwork
+                )
+            );
         } catch (error) {
             logError(`SWAP_REPOSITORY_ERROR`, error);
         }
