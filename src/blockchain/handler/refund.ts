@@ -1,5 +1,5 @@
 import { getNetworkContracts } from '../contracts';
-import { logInfo, logError } from '../../logger';
+import { logInfo, logError, logDebug, logData } from '../../logger';
 import EmailService from '../../email';
 
 export default class RefundHandler {
@@ -14,15 +14,18 @@ export default class RefundHandler {
 
         for (const swap of expiredSwaps) {
             try {
-                const transactionHash = await contracts[swap.network]?.refund(swap);
+                const { inputAmount, network, id } = swap;
+                const transactionHash = await contracts[network]?.refund(swap);
 
-                logInfo(`REFUND ${swap.network}: ID: ${swap.id}, TxHash: ${transactionHash}`);
+                logData(`Refund ${inputAmount} ${network}`);
+                logInfo(`REFUND ${network}: ID: ${id}, TxHash: ${transactionHash}`);
 
                 if (transactionHash) {
                     await this.emailService.send('REFUND', { ...swap, transactionHash });
                 }
             } catch (err) {
-                logError(`${swap.network}_REFUND_ERROR`, { err, swap });
+                logDebug(`${swap.network}_REFUND_ERROR`, { err, swap });
+                logError(`Cannot refund transaction: ${swap.id}`);
             }
         }
     }

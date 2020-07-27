@@ -2,7 +2,6 @@ import { Config } from '@jelly-swap/erc20';
 
 import UserConfig from '../../config';
 import { safeAccess } from '../../utils';
-import { logError } from '../../logger';
 
 const TokenConfig = {
     DAI: {
@@ -59,6 +58,6 @@ export default (token) => {
             PRIVATE_KEY: secret,
         };
     } else {
-        logError(`${token} ADDRESS and SECRET are missing.`);
+        throw new Error(`${token} ADDRESS and SECRET are missing.`);
     }
 };

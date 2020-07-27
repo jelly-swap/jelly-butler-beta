@@ -1,7 +1,7 @@
 import { SwapModel } from './model';
 import Repository from '../../repository';
 
-import { logError } from '../../logger';
+import { logDebug } from '../../logger';
 import { safeAccess } from '../../utils';
 import UserConfig from '../../config';
 
@@ -40,7 +40,7 @@ export default class SwapRepository {
                 )
             );
         } catch (error) {
-            logError(`SWAP_REPOSITORY_ERROR`, error);
+            logDebug(`SWAP_REPOSITORY_ERROR`, error);
         }
     }
 

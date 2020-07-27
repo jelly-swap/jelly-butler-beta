@@ -3,7 +3,7 @@ import AppConfig from '../../../config';
 import PriceProviders from './provider';
 import IPriceProvider from './provider/IPriceProvider';
 
-import { logError, logInfo } from '../../logger';
+import { logError, logInfo, logDebug } from '../../logger';
 import { mul, sub, add, toBigNumber } from '../../utils/math';
 import UserConfig from '../../config';
 import { IUserConfig } from '../../types/UserConfig';
@@ -44,7 +44,8 @@ export class PriceService {
 
             for (const pair in this.userConfig.PAIRS) {
                 if (!prices[pair]) {
-                    logError(`SUPPORTED_PAIR_MISSING_PRICE`, pair);
+                    logDebug(`MISSING_PRICE`, pair);
+                    logError(`The price for ${pair} is missing.`);
                 }
             }
 
@@ -55,12 +56,12 @@ export class PriceService {
         } catch (err) {
             if (maxTries > 0) {
                 await sleep(15000);
-                logError('PRICE_SERVICE_DOWN', err);
+                logDebug('PRICE_SERVICE_DOWN', err);
                 logInfo(`Starting new price service: ${this.userConfig.PRICE.PROVIDER}`);
                 this.priceProvider = new PriceProviders[this.userConfig.PRICE.PROVIDER]();
                 await this.update(this.priceProvider, maxTries - 1);
             } else {
-                logInfo(`Shutting down the application after 10 minutes without price provider.`);
+                logError(`Shutting down the application after 10 minutes without price provider.`);
                 process.exit(-1);
             }
         }

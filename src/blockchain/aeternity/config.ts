@@ -1,7 +1,6 @@
 import { Config } from '@jelly-swap/aeternity';
 import UserConfig from '../../config';
 import { safeAccess } from '../../utils';
-import { logError } from '../../logger';
 
 export default () => {
     const userConfig = new UserConfig().getUserConfig();
@@ -32,6 +31,6 @@ export default () => {
             },
         };
     } else {
-        logError('Aeternity ADDRESS and SECRET are missing.');
+        throw new Error('Aeternity ADDRESS and SECRET are missing.');
     }
 };

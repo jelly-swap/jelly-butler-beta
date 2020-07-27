@@ -4,10 +4,15 @@ import * as Binance from 'node-binance-api';
 
 import IExchange from './IExchange';
 import { div, add, toFixed, divDecimals } from '../utils/math';
-import { logInfo, logError } from '../logger';
+import { logInfo, logError, logData, logDebug } from '../logger';
 import AppConfig from '../../config';
 import { safeAccess } from '../utils';
 import UserConfig from '../config';
+
+const ORDER_TYPE_TO_LABEL = {
+    marketBuy: 'BUY',
+    marketSell: 'SELL',
+};
 
 export default class BinanceExchange implements IExchange {
     private static Instance: BinanceExchange;
@@ -45,15 +50,17 @@ export default class BinanceExchange implements IExchange {
 
             await this.binance[type](pair, quantity, (err, response) => {
                 if (err) {
-                    logError('BINANCE_ORDER_PLACE_ERROR', err);
+                    logDebug('BINANCE_ORDER_PLACE_ERROR', err);
+                    logError(`Could not place order in Binance for ${quantity} ${pair}`);
                 } else {
                     logInfo(`BINANCE_ORDER_PLACED ${pair} ${quantity} ${response.orderId}`);
+                    logData(`You placed ${ORDER_TYPE_TO_LABEL[type]} order in Binance for ${quantity} ${pair} `);
                 }
             });
 
             return true;
         } catch (err) {
-            logError('BINANCE_PLACE_ORDER_ERROR', err);
+            logDebug('BINANCE_PLACE_ORDER_ERROR', err);
             return false;
         }
     }
@@ -79,7 +86,7 @@ export default class BinanceExchange implements IExchange {
                 });
             });
         } catch (err) {
-            logError('BINANCE_GET_BALANCE_ERROR', err);
+            logDebug('BINANCE_GET_BALANCE_ERROR', err);
             return false;
         }
     }

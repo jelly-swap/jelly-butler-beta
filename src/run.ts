@@ -10,7 +10,7 @@ import InfoTask from './components/info/task';
 
 import { startHandlers } from './blockchain/handler';
 
-import { logError, logInfo, setLoggerConfig } from './logger';
+import { setLoggerConfig, logError, logDebug, logData } from './logger';
 import getContracts from './blockchain/contracts';
 import startEventListener from './tracker';
 import userConfig from '../user-config';
@@ -21,9 +21,7 @@ import UserConfig from './config';
 import { PK_MATCH_ADDRESS, compareAddress } from './blockchain/utils';
 
 export const run = (config = userConfig, combinedFile?: string, errorFile?: string) => {
-    if (combinedFile && errorFile) {
-        setLoggerConfig(combinedFile, errorFile);
-    }
+    setLoggerConfig(combinedFile, errorFile);
 
     new UserConfig().setUserConfig(config);
 
@@ -48,7 +46,8 @@ export const run = (config = userConfig, combinedFile?: string, errorFile?: stri
                         await startEventListener(config.WALLETS);
                     })
                     .catch((error) => {
-                        logError(`DB_ERROR`, error);
+                        logError(`${error}`);
+                        logDebug(`${error}`, JSON.stringify(error));
                     });
             }
         })
@@ -58,7 +57,7 @@ export const run = (config = userConfig, combinedFile?: string, errorFile?: stri
 };
 
 const validateAddresses = async (config) => {
-    logInfo('Validating...');
+    logData('Validating...');
 
     const ethAddress = config.WALLETS?.ETH?.ADDRESS;
 

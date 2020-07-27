@@ -1,5 +1,3 @@
-import AppConfig from '../../config';
-
 import IExchange from './IExchange';
 import Exchanges from './exchanges';
 import { logError } from '../logger';
@@ -40,6 +38,7 @@ export default class Exchange implements IExchange {
             const result = await this.exchange.placeOrder({ quote, base, buy, sell });
             return result;
         } catch (err) {
+            logError(`Could not place order in ${this.userConfig.EXCHANGE.NAME}.`);
             logError('PLACE_ORDER_ERROR', err);
             return false;
         }
