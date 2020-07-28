@@ -53,8 +53,8 @@ const handleMessage = (wallets) => {
 
                 if (lpAddress && cmpIgnoreCase(lpAddress, receiver)) {
                     new Emitter().emit('NEW_CONTRACT', data);
-                    break;
                 }
+                break;
             }
 
             case 'Withdraw': {
@@ -63,8 +63,8 @@ const handleMessage = (wallets) => {
 
                 if (lpAddress && cmpIgnoreCase(lpAddress, sender)) {
                     new Emitter().emit('WITHDRAW', data);
-                    break;
                 }
+                break;
             }
 
             default:
