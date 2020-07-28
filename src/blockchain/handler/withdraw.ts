@@ -1,4 +1,5 @@
 import getContracts from '../contracts';
+import getAdapters from '../adapters';
 import { sleep } from '../utils';
 
 import { logInfo, logData, logDebug } from '../../logger';
@@ -18,6 +19,7 @@ export default class WithdrawHandler {
     private emailService: EmailService;
 
     private contracts: any;
+    private adapters: any;
     private localCache: any;
 
     constructor() {
@@ -25,6 +27,8 @@ export default class WithdrawHandler {
         this.withdrawService = new WithdrawService();
         this.emailService = new EmailService();
         this.contracts = getContracts();
+        this.adapters = getAdapters();
+
         this.localCache = {};
     }
 
@@ -34,7 +38,10 @@ export default class WithdrawHandler {
         const swap = await this.swapService.findInputSwapByOutputSwapIdAndOutputNetwork(withdraw.id, withdraw.network);
 
         if (swap) {
-            const contract = this.contracts[swap.network];
+            const { network, inputAmount } = swap;
+
+            const contract = this.contracts[network];
+
             logInfo('WITHDRAW_SWAP_FOUND', swap);
 
             const valid = await validateWithdraw(withdraw);
@@ -54,7 +61,7 @@ export default class WithdrawHandler {
 
                             logInfo('WITHDRAW_SENT', { ...withdraw, transactionHash });
 
-                            logData(`You received ${swap.inputAmount} ${swap.network}.`);
+                            logData(`You received ${this.adapters[network].parseFromNative(inputAmount)} ${network}.`);
 
                             await this.emailService.send('WITHDRAW', {
                                 ...swap,
