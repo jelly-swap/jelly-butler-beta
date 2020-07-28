@@ -20,7 +20,7 @@ export default class RefundHandler {
                 const { inputAmount, network, id } = swap;
                 const transactionHash = await contracts[network]?.refund(swap);
 
-                logData(`Refund ${this.adapters[network].parseFromNative(inputAmount)} ${network}`);
+                logData(`Refund ${this.adapters[network].parseFromNative(String(inputAmount))} ${network}`);
                 logInfo(`REFUND ${network}: ID: ${id}, TxHash: ${transactionHash}`);
 
                 if (transactionHash) {
