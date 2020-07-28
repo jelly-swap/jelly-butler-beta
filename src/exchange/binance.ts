@@ -1,6 +1,6 @@
 import Config from '../../config';
 
-import * as Binance from 'node-binance-api';
+import Binance from 'node-binance-api';
 
 import IExchange from './IExchange';
 import { div, add, toFixed, divDecimals } from '../utils/math';
@@ -126,12 +126,19 @@ export default class BinanceExchange implements IExchange {
 
                         Object.keys(Config.DUPLICATE_PRICE).forEach((t) => {
                             const d = Config.DUPLICATE_PRICE[t];
+
                             Object.keys(prices).forEach((p) => {
-                                prices[p.replace(d, t)] = prices[p];
+                                const duplicate = p.replace(new RegExp('\\b' + d + '\\b'), t);
+                                prices[duplicate] = prices[p];
                             });
 
-                            prices[`${t}-${d}`] = 1;
-                            prices[`${d}-${t}`] = 1;
+                            if (!prices[`${t}-${d}`]) {
+                                prices[`${t}-${d}`] = 1;
+                            }
+
+                            if (!prices[`${d}-${t}`]) {
+                                prices[`${d}-${t}`] = 1;
+                            }
                         });
 
                         resolve(prices);
