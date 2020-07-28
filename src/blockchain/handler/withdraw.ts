@@ -61,7 +61,11 @@ export default class WithdrawHandler {
 
                             logInfo('WITHDRAW_SENT', { ...withdraw, transactionHash });
 
-                            logData(`You received ${this.adapters[network].parseFromNative(inputAmount)} ${network}.`);
+                            logData(
+                                `You received ${this.adapters[network].parseFromNative(
+                                    String(inputAmount)
+                                )} ${network}.`
+                            );
 
                             await this.emailService.send('WITHDRAW', {
                                 ...swap,

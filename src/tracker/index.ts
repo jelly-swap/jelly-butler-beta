@@ -48,8 +48,8 @@ const handleMessage = (wallets) => {
 
         switch (topic) {
             case 'Swap': {
-                const { receiver, outputNetwork } = data;
-                const lpAddress = wallets[outputNetwork]?.ADDRESS;
+                const { receiver, network } = data;
+                const lpAddress = wallets[network]?.ADDRESS;
 
                 if (lpAddress && cmpIgnoreCase(lpAddress, receiver)) {
                     new Emitter().emit('NEW_CONTRACT', data);
