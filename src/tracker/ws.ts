@@ -9,7 +9,7 @@ export const subscribe = () => {
         ws = new WebSocket('wss://jelly-tracker.herokuapp.com/subscribe');
 
         ws.onopen = () => {
-            console.log('WS OPENED');
+            logDebug('WS_OPENED');
         };
 
         ws.onmessage = (event) => {
@@ -18,7 +18,7 @@ export const subscribe = () => {
         };
 
         ws.onclose = () => {
-            console.log('WS CLOSED');
+            logDebug('WS_OPENED');
 
             ws = null;
             setTimeout(() => {
