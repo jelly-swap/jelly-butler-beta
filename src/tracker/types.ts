@@ -14,8 +14,3 @@ export interface EventSwap {
     refundAddress: string;
     status: number;
 }
-
-export interface ActiveExpiredSwaps {
-    activeSwaps: EventSwap[];
-    expiredSwaps: EventSwap[];
-}
