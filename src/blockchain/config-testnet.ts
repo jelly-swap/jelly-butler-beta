@@ -9,8 +9,6 @@ const TokenConfig = {
         network: 'DAI',
         decimals: 18,
         address: '0x2d69ad895797c880abce92437788047ba0eb7ff6',
-        MIN_AMOUNT: 20,
-        MAX_AMOUNT: 80,
     },
 };
 
@@ -20,7 +18,8 @@ const AddressToToken = {
 
 const Erc20Config = (token) => {
     return {
-        ...Config(token, TokenConfig, AddressToToken, 86400),
+        ...Config(TokenConfig, AddressToToken, 86400),
+        ...TokenConfig[token],
         providerUrl: 'https://ropsten.infura.io/v3/8fe4fc9626494d238879981936dbf144',
         contractAddress: '0x66ea49fd943544d59e14d1bd9107217c7503906a',
         explorer: 'https://ropsten.etherscan.io/tx/',
@@ -64,8 +63,4 @@ export default {
     },
 
     DAI: Erc20Config('DAI'),
-
-    WBTC: Erc20Config('WBTC'),
-
-    USDC: Erc20Config('USDC'),
 };
