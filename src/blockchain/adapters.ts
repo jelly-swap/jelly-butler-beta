@@ -10,7 +10,7 @@ let Adapters: any;
 const getErc20Adapters = (config) => {
     return Object.keys(SECONDARY_NETWORKS).reduce((object, token) => {
         if (config[token]) {
-            object[token] = new Erc20Adapter(token, config[token]);
+            object[token] = new Erc20Adapter(config[token]);
         }
         return object;
     }, {});
