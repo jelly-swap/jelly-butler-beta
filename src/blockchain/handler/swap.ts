@@ -77,9 +77,13 @@ export default class SwapHandler {
                             logInfo('SWAP_SENT', transactionHash);
 
                             logData(
-                                `Created a swap: ${outputAdapter.parseFromNative(outputSwap.inputAmount)} ${
+                                `Created a swap: ${outputAdapter.parseFromNative(
+                                    String(outputSwap.inputAmount),
                                     outputSwap.network
-                                } for ${inputAdapter.parseFromNative(inputSwap.inputAmount)} ${inputSwap.network}`
+                                )} ${outputSwap.network} for ${inputAdapter.parseFromNative(
+                                    String(inputSwap.inputAmount),
+                                    inputSwap.network
+                                )} ${inputSwap.network}`
                             );
 
                             await this.emailService.send('SWAP', { ...outputSwap, transactionHash });

@@ -55,7 +55,7 @@ export class BalanceService {
                     const address = this.blockchainConfig[network].receiverAddress;
                     const result = await this.contracts[network].getBalance(address, network);
                     const raw = result.toString();
-                    const balance = this.adapters[network].parseFromNative(result || 0).toString();
+                    const balance = this.adapters[network].parseFromNative(result || 0, network).toString();
 
                     this.allBalances[network] = { address, raw, balance };
 

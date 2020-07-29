@@ -25,14 +25,14 @@ export default class RefundHandler {
 
                 const transactionHash = await contract?.refund(swap);
 
-                logData(`Refund ${this.adapters[network].parseFromNative(String(inputAmount))} ${network}`);
+                logData(`Refund ${this.adapters[network].parseFromNative(String(inputAmount), network)} ${network}`);
                 logInfo(`REFUND ${network}: ID: ${id}, TxHash: ${transactionHash}`);
 
                 if (transactionHash) {
                     await this.emailService.send('REFUND', { ...swap, transactionHash });
                 }
             } catch (err) {
-                logDebug(`${swap.network}_REFUND_ERROR`, { err, swap });
+                logDebug(`${swap.network}_REFUND_ERROR ${err}`, { err, swap });
                 logError(`Cannot refund transaction: ${swap.id}`);
             }
         }

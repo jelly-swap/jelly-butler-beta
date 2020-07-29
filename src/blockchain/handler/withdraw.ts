@@ -63,7 +63,8 @@ export default class WithdrawHandler {
 
                             logData(
                                 `You received ${this.adapters[network].parseFromNative(
-                                    String(inputAmount)
+                                    String(inputAmount),
+                                    network
                                 )} ${network}.`
                             );
 
