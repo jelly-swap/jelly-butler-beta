@@ -39,9 +39,9 @@ export default (token) => {
     const address = safeAccess(userConfig, ['WALLETS', token, 'ADDRESS']);
     const secret = safeAccess(userConfig, ['WALLETS', token, 'SECRET']);
 
-    const tokenConfig = Config(token, TokenConfig, AddressToToken, 7200);
     const config = {
-        ...tokenConfig,
+        ...Config(TokenConfig, AddressToToken, 7200),
+        ...TokenConfig[token],
         providerUrl:
             userConfig.BLOCKCHAIN_PROVIDER?.INFURA || 'https://mainnet.infura.io/v3/02cf6338c88b42f595f8fd946134fa4b',
         contractAddress: '0x133DbFdf74f565838A2f9413Fb53761a19f06ADF',

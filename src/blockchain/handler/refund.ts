@@ -1,24 +1,29 @@
-import { getNetworkContracts } from '../contracts';
+import getContracts from '../contracts';
 import getAdapters from '../adapters';
 import { logInfo, logError, logDebug, logData } from '../../logger';
 import EmailService from '../../email';
 
 export default class RefundHandler {
     private emailService: EmailService;
+
+    private contracts: any;
     private adapters: any;
 
     constructor() {
         this.emailService = new EmailService();
+
+        this.contracts = getContracts();
         this.adapters = getAdapters();
     }
 
     async processRefunds(expiredSwaps) {
-        const contracts = getNetworkContracts();
-
         for (const swap of expiredSwaps) {
             try {
                 const { inputAmount, network, id } = swap;
-                const transactionHash = await contracts[network]?.refund(swap);
+
+                const contract = this.contracts[network];
+
+                const transactionHash = await contract?.refund(swap);
 
                 logData(`Refund ${this.adapters[network].parseFromNative(String(inputAmount))} ${network}`);
                 logInfo(`REFUND ${network}: ID: ${id}, TxHash: ${transactionHash}`);
