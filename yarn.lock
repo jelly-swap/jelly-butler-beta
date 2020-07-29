@@ -70,10 +70,10 @@
   version "0.1.40"
   resolved "https://registry.yarnpkg.com/@jelly-swap/btc-utils/-/btc-utils-0.1.40.tgz#ba8bfa438920d751a6f1873e787434a824741ee2"
 
-"@jelly-swap/btc-web-wallet@0.1.42":
-  version "0.1.42"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/btc-web-wallet/-/btc-web-wallet-0.1.42.tgz#9ae7e15af28690aff8e320e961645aa83ff8465e"
-  integrity sha512-glug+H6TWEB3BOe6gP/B9wH4jiFAIGlHE23u07H7c3B+DHnNunBBIU6mkMO4J0veh+1xImT7vrjaPvnSCw9A2w==
+"@jelly-swap/btc-web-wallet@0.1.45":
+  version "0.1.45"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/btc-web-wallet/-/btc-web-wallet-0.1.45.tgz#1cc9fa54f46337371832e5271e104339e03524f6"
+  integrity sha512-yvB8Kp1zb9nux50aGVvfjL2H8+ZKj4AzrLDCVABUnj9IZYs+5FKNM0jreE1Kkvv6MiASFm8ojo5/xc+O4lQoWg==
   dependencies:
     "@jelly-swap/btc-utils" "^0.1.40"
     "@jelly-swap/types" "^0.1.42"
@@ -83,10 +83,10 @@
     bitcoinjs-message "^2.1.0"
     coinselect "3.1.11"
 
-"@jelly-swap/erc20@0.1.42":
-  version "0.1.42"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/erc20/-/erc20-0.1.42.tgz#87795fede43ef1ebb05efdb1f75a81d516f1b15a"
-  integrity sha512-7ch72Oa+IyC0QXicYvwJ04u0EREBSxTXxR9TjedO/K235iu7ErcLx/TksrgbeR+PLjgQYREsGcowAwO51VWEOg==
+"@jelly-swap/erc20@0.1.44":
+  version "0.1.44"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/erc20/-/erc20-0.1.44.tgz#8c9ff9335d85fe21683f834bbd2f27443d0924fb"
+  integrity sha512-twbl5yWp15Djblq0mGpcucXh1SspKZCPa5flyGwqzSQls3vBBeKNJW8GcoTqVm0xmtfJhuA3dzebX0Snpc5lgA==
   dependencies:
     "@jelly-swap/ethereum" "^0.1.42"
     "@jelly-swap/types" "^0.1.42"
