@@ -16,14 +16,6 @@ export default class Erc20Contract extends Contract {
         return await this.wallet.signMessage(message);
     }
 
-    async withdraw(withdraw) {
-        if (!withdraw.tokenAddress) {
-            withdraw.tokenAddress = this.config.TokenToAddress(withdraw.network);
-        }
-
-        return await super.withdraw(withdraw);
-    }
-
     async userWithdraw(swap, secret) {
         const address = swap.receiver;
         const balance = await this.provider.getBalance(address);

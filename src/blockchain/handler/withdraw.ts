@@ -79,8 +79,9 @@ export default class WithdrawHandler {
                     } catch (err) {
                         this.localCache[withdraw.id] = false;
 
+                        logDebug(`WITHDRAW_ERROR ${err}`, err);
+
                         logDebug('WITHDRAW_BROADCAST_ERROR', withdraw.id);
-                        logDebug(`WITHDRAW_ERROR`, err);
 
                         if (maxTries > 0) {
                             logInfo('WITHDRAW_RETRY', withdraw.id);
