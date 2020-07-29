@@ -9,11 +9,15 @@ export default class RefundHandler {
     private contracts: any;
     private adapters: any;
 
+    private localCache: any;
+
     constructor() {
         this.emailService = new EmailService();
 
         this.contracts = getContracts();
         this.adapters = getAdapters();
+
+        this.localCache = {};
     }
 
     async processRefunds(expiredSwaps) {
@@ -21,15 +25,21 @@ export default class RefundHandler {
             try {
                 const { inputAmount, network, id } = swap;
 
-                const contract = this.contracts[network];
+                if (!this.localCache[id]) {
+                    const contract = this.contracts[network];
 
-                const transactionHash = await contract?.refund(swap);
+                    const transactionHash = await contract?.refund(swap);
 
-                logData(`Refund ${this.adapters[network].parseFromNative(String(inputAmount), network)} ${network}`);
-                logInfo(`REFUND ${network}: ID: ${id}, TxHash: ${transactionHash}`);
+                    this.localCache[id] = true;
 
-                if (transactionHash) {
-                    await this.emailService.send('REFUND', { ...swap, transactionHash });
+                    logData(
+                        `Refund ${this.adapters[network].parseFromNative(String(inputAmount), network)} ${network}`
+                    );
+                    logInfo(`REFUND ${network}: ID: ${id}, TxHash: ${transactionHash}`);
+
+                    if (transactionHash) {
+                        await this.emailService.send('REFUND', { ...swap, transactionHash });
+                    }
                 }
             } catch (err) {
                 logDebug(`${swap.network}_REFUND_ERROR ${err}`, { err, swap });
