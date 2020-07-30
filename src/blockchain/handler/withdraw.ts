@@ -1,15 +1,14 @@
-import getContracts, { getNetworkContracts } from '../contracts';
+import getContracts from '../contracts';
+import getAdapters from '../adapters';
 import { sleep } from '../utils';
 
-import { logInfo, logError, logWarn } from '../../logger';
+import { logInfo, logData, logDebug } from '../../logger';
 
 import { SwapService } from '../../components/swap/service';
 import { WithdrawService } from '../../components/withdraw/service';
 
 import { validateWithdraw } from '../validator';
 import EmailService from '../../email';
-import Emitter from '../../emitter';
-import { equal } from '../../utils/math';
 
 const RETRY_COUNT = 10;
 const RETRY_TIME = 1000 * 10;
@@ -20,6 +19,7 @@ export default class WithdrawHandler {
     private emailService: EmailService;
 
     private contracts: any;
+    private adapters: any;
     private localCache: any;
 
     constructor() {
@@ -27,6 +27,8 @@ export default class WithdrawHandler {
         this.withdrawService = new WithdrawService();
         this.emailService = new EmailService();
         this.contracts = getContracts();
+        this.adapters = getAdapters();
+
         this.localCache = {};
     }
 
@@ -36,7 +38,10 @@ export default class WithdrawHandler {
         const swap = await this.swapService.findInputSwapByOutputSwapIdAndOutputNetwork(withdraw.id, withdraw.network);
 
         if (swap) {
-            const contract = this.contracts[swap.network];
+            const { network, inputAmount } = swap;
+
+            const contract = this.contracts[network];
+
             logInfo('WITHDRAW_SWAP_FOUND', swap);
 
             const valid = await validateWithdraw(withdraw);
@@ -56,71 +61,60 @@ export default class WithdrawHandler {
 
                             logInfo('WITHDRAW_SENT', { ...withdraw, transactionHash });
 
+                            logData(
+                                `You received ${this.adapters[network].parseFromNative(
+                                    String(inputAmount),
+                                    network
+                                )} ${network}.`
+                            );
+
                             await this.emailService.send('WITHDRAW', {
                                 ...swap,
                                 transactionHash,
                                 secret: withdraw.secret,
                             });
                         } catch (err) {
-                            logError(`WITHDRAW_SERVICE_ERROR: ${err}`);
+                            logDebug(`WITHDRAW_SERVICE_ERROR: ${err}`);
                         }
                     } catch (err) {
                         this.localCache[withdraw.id] = false;
 
-                        logError('WITHDRAW_BROADCAST_ERROR', withdraw.id);
-                        logError(`WITHDRAW_ERROR`, err);
+                        logDebug(`WITHDRAW_ERROR ${err}`, err);
+
+                        logDebug('WITHDRAW_BROADCAST_ERROR', withdraw.id);
 
                         if (maxTries > 0) {
                             logInfo('WITHDRAW_RETRY', withdraw.id);
                             await sleep((RETRY_COUNT + 1 - maxTries) * RETRY_TIME);
                             await this.onWithdraw(withdraw, maxTries - 1);
                         } else {
-                            logError('WITHDRAW_FAILED', withdraw.id);
+                            logDebug('WITHDRAW_FAILED', withdraw.id);
                         }
                     }
                 } else {
-                    logWarn('WITHDRAW_ALREADY_PROCESSED', withdraw.id);
+                    logDebug('WITHDRAW_ALREADY_PROCESSED', withdraw.id);
                 }
             }
         } else {
-            logWarn('WITHDRAW_SWAP_NOT_FOUND', withdraw.id);
+            logDebug('WITHDRAW_SWAP_NOT_FOUND', withdraw.id);
         }
     }
 
-    async processOldWithdraws() {
+    async processOldWithdraws(withdraws) {
+        logData(`Checking for missed withdrawals.`);
+
         try {
-            logInfo(`TRACK_OLD_WITHDRAWS`);
+            for (const index in withdraws) {
+                const withdraw = withdraws[index];
 
-            const networkContracts = getNetworkContracts();
+                const isProcessed = await this.withdrawService.findByIdAndNetwork(withdraw.id, withdraw.network);
 
-            for (const network in networkContracts) {
-                const contract = networkContracts[network];
-                const withdraws = await contract.getPast('withdraw');
-                const ids = withdraws.map((w) => w.id);
-
-                try {
-                    const statuses = await contract.getStatus(ids);
-
-                    for (const index in withdraws) {
-                        if (equal(statuses[index], 3)) {
-                            const withdraw = withdraws[index];
-
-                            const isProcessed = await this.withdrawService.findByIdAndNetwork(
-                                withdraw.id,
-                                withdraw.network
-                            );
-
-                            if (!isProcessed) {
-                                this.onWithdraw(withdraw);
-                            }
-                        }
-                    }
-                } catch (err) {
-                    logError(`TRACK_OLD_WITHDRAWS_PROCESSING_ERROR`, { network, err });
+                if (!isProcessed) {
+                    await this.onWithdraw(withdraw);
                 }
             }
         } catch (err) {
-            logError(`TRACK_OLD_WITHDRAWS_ERROR`, err);
+            logDebug(`TRACK_OLD_WITHDRAWS_PROCESSING_ERROR`, { err });
         }
     }
 }

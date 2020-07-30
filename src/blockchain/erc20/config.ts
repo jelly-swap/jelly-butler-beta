@@ -2,7 +2,6 @@ import { Config } from '@jelly-swap/erc20';
 
 import UserConfig from '../../config';
 import { safeAccess } from '../../utils';
-import { logError } from '../../logger';
 
 const TokenConfig = {
     DAI: {
@@ -40,16 +39,16 @@ export default (token) => {
     const address = safeAccess(userConfig, ['WALLETS', token, 'ADDRESS']);
     const secret = safeAccess(userConfig, ['WALLETS', token, 'SECRET']);
 
-    const tokenConfig = Config(token, TokenConfig, AddressToToken, 7200);
     const config = {
-        ...tokenConfig,
+        ...Config(TokenConfig, AddressToToken, 7200),
+        ...TokenConfig[token],
         providerUrl:
             userConfig.BLOCKCHAIN_PROVIDER?.INFURA || 'https://mainnet.infura.io/v3/02cf6338c88b42f595f8fd946134fa4b',
         contractAddress: '0x133DbFdf74f565838A2f9413Fb53761a19f06ADF',
         explorer: 'https://etherscan.io/tx/',
         REFUND_PERIOD: 10,
         VALID_EXPIRATION: 72000,
-        gasMultiplier: 2,
+        gasMultiplier: 1,
     };
 
     if (address && secret) {
@@ -59,6 +58,6 @@ export default (token) => {
             PRIVATE_KEY: secret,
         };
     } else {
-        logError(`${token} ADDRESS and SECRET are missing.`);
+        throw new Error(`${token} ADDRESS and SECRET are missing.`);
     }
 };

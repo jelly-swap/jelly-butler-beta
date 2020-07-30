@@ -25,7 +25,11 @@ export default class CryptoCompareProvider implements IPriceProvider {
             const result = await CryptoCompareApi.priceMulti(q, b);
 
             Object.entries(AppConfig.DUPLICATE_PRICE).forEach((t) => {
-                result[t['0']] = result[t['1']];
+                const duplicate = t['0'];
+                const from = t['1'];
+                if (!result[duplicate]) {
+                    result[duplicate] = result[from];
+                }
             });
 
             Object.keys(result).forEach((base) => {
@@ -35,8 +39,16 @@ export default class CryptoCompareProvider implements IPriceProvider {
             });
 
             Object.entries(AppConfig.DUPLICATE_PRICE).forEach((t) => {
-                prices[`${t['0']}-${t['1']}`] = 1;
-                prices[`${t['1']}-${t['0']}`] = 1;
+                const b = t['0'];
+                const q = t['1'];
+
+                if (!prices[`${b}-${q}`]) {
+                    prices[`${b}-${q}`] = 1;
+                }
+
+                if (!prices[`${q}-${b}`]) {
+                    prices[`${q}-${b}`] = 1;
+                }
             });
 
             return prices;

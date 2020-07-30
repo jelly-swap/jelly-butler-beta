@@ -3,7 +3,6 @@ import { Networks } from '@jelly-swap/btc-utils';
 
 import { safeAccess } from '../../utils';
 import UserConfig from '../../config';
-import { logError } from '../../logger';
 
 export default () => {
     const userConfig = new UserConfig().getUserConfig();
@@ -30,6 +29,6 @@ export default () => {
             SEED: secret,
         };
     } else {
-        logError('Bitcoin ADDRESS and SECRET are missing.');
+        throw new Error('Bitcoin ADDRESS and SECRET are missing.');
     }
 };

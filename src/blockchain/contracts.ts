@@ -52,12 +52,4 @@ export const getNetworkContracts = () => {
     return NetworkContracts;
 };
 
-export const startEventListener = async () => {
-    getContracts();
-    getNetworkContracts();
-    for (const network in NetworkContracts) {
-        await NetworkContracts[network].subscribe();
-    }
-};
-
 export default getContracts;

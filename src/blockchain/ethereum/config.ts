@@ -1,7 +1,6 @@
 import { Config } from '@jelly-swap/ethereum';
 import UserConfig from '../../config';
 import { safeAccess } from '../../utils';
-import { logError } from '../../logger';
 
 export default () => {
     const userConfig = new UserConfig().getUserConfig();
@@ -17,7 +16,7 @@ export default () => {
         explorer: 'https://etherscan.io/tx/',
         REFUND_PERIOD: 10,
         VALID_EXPIRATION: 72000,
-        gasMultiplier: 2,
+        gasMultiplier: 1,
     };
 
     if (address && secret) {
@@ -27,6 +26,6 @@ export default () => {
             PRIVATE_KEY: secret,
         };
     } else {
-        logError('Ethereums ADDRESS and SECRET are missing.');
+        throw new Error('Ethereum ADDRESS and SECRET are missing.');
     }
 };

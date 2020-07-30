@@ -1,7 +1,7 @@
 import Repository from '../../repository';
 import { safeAccess } from '../../utils';
 
-import { logError } from '../../logger';
+import { logDebug } from '../../logger';
 import UserConfig from '../../config';
 
 export default class BalanceRepository {
@@ -23,7 +23,7 @@ export default class BalanceRepository {
         try {
             await this.balanceRepository.save(balance);
         } catch (error) {
-            logError(`BALANCE_REPOSITORY_ERROR`, error);
+            logDebug(`BALANCE_REPOSITORY_ERROR`, error);
         }
     }
 

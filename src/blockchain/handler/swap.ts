@@ -1,15 +1,15 @@
 import getAdapters from '../adapters';
-import getContracts, { getNetworkContracts } from '../contracts';
+import getContracts from '../contracts';
 import { isOutputSwapValid, isInputSwapValid } from '../validator';
 import { sleep } from '../utils';
 
-import { logInfo, logError, logWarn } from '../../logger';
+import { logInfo, logWarn, logData, logDebug } from '../../logger';
 
 import { SwapService } from '../../components/swap/service';
 import EmailService from '../../email';
 import Exchange from '../../exchange';
-import Emitter from '../../emitter';
-import { equal, divDecimals, mulDecimals, mul, toFixed } from '../../utils/math';
+
+import { divDecimals, mulDecimals, mul, toFixed } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
 import getBlockchainConfig from '../config';
 
@@ -46,10 +46,11 @@ export default class SwapHandler {
             const isProcessed = await this.swapService.findByIdAndNetwork(inputSwap.id, inputSwap.network);
 
             if (!isProcessed && !this.localCache[inputSwap.id]) {
-                const adapter = this.adapters[inputSwap.outputNetwork];
+                const inputAdapter = this.adapters[inputSwap.network];
+                const outputAdapter = this.adapters[inputSwap.outputNetwork];
                 const contract = this.contracts[inputSwap.outputNetwork];
 
-                const outputSwap = adapter.createSwapFromInput({
+                const outputSwap = outputAdapter.createSwapFromInput({
                     ...inputSwap,
                     outputAmount: this.getLatestOutputAmount(inputSwap),
                 });
@@ -75,21 +76,31 @@ export default class SwapHandler {
 
                             logInfo('SWAP_SENT', transactionHash);
 
+                            logData(
+                                `Created a swap: ${outputAdapter.parseFromNative(
+                                    String(outputSwap.inputAmount),
+                                    outputSwap.network
+                                )} ${outputSwap.network} for ${inputAdapter.parseFromNative(
+                                    String(inputSwap.inputAmount),
+                                    inputSwap.network
+                                )} ${inputSwap.network}`
+                            );
+
                             await this.emailService.send('SWAP', { ...outputSwap, transactionHash });
                         } catch (err) {
-                            logError(`SWAP_SERVICE_ERROR: ${err}`);
+                            logDebug(`SWAP_SERVICE_ERROR: ${err}`);
                         }
                     } catch (err) {
                         this.localCache[inputSwap.id] = false;
 
-                        logError('SWAP_BROADCAST_ERROR', inputSwap.id);
-                        logError(`SWAP_ERROR`, err);
+                        logDebug('SWAP_BROADCAST_ERROR', inputSwap.id);
+                        logDebug(`SWAP_ERROR`, err);
                         if (maxTries > 0) {
                             logInfo('SWAP_RETRY', inputSwap.id);
                             await sleep((RETRY_COUNT + 1 - maxTries) * RETRY_TIME);
                             await this.onSwap(inputSwap, maxTries - 1);
                         } else {
-                            logError('SWAP_FAILED', inputSwap.id);
+                            logDebug('SWAP_FAILED', inputSwap.id);
                         }
                     }
                 }
@@ -97,29 +108,16 @@ export default class SwapHandler {
                 logWarn('SWAP_ALREADY_PROCESSED', inputSwap.id);
             }
         } catch (err) {
-            logError(`CANNOT_PREPARE_SWAP_OUTPUT`, { inputSwap, err });
+            logDebug(`CANNOT_PREPARE_SWAP_OUTPUT`, { inputSwap, err });
         }
     }
 
-    async processOldSwaps() {
-        logInfo(`TRACK_OLD_SWAPS`);
+    async processOldSwaps(swaps) {
+        logData(`Checking for missed swaps.`);
 
-        const networkContracts = getNetworkContracts();
-
-        for (const network in networkContracts) {
-            try {
-                const swaps = await networkContracts[network].getPast('new');
-
-                if (swaps) {
-                    for (const swap of swaps) {
-                        // if swap is Active
-                        if (equal(swap.status, 1)) {
-                            this.onSwap(swap);
-                        }
-                    }
-                }
-            } catch (err) {
-                logError(`TRACK_OLD_SWAPS_ERROR`, { network, err });
+        if (swaps) {
+            for (const swap of swaps) {
+                await this.onSwap(swap);
             }
         }
     }

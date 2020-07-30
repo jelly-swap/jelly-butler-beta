@@ -1,7 +1,7 @@
-import AppConfig from '../../../config';
+import { WithdrawModel } from './model';
 import Repository from '../../repository';
 
-import { logError } from '../../logger';
+import { logDebug } from '../../logger';
 import { safeAccess } from '../../utils';
 import UserConfig from '../../config';
 
@@ -22,9 +22,19 @@ export default class WithdrawRepository {
 
     public async create(withdraw: any) {
         try {
-            await this.withdrawRepository.save(withdraw);
+            await this.withdrawRepository.save(
+                new WithdrawModel(
+                    withdraw.id,
+                    withdraw.hashLock,
+                    withdraw.secret,
+                    withdraw.transactionHash,
+                    withdraw.sender,
+                    withdraw.receiver,
+                    withdraw.network
+                )
+            );
         } catch (error) {
-            logError(`WITHDRAW_REPOSITORY_ERROR`, error);
+            logDebug(`WITHDRAW_REPOSITORY_ERROR`, error);
         }
     }
 

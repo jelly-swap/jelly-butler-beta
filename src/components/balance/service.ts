@@ -10,7 +10,7 @@ import { add, addBig, toBigNumber, mul } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
 import BalanceRepository from './repository';
 
-import { logError, logWarn } from '../../logger';
+import { logDebug } from '../../logger';
 import { safeAccess } from '../../utils';
 
 export class BalanceService {
@@ -55,7 +55,7 @@ export class BalanceService {
                     const address = this.blockchainConfig[network].receiverAddress;
                     const result = await this.contracts[network].getBalance(address, network);
                     const raw = result.toString();
-                    const balance = this.adapters[network].parseFromNative(result || 0).toString();
+                    const balance = this.adapters[network].parseFromNative(result || 0, network).toString();
 
                     this.allBalances[network] = { address, raw, balance };
 
@@ -63,13 +63,13 @@ export class BalanceService {
                         this.providedBalances[network] = this.allBalances[network];
                     }
                 } catch (err) {
-                    logError(`CANNOT_GET_BALANCES`, { network, err });
+                    logDebug(`CANNOT_GET_BALANCES`, { network, err });
                 }
             }
 
             this.exchangeBalances = await this.exchange.getBalance();
         } catch (err) {
-            logError(`CANNOT_GET_BALANCES`, err);
+            logDebug(`CANNOT_GET_BALANCES`, err);
         }
     }
 
@@ -89,7 +89,7 @@ export class BalanceService {
                     balances.push({ assetName: network, amount, valueInUsdc });
                     portfolioInUsdcTotal = addBig(portfolioInUsdcTotal, valueInUsdc);
                 } catch (err) {
-                    logWarn(`BALANCE_HISTORY_PRICE_${network}-USDC`, err);
+                    logDebug(`BALANCE_HISTORY_PRICE_${network}-USDC`, err);
                 }
             }
 
@@ -101,7 +101,7 @@ export class BalanceService {
 
             this.balanceRepository.saveBalance(balances);
         } catch (err) {
-            logError(`CANNOT_SAVE_BALANCES`, err);
+            logDebug(`CANNOT_SAVE_BALANCES`, err);
         }
     }
 

@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { logInfo } from '../logger';
+import { logData } from '../logger';
 
 type Wrapper = (router: Router) => void;
 type TaskWrapper = () => void;
@@ -18,7 +18,7 @@ interface Task {
 
 export const startTasks = async (tasks: Task[]) => {
     for (const t of tasks) {
-        logInfo(`Starting task: ${t.name}`);
+        logData(`Starting ${t.name}`);
         await t.start();
     }
 };
@@ -30,15 +30,13 @@ export const applyMiddleware = (middlewareWrappers: Wrapper[], router: Router) =
 };
 
 export const applyRoutes = (routes: Route[], router: Router) => {
-    routes.forEach(route => {
+    routes.forEach((route) => {
         const { method, controller, action } = route;
         (router as any)[method](route.route, (req: Request, res: Response, next: () => void) => {
             const result = new (controller as any)()[action](req, res, next);
             if (result instanceof Promise) {
-                result.then(innerResult =>
-                    innerResult !== null && innerResult !== undefined
-                        ? res.send(innerResult)
-                        : undefined
+                result.then((innerResult) =>
+                    innerResult !== null && innerResult !== undefined ? res.send(innerResult) : undefined
                 );
             } else if (result !== null && result !== undefined) {
                 res.json(result);

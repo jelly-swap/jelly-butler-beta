@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import UserConfig from '../../config';
 
@@ -96,7 +96,11 @@ export default class InfoService {
                     const sig = await contracts[network].signMessage(message);
                     this.balances[network]['signature'] = sig;
                 } catch (err) {
-                    logError(`Cannot sign message ${network} : ${err}`);
+                    logError(`Cannot sign message for ${network}. ${err}`);
+                    logError(
+                        `Please make sure you've entered correct Address/Secret pair. This error can happen if you've entered a BTC address and a mnemonic that does not contain it.`
+                    );
+                    process.exit(-1);
                 }
             }
         }

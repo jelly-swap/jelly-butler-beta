@@ -3,7 +3,7 @@ import { createTransport } from 'nodemailer';
 import SwapEmail from './templates/swap';
 import WithdrawEmail from './templates/withdraw';
 import RefundEmail from './templates/refund';
-import { logError, logInfo } from '../logger';
+import { logInfo, logDebug } from '../logger';
 import { IUserConfig } from '../types/UserConfig';
 import UserConfig from '../config';
 import { safeAccess } from '../utils';
@@ -71,7 +71,7 @@ export default class EmailService {
 
         await this.transport.sendMail(mailOptions, (err, information) => {
             if (err) {
-                logError('EMAIL_ERROR', err);
+                logDebug('EMAIL_ERROR', err);
             } else {
                 logInfo('EMAIL_SENT', information.response);
             }

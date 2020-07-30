@@ -4,7 +4,7 @@ import Validators from './validators';
 import AppConfig from '../../config';
 
 import { greaterThan, sub, lessThanOrEqual, mul, divDecimals } from '../utils/math';
-import { logError } from '../logger';
+import { logError, logDebug, logData } from '../logger';
 import { PriceService } from '../components/price/service';
 import UserConfig from '../config';
 import { safeAccess } from '../utils';
@@ -22,7 +22,7 @@ export const isInputSwapExpirationValid = (swap) => {
     );
 
     if (!result) {
-        logError(`INPUT_INVALID_EXPIRATION`, swap);
+        logDebug(`INPUT_INVALID_EXPIRATION`, swap);
     }
 
     return result;
@@ -38,7 +38,7 @@ export const isOutputSwapExpirationValid = (swap) => {
     );
 
     if (!result) {
-        logError(`OUTPUT_INVALID_EXPIRATION`, swap);
+        logDebug(`OUTPUT_INVALID_EXPIRATION`, swap);
     }
 
     return result;
@@ -54,32 +54,32 @@ export const isInputSwapValid = async (swap) => {
     const receivers = userConfigInstance.getReceivers(Object.keys(supportedNetworks));
 
     if (receivers.findIndex((item) => compareAddress(swap.sender, item)) !== -1) {
-        logError(`INPUT_SENDER_EQUAL_BUTLER_RECEIVER`, swap);
+        logDebug(`INPUT_SENDER_EQUAL_BUTLER_RECEIVER`, swap);
         return false;
     }
 
     if (!isInputSwapExpirationValid(swap)) {
-        logError(`INPUT_INVALID_EXPIRATION`, swap);
+        logDebug(`INPUT_INVALID_EXPIRATION`, swap);
         return false;
     }
 
     if (!outputNetworkValidation) {
-        logError(`INPUT_SECONDARY_CHAIN_VALIDATION_FAILED`, swap);
+        logDebug(`INPUT_SECONDARY_CHAIN_VALIDATION_FAILED`, swap);
         return false;
     }
 
     if (!inputNetworkValidation) {
-        logError(`INPUT_CHAIN_VALIDATION_FAILED`, swap);
+        logDebug(`INPUT_CHAIN_VALIDATION_FAILED`, swap);
         return false;
     }
 
     if (!compareAddress(swap.receiver, safeAccess(userConfig, ['WALLETS', swap.network, 'ADDRESS']))) {
-        logError(`INPUT_INVALID_RECEIVER`, swap);
+        logDebug(`INPUT_INVALID_RECEIVER`, swap);
         return false;
     }
 
     if (!isInputPriceValid(swap)) {
-        logError(`INPUT_INVALID_PRICE`, swap);
+        logDebug(`INPUT_INVALID_PRICE`, swap);
         return false;
     }
 
@@ -93,39 +93,42 @@ export const isOutputSwapValid = async (swap, takerDesiredAmount) => {
     const outputNetworkValidation = safeAccess(blockchainConfig, [swap.outputNetwork]);
 
     if (!inputNetworkValidation) {
-        logError(`INPUT_CHAIN_VALIDATION_FAILED`, swap);
+        logDebug(`INPUT_CHAIN_VALIDATION_FAILED`, swap);
         return false;
     }
 
     if (!outputNetworkValidation) {
-        logError(`OUTPUT_CHAIN_VALIDATION_FAILED`, swap);
+        logDebug(`OUTPUT_CHAIN_VALIDATION_FAILED`, swap);
         return false;
     }
 
     if (compareAddress(swap.outputAddress, safeAccess(userConfig, ['WALLETS', swap.network, 'ADDRESS']))) {
-        logError(`OUTPUT_WRONG_OUTPUT_ADDRESS`, swap);
+        logDebug(`OUTPUT_WRONG_OUTPUT_ADDRESS`, swap);
         return false;
     }
 
     if (compareAddress(swap.sender, swap.receiver)) {
-        logError(`OUTPUT_SENDER_CANNOT_EQUAL_RECEIVER`, swap);
+        logDebug(`OUTPUT_SENDER_CANNOT_EQUAL_RECEIVER`, swap);
         return false;
     }
 
     const isPairValid = isInputPairValid(swap);
     if (!isPairValid) {
-        logError(`OUTPUT_INVALID_PAIR`, swap);
+        logDebug(`OUTPUT_INVALID_PAIR`, swap);
         return false;
     }
 
     const allowedSlippageAmount = mul(takerDesiredAmount, AppConfig.SLIPPAGE);
     if (greaterThan(sub(takerDesiredAmount, swap.inputAmount), allowedSlippageAmount)) {
-        logError(`OUTPUT_TOO_HIGH_SLIPPAGE_FOR_TAKER`, swap);
+        logError(
+            `Slippage is too high. Taker requested ${swap.inputAmount} ${swap.network} but the calculated amount is ${takerDesiredAmount}`
+        );
+        logDebug(`OUTPUT_TOO_HIGH_SLIPPAGE_FOR_TAKER`, swap);
         return false;
     }
 
     if (!isOutputSwapExpirationValid(swap)) {
-        logError(`OUTPUT_INVALID_EXPIRATION`, swap);
+        logDebug(`OUTPUT_INVALID_EXPIRATION`, swap);
         return false;
     }
 
@@ -168,6 +171,7 @@ function isInputPriceValid(swap) {
         const priceService = new PriceService();
         const blockchainConfig = getBlockchainConfig();
         const pairPrice = priceService.getPairPriceWithSpreadAndFee(swap.network, swap.outputNetwork);
+        logData(`Pair price ${swap.network}-${swap.outputNetwork}: ${pairPrice}`);
 
         const inputDecimals = blockchainConfig[swap.network].decimals;
         const outputDecimals = blockchainConfig[swap.outputNetwork].decimals;
