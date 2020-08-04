@@ -58,6 +58,12 @@ export const isInputSwapValid = async (swap) => {
         return false;
     }
 
+    const isPairValid = isInputPairValid(swap);
+    if (!isPairValid) {
+        logDebug(`INVALID_PAIR`, swap);
+        return false;
+    }
+
     if (!isInputSwapExpirationValid(swap)) {
         logDebug(`INPUT_INVALID_EXPIRATION`, swap);
         return false;
@@ -109,12 +115,6 @@ export const isOutputSwapValid = async (swap, takerDesiredAmount) => {
 
     if (compareAddress(swap.sender, swap.receiver)) {
         logDebug(`OUTPUT_SENDER_CANNOT_EQUAL_RECEIVER`, swap);
-        return false;
-    }
-
-    const isPairValid = isInputPairValid(swap);
-    if (!isPairValid) {
-        logDebug(`OUTPUT_INVALID_PAIR`, swap);
         return false;
     }
 
