@@ -19,6 +19,7 @@ import getDbConfig from './config/database';
 import UserConfig from './config';
 
 import { PK_MATCH_ADDRESS, compareAddress } from './blockchain/utils';
+import Emitter from './emitter';
 
 export const run = (config = userConfig, combinedFile?: string, errorFile?: string) => {
     setLoggerConfig(combinedFile, errorFile);
@@ -43,7 +44,7 @@ export const run = (config = userConfig, combinedFile?: string, errorFile?: stri
 
                         await startHandlers();
 
-                        await startEventListener(config.WALLETS);
+                        await startEventListener(config);
                     })
                     .catch((error) => {
                         logError(`${error}`);

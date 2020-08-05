@@ -8,20 +8,22 @@ import Emitter from '../emitter';
 import { cmpIgnoreCase } from '../utils';
 import getConfig from '../blockchain/config';
 
-export default async (wallets) => {
+export default async (config) => {
+    const { WALLETS, TRACKER_URL } = config;
+
     const MINUTES_15 = 15 * 1000 * 60;
 
-    const lpAddresses = getLpAddresses(wallets);
+    const lpAddresses = getLpAddresses(WALLETS);
 
-    await processPastEvents(lpAddresses, wallets);
+    await processPastEvents(lpAddresses, WALLETS, TRACKER_URL);
 
     setInterval(() => {
-        processPastEvents(lpAddresses, wallets);
+        processPastEvents(lpAddresses, WALLETS, TRACKER_URL);
     }, MINUTES_15);
 
-    handleMessage(wallets);
+    handleMessage(WALLETS);
 
-    subscribe();
+    subscribe(TRACKER_URL);
 };
 
 const SWAP_STATUSES = {
@@ -30,16 +32,16 @@ const SWAP_STATUSES = {
     EXPIRED_STATUS: 4,
 };
 
-const processPastEvents = async (lpAddresses, wallets) => {
+const processPastEvents = async (lpAddresses, wallets, url) => {
     const past5Days = moment().subtract(5, 'days').unix();
 
-    const fetchedWithdraws = await fetchWithdraws(lpAddresses, past5Days);
+    const fetchedWithdraws = await fetchWithdraws(url, lpAddresses, past5Days);
     const withdraws = getWithdraws(fetchedWithdraws, wallets);
 
-    const fetchedSwaps = await fetchSwaps(lpAddresses, past5Days);
+    const fetchedSwaps = await fetchSwaps(url, lpAddresses, past5Days);
     const activeSwaps = getActiveSwaps(fetchedSwaps, wallets);
 
-    const fetchedExpiredSwaps = await fetchExpiredSwaps(lpAddresses);
+    const fetchedExpiredSwaps = await fetchExpiredSwaps(url, lpAddresses);
     const expiredSwaps = getExpiredSwaps(fetchedExpiredSwaps, wallets);
 
     new Emitter().emit('PROCESS_PAST_SWAPS', { withdraws, activeSwaps, expiredSwaps });

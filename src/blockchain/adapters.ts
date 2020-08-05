@@ -1,5 +1,6 @@
 import { Adapter as BitcoinAdapter } from '@jelly-swap/bitcoin';
 import { Adapter as EthereumAdapter } from '@jelly-swap/ethereum';
+import { Adapter as AvalancheAdapter } from '@jelly-swap/avalanche';
 import { Adapter as AeternityAdapter } from '@jelly-swap/aeternity';
 import { Adapter as Erc20Adapter } from '@jelly-swap/erc20';
 
@@ -25,6 +26,7 @@ export default () => {
             ETH: Config.ETH && new EthereumAdapter(Config.ETH as any),
             BTC: Config.BTC && new BitcoinAdapter(Config.BTC as any),
             AE: Config.AE && new AeternityAdapter(Config.AE as any),
+            AVAX: Config.AVAX && new AvalancheAdapter(Config.AVAX),
         };
 
         Adapters = Object.entries(AllAdapters).reduce((a, [k, v]) => (v === undefined ? a : { ...a, [k]: v }), {});

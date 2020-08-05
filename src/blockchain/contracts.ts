@@ -2,6 +2,7 @@ import getConfig, { SECONDARY_NETWORKS } from './config';
 
 import BitcoinContract from './bitcoin';
 import EthereumContract from './ethereum';
+import AvalancheContract from './avalanche';
 import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
 
@@ -24,6 +25,7 @@ const getContracts = () => {
         const AllContracts = {
             ...getErc20Contracts(Config),
             ETH: Config.ETH && new EthereumContract(Config.ETH),
+            AVAX: Config.AVAX && new AvalancheContract(Config.AVAX),
             BTC: Config.BTC && new BitcoinContract(Config.BTC),
             AE: Config.AE && new AeternityContract(Config.AE),
         };

@@ -50,6 +50,7 @@ const getErc20Matcher = () => {
 export const PK_MATCH_ADDRESS = {
     ...getErc20Matcher(),
     ETH: ethAddressMatch,
+    AVAX: ethAddressMatch,
     BTC: btcAddressMatch,
     AE: aeAddressMatch,
 };
