@@ -26,7 +26,6 @@ export default class BinanceExchange implements IExchange {
 
         const userConfig = new UserConfig().getUserConfig();
 
-        safeAccess;
         this.binance = Binance().options({
             APIKEY: safeAccess(userConfig, ['EXCHANGE', 'API_KEY']) || safeAccess(userConfig, ['PRICE', 'API_KEY']),
             APISECRET:
@@ -35,6 +34,8 @@ export default class BinanceExchange implements IExchange {
         });
 
         BinanceExchange.Instance = this;
+
+        logData(`Binance Exchange Connected!`);
     }
 
     async placeOrder(order) {
