@@ -4,11 +4,19 @@ export default {
 
     // Traiding pairs
     PAIRS: {
-        'AVAX-ETH': {
+        // 'AVAX-ETH': {
+        //     FEE: 0.01,
+        // },
+
+        // 'ETH-AVAX': {
+        //     FEE: 0.01,
+        // },
+
+        'ONE-ETH': {
             FEE: 0.01,
         },
 
-        'ETH-AVAX': {
+        'ETH-ONE': {
             FEE: 0.01,
         },
     },
@@ -20,10 +28,16 @@ export default {
         ETH: {
             ADDRESS: '',
             // Ethereum Private Key
-            SECRET: '3ee89553f5524191a80a4230b015a0781898b2d97b7d74fc16e027604b05ff3c',
+            SECRET: '',
         },
 
         AVAX: {
+            ADDRESS: '',
+            // Avalanche Private Key
+            SECRET: '',
+        },
+
+        ONE: {
             ADDRESS: '',
             // Avalanche Private Key
             SECRET: '',

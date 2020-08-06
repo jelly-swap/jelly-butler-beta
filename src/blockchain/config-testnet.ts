@@ -5,6 +5,7 @@ import getSupportedNetworks from '../config/supportedNetworks';
 import BitcoinConfig from './bitcoin/config';
 import EthereumConfig from './ethereum/config';
 import AvalancheConfig from './avalanche/config';
+import HarmonyConfig from './harmony/config';
 import AeternityConfig from './aeternity/config';
 
 import { SECONDARY_NETWORKS } from './config';
@@ -71,6 +72,12 @@ const Config = {
     AVAX: () => {
         return {
             ...AvalancheConfig(),
+        };
+    },
+
+    ONE: () => {
+        return {
+            ...HarmonyConfig(),
         };
     },
 };

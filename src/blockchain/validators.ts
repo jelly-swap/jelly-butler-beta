@@ -1,6 +1,7 @@
 import * as BitcoinValidator from './bitcoin/validator';
 import * as EthereumValidator from './ethereum/validator';
 import * as AvalancheValidator from './avalanche/validator';
+import * as HarmonyValidator from './harmony/validator';
 import * as AeternityValidator from './aeternity/validator';
 import * as Erc20Validator from './erc20/validator';
 import { SECONDARY_NETWORKS } from './config';
@@ -16,6 +17,7 @@ export default {
     BTC: BitcoinValidator,
     ETH: EthereumValidator,
     AVAX: AvalancheValidator,
+    ONE: HarmonyValidator,
     AE: AeternityValidator,
     ...getErc20Validators(),
 };
