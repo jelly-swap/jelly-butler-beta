@@ -5,8 +5,7 @@ import getAdapters from '../../blockchain/adapters';
 import getProvidedAssets from '../../config/providedAssets';
 import getSupportedNetworks from '../../config/supportedNetworks';
 
-import Exchange from '../../exchange';
-import { add, addBig, toBigNumber, mul } from '../../utils/math';
+import { addBig, toBigNumber, mul } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
 import BalanceRepository from './repository';
 
@@ -16,7 +15,6 @@ import { safeAccess } from '../../utils';
 export class BalanceService {
     private static Instance: BalanceService;
 
-    private exchange = new Exchange();
     private priceService = new PriceService();
     private balanceRepository = new BalanceRepository();
 
@@ -29,8 +27,6 @@ export class BalanceService {
 
     private providedAssets: any;
     private allAssets: any;
-
-    private exchangeBalances = {};
 
     constructor() {
         if (BalanceService.Instance) {
@@ -66,8 +62,6 @@ export class BalanceService {
                     logDebug(`CANNOT_GET_BALANCES`, { network, err });
                 }
             }
-
-            this.exchangeBalances = await this.exchange.getBalance();
         } catch (err) {
             logDebug(`CANNOT_GET_BALANCES`, err);
         }
@@ -80,10 +74,8 @@ export class BalanceService {
 
             for (const network in this.allAssets) {
                 try {
-                    const jellyBalance = safeAccess(this.allBalances, [network, 'balance']) || 0;
-                    const exchangeBalance = safeAccess(this.exchangeBalances, [network, 'balance']) || 0;
+                    const amount = safeAccess(this.allBalances, [network, 'balance']) || 0;
                     const pairPrice = this.priceService.getPairPrice(network, 'USDC');
-                    const amount = add(jellyBalance, exchangeBalance);
                     const valueInUsdc = mul(pairPrice, amount);
 
                     balances.push({ assetName: network, amount, valueInUsdc });
@@ -92,12 +84,6 @@ export class BalanceService {
                     logDebug(`BALANCE_HISTORY_PRICE_${network}-USDC`, err);
                 }
             }
-
-            balances.push({
-                assetName: 'TOTAL_USDC',
-                amount: portfolioInUsdcTotal.toString(),
-                valueInUsdc: portfolioInUsdcTotal.toString(),
-            });
 
             this.balanceRepository.saveBalance(balances);
         } catch (err) {
@@ -111,9 +97,5 @@ export class BalanceService {
 
     getAllBalances() {
         return this.allBalances;
-    }
-
-    getExchangeBalances() {
-        return this.exchangeBalances;
     }
 }
