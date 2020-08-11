@@ -47,9 +47,11 @@ export default {
         PRECISION: {
             ETH: 3,
             BTC: 4,
-            USDT: 4,
             AE: 1,
+
+            USDT: 4,
             USDC: 4,
+            DAI: 4,
         },
     },
 };

@@ -1,12 +1,12 @@
-import Config from '../../config';
-
 import Binance from 'node-binance-api';
 
 import IExchange from './IExchange';
 import { div, add, toFixed, divDecimals } from '../utils/math';
 import { logInfo, logError, logData, logDebug } from '../logger';
-import AppConfig from '../../config';
 import { safeAccess } from '../utils';
+
+import BlockchainConfig from '../blockchain/config';
+import AppConfig from '../../config';
 import UserConfig from '../config';
 
 const ORDER_TYPE_TO_LABEL = {
@@ -96,7 +96,7 @@ export default class BinanceExchange implements IExchange {
         const precision = safeAccess(AppConfig, ['BINANCE', 'PRECISION', quote]);
 
         if (precision) {
-            return toFixed(divDecimals(quantity, Config[quote].decimals), precision);
+            return toFixed(divDecimals(quantity, BlockchainConfig()[quote].decimals), precision);
         }
     }
 
@@ -125,8 +125,8 @@ export default class BinanceExchange implements IExchange {
                             }
                         }
 
-                        Object.keys(Config.DUPLICATE_PRICE).forEach((t) => {
-                            const d = Config.DUPLICATE_PRICE[t];
+                        Object.keys(AppConfig.DUPLICATE_PRICE).forEach((t) => {
+                            const d = AppConfig.DUPLICATE_PRICE[t];
 
                             Object.keys(prices).forEach((p) => {
                                 const duplicate = p.replace(new RegExp('\\b' + d + '\\b'), t);
@@ -152,16 +152,16 @@ export default class BinanceExchange implements IExchange {
     }
 
     formatOrder(order) {
-        const quote = Config.DUPLICATE_PRICE[order.quote] || order.quote;
-        const base = Config.DUPLICATE_PRICE[order.base] || order.base;
+        const quote = AppConfig.DUPLICATE_PRICE[order.quote] || order.quote;
+        const base = AppConfig.DUPLICATE_PRICE[order.base] || order.base;
 
-        if (Config.BINANCE.PAIRS[quote + base]) {
+        if (AppConfig.BINANCE.PAIRS[quote + base]) {
             return {
                 type: 'marketBuy',
                 pair: quote + base,
                 quantity: order.buy,
             };
-        } else if (Config.BINANCE.PAIRS[base + quote]) {
+        } else if (AppConfig.BINANCE.PAIRS[base + quote]) {
             return {
                 type: 'marketSell',
                 pair: base + quote,
