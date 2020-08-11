@@ -17,6 +17,7 @@ export default () => {
         BTC: supportedNetworks['BTC'] && Config.BTC(),
         ETH: supportedNetworks['ETH'] && Config.ETH(),
         AVAX: supportedNetworks['AVAX'] && Config.AVAX(),
+        ONE: supportedNetworks['ONE'] && Config.ONE(),
         AE: supportedNetworks['AE'] && Config.AE(),
         ...getErc20Configs(supportedNetworks),
     };

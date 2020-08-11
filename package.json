@@ -23,7 +23,7 @@
         "@jelly-swap/btc-web-wallet": "0.1.45",
         "@jelly-swap/erc20": "0.1.44",
         "@jelly-swap/ethereum": "0.1.42",
-        "@jelly-swap/harmony": "^0.1.45",
+        "@jelly-swap/harmony": "^0.1.48",
         "@jelly-swap/utils": "0.1.41",
         "axios": "^0.19.2",
         "big.js": "^5.2.2",
