@@ -1,6 +1,7 @@
 import { Adapter as BitcoinAdapter } from '@jelly-swap/bitcoin';
 import { Adapter as EthereumAdapter } from '@jelly-swap/ethereum';
 import { Adapter as AvalancheAdapter } from '@jelly-swap/avalanche';
+import { Adapter as MaticAdapter } from '@jelly-swap/matic';
 import { Adapter as HarmonyAdapter } from '@jelly-swap/harmony';
 import { Adapter as AeternityAdapter } from '@jelly-swap/aeternity';
 import { Adapter as Erc20Adapter } from '@jelly-swap/erc20';
@@ -28,6 +29,7 @@ export default () => {
             BTC: Config.BTC && new BitcoinAdapter(Config.BTC as any),
             AE: Config.AE && new AeternityAdapter(Config.AE as any),
             AVAX: Config.AVAX && new AvalancheAdapter(Config.AVAX),
+            MATIC: Config.MATIC && new MaticAdapter(Config.MATIC),
             ONE: Config.ONE && new HarmonyAdapter(Config.ONE),
         };
 

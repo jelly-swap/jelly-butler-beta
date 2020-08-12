@@ -5,6 +5,7 @@ import getSupportedNetworks from '../config/supportedNetworks';
 import BitcoinConfig from './bitcoin/config';
 import EthereumConfig from './ethereum/config';
 import AvalancheConfig from './avalanche/config';
+import MaticConfig from './matic/config';
 import HarmonyConfig from './harmony/config';
 import AeternityConfig from './aeternity/config';
 
@@ -17,6 +18,7 @@ export default () => {
         BTC: supportedNetworks['BTC'] && Config.BTC(),
         ETH: supportedNetworks['ETH'] && Config.ETH(),
         AVAX: supportedNetworks['AVAX'] && Config.AVAX(),
+        MATIC: supportedNetworks['MATIC'] && Config.MATIC(),
         ONE: supportedNetworks['ONE'] && Config.ONE(),
         AE: supportedNetworks['AE'] && Config.AE(),
         ...getErc20Configs(supportedNetworks),
@@ -73,6 +75,12 @@ const Config = {
     AVAX: () => {
         return {
             ...AvalancheConfig(),
+        };
+    },
+
+    MATIC: () => {
+        return {
+            ...MaticConfig(),
         };
     },
 

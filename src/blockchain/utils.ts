@@ -55,6 +55,7 @@ export const PK_MATCH_ADDRESS = {
     ...getErc20Matcher(),
     ETH: ethAddressMatch,
     AVAX: ethAddressMatch,
+    MATIC: ethAddressMatch,
     ONE: oneAddressMatch,
     BTC: btcAddressMatch,
     AE: aeAddressMatch,

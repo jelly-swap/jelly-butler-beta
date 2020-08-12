@@ -376,6 +376,15 @@
     "@jelly-swap/types" "^0.1.42"
     "@jelly-swap/utils" "^0.1.41"
 
+"@jelly-swap/matic@^0.1.42":
+  version "0.1.42"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/matic/-/matic-0.1.42.tgz#53faacca17c7905ec7fe8519ee03cdffa5ae5361"
+  integrity sha512-bNvydhVUWgZqk/sovMFaoWFpn2K8NhDGch0QoP8fTskwS8IVdUBBdtR5uevSMNZe2H8Xd3+VSB88fiS7T/CQ+w==
+  dependencies:
+    "@jelly-swap/types" "^0.1.42"
+    "@jelly-swap/utils" "^0.1.41"
+    ethers "^4.0.40"
+
 "@jelly-swap/types@^0.1.33":
   version "0.1.40"
   resolved "https://registry.yarnpkg.com/@jelly-swap/types/-/types-0.1.40.tgz#040a680464a961da07db0b41249a9e084fae7e7f"
