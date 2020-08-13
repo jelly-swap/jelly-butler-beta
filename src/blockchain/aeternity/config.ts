@@ -10,9 +10,9 @@ export default () => {
 
     const config = {
         ...Config(7200),
-        providerUrl: 'https://sdk-mainnet.aepps.com/',
-        internalUrl: 'https://sdk-mainnet.aepps.com/',
-        compilerUrl: 'https://compiler.aepps.com',
+        providerUrl: 'https://mainnet.aeternity.io/',
+        internalUrl: 'https://mainnet.aeternity.io/',
+        compilerUrl: 'https://latest.compiler.aepps.com',
         wsUrl: 'wss://mainnet.aeternal.io/websocket',
         apiUrl: 'https://mainnet.aeternal.io/',
         contractAddress: 'ct_jmRkfpzmn7KZbXbkEL9wueJkb1vaFzMnVFJMFjAnJgj1CTtQe',
