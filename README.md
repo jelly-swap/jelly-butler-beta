@@ -1,55 +1,56 @@
-
 # What is Butler?[](#what-is-butler)
 
-Butler is automated market making software that is used for liquidity provision to JellySwap protocol. Everyone can run Butler instance on his/her own machine and start earning interest from market spreads. Butler supports automatic order matching, withdraws, refunds, portfolio rebalancing, email and slack notifications. Supported coins are BTC, ETH, DAI, AE, WBTC, USDC.
+Butler is automated market making software that is used for liquidity provision to JellySwap protocol. Everyone can run Butler instance on his/her own machine and start earning interest from market spreads. Butler supports automatic order matching, withdraws, refunds, portfolio rebalancing, email notifications. Supported coins are BTC, ETH, DAI, AE, WBTC, USDC.
 
 # How to install Butler?[](#how-to-install-butler)
 
 There are two main approaches to install Butler:
 
- 1.  [Docker Setup](#docker-setup)
-    
- 2.   [Manual Setup](#manual-setup)
-    
+1.  [Docker Setup](#docker-setup)
+
+2.  [Manual Setup](#manual-setup)
+
 # Docker setup[](#docker-setup)
- **1.  Setup Docker on your system.**
- - Linux
-To install Docker on Linux follow this quick guide: [https://docs.docker.com/install/linux/docker-ce/ubuntu/](https://docs.docker.com/install/linux/docker-ce/ubuntu/) Docker Compose: [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
 
-- Windows
-To install Docker on Windows follow this quick guide: [https://docs.docker.com/docker-for-windows/install/](https://docs.docker.com/docker-for-windows/install/)
+**1. Setup Docker on your system.**
 
-- Mac
-To install Docker on Mac follow this quick guide: [https://docs.docker.com/docker-for-mac/install/](https://docs.docker.com/docker-for-mac/install/)
+-   Linux
+    To install Docker on Linux follow this quick guide: [https://docs.docker.com/install/linux/docker-ce/ubuntu/](https://docs.docker.com/install/linux/docker-ce/ubuntu/) Docker Compose: [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
 
- **2.  Download Butler**
- Once, you have successfully installed docker on your system you can clone/download this repository.
+-   Windows
+    To install Docker on Windows follow this quick guide: [https://docs.docker.com/docker-for-windows/install/](https://docs.docker.com/docker-for-windows/install/)
 
-    git clone https://github.com/jelly-swap/jelly-butler-beta.git
+-   Mac
+    To install Docker on Mac follow this quick guide: [https://docs.docker.com/docker-for-mac/install/](https://docs.docker.com/docker-for-mac/install/)
 
+    **2. Download Butler**
+    Once, you have successfully installed docker on your system you can clone/download this repository.
 
- **3. Configure Butler**
-- Setup a password for the database in `.env`  `MONGO_PASSWORD='your password'`
+        git clone https://github.com/jelly-swap/jelly-butler-beta.git
 
-- Open `config.ts` and fill all required fields.
+**3. Configure Butler**
 
-- Butler needs a price source and you have two options: 
+-   Setup a password for the database in `.env` `MONGO_PASSWORD='your password'`
+
+-   Open `config.ts` and fill all required fields.
+
+-   Butler needs a price source and you have two options:
 
     **Binance** - Create Binance API key [https://binance.zendesk.com/hc/en-us/articles/360002502072-How-to-create-API](https://binance.zendesk.com/hc/en-us/articles/360002502072-How-to-create-API)
     **CryptoCompare** - Create Cryptocompare API Key [https://min-api.cryptocompare.com/](https://min-api.cryptocompare.com/)
 
- - If you want Email Notifications you can provide your GMAIL credentials.
- 
+-   If you want Email Notifications you can provide your GMAIL credentials.
 
 ## Note: All provided private keys, API keys, and gmail credentials are securely stored only on your local machine.
 
- **4.  Start Butler**
+**4. Start Butler**
 
 After `.env` and `config.ts` are filled you can run the following command
 
     chmod 777 wait-for.sh (for linux and macOS)
 
     mkdir logs && docker-compose up -d
+
 The above mentioned command will start the application in background mode.
 
 Type in the next command to check the log and verify that everything is working fine
@@ -82,39 +83,43 @@ Then you can open again config.ts and update your configurations. When you are r
 
 **1. Setup MongoDB on your system**
 
- - Linux - [https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)
+-   Linux - [https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)
 
-- Windows - [https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/)
+-   Windows - [https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/)
 
-- Mac - [https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/)
+-   Mac - [https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/)
 
 **1. Install NodeJS**
-- Install https://nodejs.org/en/download/
-- Install **yarn** using this command `npm install yarn -g`
-- Install **pm2** `npm install pm2 -g`
+
+-   Install https://nodejs.org/en/download/
+-   Install **yarn** using this command `npm install yarn -g`
+-   Install **pm2** `npm install pm2 -g`
 
 **2. Clone or download this repository**
 
     git clone https://github.com/jelly-swap/jelly-butler.git
 
 **3. Open the downloaded directory**
-- Install all packages using this command `yarn install`
 
- **4. Configure Butler**
-- Open `config.ts` and fill all required fields.
+-   Install all packages using this command `yarn install`
 
-- Butler needs a price source and you have two options: 
+    **4. Configure Butler**
+
+-   Open `config.ts` and fill all required fields.
+
+-   Butler needs a price source and you have two options:
 
     **Binance** - Create Binance API key [https://binance.zendesk.com/hc/en-us/articles/360002502072-How-to-create-API](https://binance.zendesk.com/hc/en-us/articles/360002502072-How-to-create-API)
     **CryptoCompare** - Create Cryptocompare API Key [https://min-api.cryptocompare.com/](https://min-api.cryptocompare.com/)
 
- - If you want Email Notifications you can provide your GMAIL credentials.
+-   If you want Email Notifications you can provide your GMAIL credentials.
 
- **5.  Start Butler**
+**5. Start Butler**
 
 After `config.ts` is filled you can run the following command
 
     pm2 start yarn --name "butler"  -- start
+
 The above mentioned command will start the application in background mode.
 
 Type in the next command to check the log and verify that everything is working fine
@@ -137,49 +142,46 @@ To confirm that everything works, you can open your browser at [http://localhost
 Run the following command:
 
     pm2 stop butler
-Then you can change `config.ts` and start it again.
 
+Then you can change `config.ts` and start it again.
 
 # What are the risks?[](#what-are-the-risks)
 
-Butler is automated software and it should be up and running 24/7 as long as you want to participate in the protocol. 
+Butler is automated software and it should be up and running 24/7 as long as you want to participate in the protocol.
 
 **Risks related to connectivity and hardware:**
 
 -   Power outage
-    
+
 -   Internet outage
-    
+
 -   Hardware problem
-    
-    
+
 **Next group of problems is related to software and service dependencies:**
 
 -   Bug in the Butler software or smart contracts
-    
+
 -   Price provider service outage
-    
+
 -   Lack of connectivity to blockchain
-    
+
 -   Database problem
-    
+
 -   Problem with connecting to rebalancing exchange
-    
+
 -   Hacker attack that can get access to Butler operator node
-    
+
 **Market related risks:**
 
 -   Too volatile market and big price movement can bring some losses
-    
+
 -   Ghost attack - fake swaps are started, but never finalized - no losses for Butler operator, but funds will be locked for 4 hours in HTLC
-    
+
 -   Slow blockchain transaction speed due to network overload, usually combined with massive price movement
-    
 
 All swaps have a lock period of 24 hours. If Butler is down for some of the above mentioned reasons or some new unexpected bug, every Butler node operator have 24 hours period to recover his/her Butler and no loses will be encountered.
 
 JellySwap team have paid for 3rd party security audit and all of the code for Butler is open source, therefore everyone can check it and run it on his/her own risk.
-
 
 > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 > EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF

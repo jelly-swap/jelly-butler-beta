@@ -56,6 +56,11 @@ export default {
         },
     },
 
+    // BLOCKCHAIN PROVIDER
+    BLOCKCHAIN_PROVIDER: {
+        INFURA: '',
+    },
+
     // PRICE PROVIDER
     PRICE: {
         PROVIDER: 'CryptoCompare',
@@ -82,15 +87,11 @@ export default {
             TO: '',
             SUBJECT: 'JELLY',
         },
-        SLACK: {
-            ENABLED: false,
-            WEBHOOK_URL: '', //https://hooks.slack.com/services/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
-        },
     },
 
     // ================== ADVANCED ==================
 
-    AGGREGATOR_URL: 'https://network.jelly.market/api/v1/info',
+    AGGREGATOR_URL: 'https://network.weidex.market/api/v1/info',
 
     SERVER: { PORT: 9000 },
 
