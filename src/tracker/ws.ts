@@ -12,6 +12,10 @@ export const subscribe = () => {
             logDebug('WS_OPENED');
         };
 
+        ws.on('error', (err) => {
+            logDebug(`WS_ERROR ${err}`);
+        });
+
         ws.onmessage = (event) => {
             logDebug(`WS_EVENT: `, event.data);
             new Emitter().emit('WS_EVENT', event.data);

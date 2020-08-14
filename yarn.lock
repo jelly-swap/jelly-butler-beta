@@ -2570,13 +2570,6 @@ wif@^2.0.1, wif@^2.0.6:
   dependencies:
     bs58check "<3.0.0"
 
-winston-slack-webhook-transport@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/winston-slack-webhook-transport/-/winston-slack-webhook-transport-1.2.1.tgz#b61cb06567f35d036eca789ba4d14e14551b679b"
-  dependencies:
-    axios "^0.19.2"
-    winston-transport "^4.3.0"
-
 winston-transport@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/winston-transport/-/winston-transport-4.3.0.tgz#df68c0c202482c448d9b47313c07304c2d7c2c66"
