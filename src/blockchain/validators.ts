@@ -2,6 +2,8 @@ import * as BitcoinValidator from './bitcoin/validator';
 import * as EthereumValidator from './ethereum/validator';
 import * as AeternityValidator from './aeternity/validator';
 import * as Erc20Validator from './erc20/validator';
+import * as HarmonyValidator from './harmony/validator';
+
 import { SECONDARY_NETWORKS } from './config';
 
 const getErc20Validators = () => {
@@ -15,5 +17,6 @@ export default {
     BTC: BitcoinValidator,
     ETH: EthereumValidator,
     AE: AeternityValidator,
+    ONE: HarmonyValidator,
     ...getErc20Validators(),
 };

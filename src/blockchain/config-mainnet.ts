@@ -2,6 +2,7 @@ import BitcoinConfig from './bitcoin/config';
 import EthereumConfig from './ethereum/config';
 import AeternityConfig from './aeternity/config';
 import Erc20Config from './erc20/config';
+import HarmonyConfig from './harmony/config';
 
 import getSupportedNetworks from '../config/supportedNetworks';
 import { SECONDARY_NETWORKS } from './config';
@@ -22,6 +23,7 @@ export default () => {
         BTC: supportedNetworks['BTC'] && BitcoinConfig(),
         ETH: supportedNetworks['ETH'] && EthereumConfig(),
         AE: supportedNetworks['AE'] && AeternityConfig(),
+        ONE: supportedNetworks['ONE'] && HarmonyConfig(),
         ...getErc20Configs(supportedNetworks),
     };
 };

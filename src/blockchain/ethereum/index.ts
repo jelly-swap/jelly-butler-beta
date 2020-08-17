@@ -1,5 +1,5 @@
 import { Contract } from '@jelly-swap/ethereum';
-import { WalletProvider } from '@jelly-swap/ethereum/dist/providers';
+import { WalletProvider } from '@jelly-swap/ethereum/dist/src/providers';
 
 import { greaterThan } from '../../utils/math';
 
