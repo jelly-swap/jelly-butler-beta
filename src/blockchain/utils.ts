@@ -34,6 +34,10 @@ export const btcAddressMatch = async (mnemonic, address) => {
     }
 };
 
+export const oneAddressMatch = async (privateKey, address) => {
+    return true;
+};
+
 export const aeAddressMatch = async (privateKey, address) => {
     const keys = nacl.sign.keyPair.fromSecretKey(Buffer.from(privateKey, 'hex'));
     const publicBuffer = Buffer.from(keys.publicKey);
@@ -52,4 +56,5 @@ export const PK_MATCH_ADDRESS = {
     ETH: ethAddressMatch,
     BTC: btcAddressMatch,
     AE: aeAddressMatch,
+    ONE: oneAddressMatch,
 };

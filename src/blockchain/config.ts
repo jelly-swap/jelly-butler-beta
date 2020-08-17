@@ -12,7 +12,7 @@ export const SECONDARY_NETWORKS = {
 
 export default () => {
     if (!Config) {
-        Config = process.env.NETWORK === 'testnet' ? TestnetConfig : MainnetConfig();
+        Config = process.env.NETWORK === 'testnet' ? TestnetConfig() : MainnetConfig();
     }
 
     return Config;
