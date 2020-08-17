@@ -1,4 +1,5 @@
 import { fixHash } from '@jelly-swap/utils';
+import Adapters from './adapters';
 
 // Ethereum
 import { utils } from 'ethers';
@@ -12,6 +13,9 @@ import { Crypto } from '@aeternity/aepp-sdk';
 import * as nacl from 'tweetnacl';
 import { SECONDARY_NETWORKS } from './config';
 
+// Harmony
+import { WalletProvider } from '@jelly-swap/harmony/dist/src/providers';
+
 export const compareAddress = (a1: string, a2: string) => {
     return a1.toLowerCase() === a2.toLowerCase();
 };
@@ -21,21 +25,23 @@ export const sleep = (msec: number) => {
 };
 
 export const ethAddressMatch = async (privateKey, address) => {
-    return utils.computeAddress(fixHash(privateKey, true)).toLowerCase() === address.toLowerCase();
+    return compareAddress(utils.computeAddress(fixHash(privateKey, true)), address);
 };
 
 export const btcAddressMatch = async (mnemonic, address) => {
     try {
         const wallet = new Wallet(mnemonic, new BitcoinProvider(''));
         const btcAddress = await wallet.getWalletAddress(address);
-        return btcAddress.address.toLowerCase() === address.toLowerCase();
+        return compareAddress(btcAddress.address, address);
     } catch (err) {
         return false;
     }
 };
 
 export const oneAddressMatch = async (privateKey, address) => {
-    return true;
+    const wallet = new WalletProvider(undefined, privateKey).addByPrivateKey(privateKey);
+    const bech32Address = Adapters()['ONE'].parseAddress(wallet.address);
+    return compareAddress(address, bech32Address);
 };
 
 export const aeAddressMatch = async (privateKey, address) => {
