@@ -10,6 +10,9 @@ export default () => {
 
     const config = {
         ...Config(7200),
+        providerUrl: 'https://api.s0.t.hmny.io',
+        contractAddress: '0x381a5b682D3e143DCADc0C42912CB97BED501919',
+        explorer: 'https://explorer.harmony.one/#/tx/',
         REFUND_PERIOD: 10,
         VALID_EXPIRATION: 72000,
     };
