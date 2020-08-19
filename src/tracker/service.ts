@@ -1,12 +1,10 @@
 import axios from 'axios';
 import { logDebug, logError } from '../logger';
 
-export const fetchSwaps = async (login, expiration = 1) => {
+export const fetchSwaps = async (url, login, expiration = 1) => {
     try {
         if (login) {
-            const res = await axios.get(
-                `https://jelly-tracker.herokuapp.com/api/v1/swaps/receiver/${login}/expiration/${expiration}`
-            );
+            const res = await axios.get(`https://${url}/api/v1/swaps/receiver/${login}/expiration/${expiration}`);
 
             return res.data;
         } else {
@@ -20,12 +18,10 @@ export const fetchSwaps = async (login, expiration = 1) => {
     }
 };
 
-export const fetchExpiredSwaps = async (login, status = 4) => {
+export const fetchExpiredSwaps = async (url, login, status = 4) => {
     try {
         if (login) {
-            const res = await axios.get(
-                `https://jelly-tracker.herokuapp.com/api/v1/swaps/sender/${login}/status/${status}`
-            );
+            const res = await axios.get(`https://${url}/api/v1/swaps/sender/${login}/status/${status}`);
 
             return res.data;
         } else {
@@ -39,12 +35,10 @@ export const fetchExpiredSwaps = async (login, status = 4) => {
     }
 };
 
-export const fetchWithdraws = async (login, expiration = 1) => {
+export const fetchWithdraws = async (url, login, expiration = 1) => {
     try {
         if (login) {
-            const res = await axios.get(
-                `https://jelly-tracker.herokuapp.com/api/v1/withdraws/sender/${login}/expiration/${expiration}`
-            );
+            const res = await axios.get(`https://${url}/api/v1/withdraws/sender/${login}/expiration/${expiration}`);
 
             return res.data;
         } else {

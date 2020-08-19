@@ -4,9 +4,9 @@ import { logDebug } from '../logger';
 
 let ws = null;
 
-export const subscribe = () => {
+export const subscribe = (url: string) => {
     if (!ws) {
-        ws = new WebSocket('wss://jelly-tracker.herokuapp.com/subscribe');
+        ws = new WebSocket(`wss://${url}/subscribe`);
 
         ws.onopen = () => {
             logDebug('WS_OPENED');
@@ -26,7 +26,7 @@ export const subscribe = () => {
 
             ws = null;
             setTimeout(() => {
-                subscribe();
+                subscribe(url);
             }, 5000);
         };
     }
