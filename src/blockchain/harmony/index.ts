@@ -5,7 +5,7 @@ export default class EthereumContract extends Contract {
     private wallet: WalletProvider;
 
     constructor(config) {
-        const _wallet = new WalletProvider(config.providerUrl, config.PRIVATE_KEY);
+        const _wallet = new WalletProvider(config.providerUrl, config.chainId, config.PRIVATE_KEY);
         super(_wallet, config);
         this.wallet = _wallet;
     }
