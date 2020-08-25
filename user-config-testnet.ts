@@ -60,6 +60,12 @@ export default {
             // Ethereum Private Key
             SECRET: '',
         },
+
+        CAPT: {
+            ADDRESS: '',
+            // Ethereum Private Key
+            SECRET: '',
+        },
     },
 
     // PRICE PROVIDER

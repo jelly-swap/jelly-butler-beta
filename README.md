@@ -1,6 +1,6 @@
 # What is Butler?[](#what-is-butler)
 
-Butler is automated market making software that is used for liquidity provision to JellySwap protocol. Everyone can run Butler instance on his/her own machine and start earning interest from market spreads. Butler supports automatic order matching, withdraws, refunds, portfolio rebalancing, email notifications. Supported coins are BTC, ETH, DAI, AE, WBTC, USDC.
+Butler is automated market making software that is used for liquidity provision to JellySwap protocol. Everyone can run Butler instance on his/her own machine and start earning interest from market spreads. Butler supports automatic order matching, withdraws, refunds, portfolio rebalancing, email notifications. Supported coins are BTC, ETH, ONE, AVAX, MATIC, DAI, AE, WBTC, CAPT, USDC, BTC++.
 
 # How to install Butler?[](#how-to-install-butler)
 

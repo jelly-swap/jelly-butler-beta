@@ -5,6 +5,7 @@ let Config;
 
 export const SECONDARY_NETWORKS = {
     WBTC: 'WBTC',
+    CAPT: 'CAPT',
     USDC: 'USDC',
     DAI: 'DAI',
     'BTC++': 'BTC++',

@@ -7,6 +7,7 @@ export default {
         DAI: true,
         USDC: true,
         WBTC: true,
+        CAPT: true,
         'BTC++': true,
     },
 
@@ -29,7 +30,7 @@ export default {
     BALANCE_SNAPSHOT_INTERVAL: 3600,
 
     PRICE: {
-        COINS: ['ETH', 'BTC', 'AE', 'DAI', 'WBTC', 'USDC', 'USDT', 'BTC++', 'ONE'],
+        COINS: ['ETH', 'BTC', 'AE', 'DAI', 'CAPT', 'WBTC', 'USDC', 'USDT', 'BTC++', 'ONE'],
     },
 
     DUPLICATE_PRICE: { DAI: 'USDC', WBTC: 'BTC', 'BTC++': 'BTC' },
