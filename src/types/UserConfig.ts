@@ -4,6 +4,7 @@ export interface IUserConfig {
     PAIRS: {
         [key: string]: {
             FEE: number;
+            PRICE: number;
         };
     };
 
