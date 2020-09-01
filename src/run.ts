@@ -19,6 +19,7 @@ import getDbConfig from './config/database';
 import UserConfig from './config';
 
 import { PK_MATCH_ADDRESS, compareAddress } from './blockchain/utils';
+import { SECONDARY_NETWORKS } from './blockchain/config';
 
 export const run = (config = userConfig, combinedFile?: string, errorFile?: string) => {
     setLoggerConfig(combinedFile, errorFile);
@@ -64,7 +65,7 @@ const validateAddresses = async (config) => {
     for (const network in config.WALLETS) {
         const { ADDRESS, SECRET } = config.WALLETS[network];
 
-        if (network !== 'ETH' && ethAddress && compareAddress(ethAddress, ADDRESS)) {
+        if (network !== 'ETH' && ethAddress && SECONDARY_NETWORKS[network] && compareAddress(ethAddress, ADDRESS)) {
             logError('It is not allowed to have the same wallet for ETH and any ERC20');
             return false;
         }

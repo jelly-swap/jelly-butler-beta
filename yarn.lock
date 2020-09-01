@@ -178,66 +178,66 @@
     memoizee "^0.4.14"
     websocket "^1.0.31"
 
-"@jelly-swap/bitcoin@0.1.49":
-  version "0.1.49"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/bitcoin/-/bitcoin-0.1.49.tgz#4746a80ab50f149c8c983f869015d9b83743fc04"
-  integrity sha512-LSI2Q//w6+IuBub4jI3YqxiQuGA6jwzSb91z84QApxf/oneydQaJTERhIKnnlrRnOZbePwHx9MEpMD6jg7DNlA==
+"@jelly-swap/bitcoin@0.1.51":
+  version "0.1.51"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/bitcoin/-/bitcoin-0.1.51.tgz#584bb79ca52b03e569bb50352d296acc31ae7484"
+  integrity sha512-X9Qq6NqRy4jl4nA9+73RBU9dBNxbjyuVTPTfQIjZcCCQiR/87puD3X6Zu1IC0A3oNDpybPlZdzTiIRwNjDq1Xw==
   dependencies:
-    "@jelly-swap/types" "^0.1.49"
-    "@jelly-swap/utils" "^0.1.49"
+    "@jelly-swap/types" "^0.1.51"
+    "@jelly-swap/utils" "^0.1.51"
     bignumber.js "^9.0.0"
     bitcoinjs-lib "5.1.6"
 
-"@jelly-swap/btc-provider@0.1.49":
-  version "0.1.49"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/btc-provider/-/btc-provider-0.1.49.tgz#0ca0ba6eb38510bf2adee147a7964c937c8b1812"
-  integrity sha512-RIyDxOVwurqQA7BUF+X3PCuA83CW+7QnUhZqZNcMJNNgcPwijT8B4qmlEn3b2vRzkeFoYJeWSwhQ45/SOR5W1Q==
+"@jelly-swap/btc-provider@0.1.51":
+  version "0.1.51"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/btc-provider/-/btc-provider-0.1.51.tgz#083a1877f0c8fcf54bab99044546c2d86ea478a5"
+  integrity sha512-nwRbQt6PR4ln/44PRFyDMtWK+ZfUMRQGasfbJ8FjnLOebjh1CYMCenM2h2CIehRVDVamptRu6AhNf+VMcaANPQ==
   dependencies:
     axios "^0.19.0"
     bignumber.js "^9.0.0"
     memoizee "^0.4.14"
 
-"@jelly-swap/btc-utils@0.1.49", "@jelly-swap/btc-utils@^0.1.49":
-  version "0.1.49"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/btc-utils/-/btc-utils-0.1.49.tgz#8e10aee95062cb19578565d91b72cfbb1f5f685b"
-  integrity sha512-fuEoM9/geBsQxg6gmCYzK6O+Z8qv7MxktRJz9OQwoa2Wg5LS6yC3DeAhBA5TJIOqwZuWOpSmr0FDNVAtFr318g==
+"@jelly-swap/btc-utils@0.1.51", "@jelly-swap/btc-utils@^0.1.51":
+  version "0.1.51"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/btc-utils/-/btc-utils-0.1.51.tgz#ee9865c1c423f0dc6351a9859e55de8e3c376c03"
+  integrity sha512-HoP1bF3o1wQY8SVXEMXNNLrvWC/t+5M07mUVLx+SSvzTuLqfkPGs/8/jWJ9wVQWMNSRUGNSxBbEt9hl9l9/eQg==
 
-"@jelly-swap/btc-web-wallet@0.1.49":
-  version "0.1.49"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/btc-web-wallet/-/btc-web-wallet-0.1.49.tgz#28598527d21d0d38f9c0a88e6e42a71c337f1822"
-  integrity sha512-VKNUjPDOjv0gKiJs3XLQoqVaE3s+S46sbTElJHq7OrHZD4PVenv1StYVTyUQ9HSxz4k1bC6NySoqBuUOSYoclQ==
+"@jelly-swap/btc-web-wallet@0.1.51":
+  version "0.1.51"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/btc-web-wallet/-/btc-web-wallet-0.1.51.tgz#e33e3e48c32319772e15d88242a348b591665a2b"
+  integrity sha512-e/ueHHFoWbdEIaTmj03kD9IpJnNSLhmUBsd4vDQn/p1bykUxzcmVMnelEBtwnvXz8NIB+0nzIJ5cJ1PyHupLiA==
   dependencies:
-    "@jelly-swap/btc-utils" "^0.1.49"
-    "@jelly-swap/types" "^0.1.49"
+    "@jelly-swap/btc-utils" "^0.1.51"
+    "@jelly-swap/types" "^0.1.51"
     bignumber.js "^9.0.0"
     bip39 "3.0.2"
     bitcoinjs-lib "5.1.6"
     bitcoinjs-message "^2.1.0"
     coinselect "3.1.11"
 
-"@jelly-swap/erc20@0.1.49":
-  version "0.1.49"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/erc20/-/erc20-0.1.49.tgz#c85946f9fd675e2f94d1c34cdeddebe776adea13"
-  integrity sha512-KXAbzv8qqCqs8C1CjjmyPSA53zhjxYzW6qSnX3pJ7sGxcXt/KcFKCgT1WTXuYI0YfYGggm5edgcaADfBiafbpg==
+"@jelly-swap/erc20@0.1.51":
+  version "0.1.51"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/erc20/-/erc20-0.1.51.tgz#42af33e8c5e2e1a2fcf82899e57f25824468d54e"
+  integrity sha512-ZW1IcJKl+99V2KTLX9YaFHh/KczarCgVF7BJxFeCc1rpnyxHOf+VISTZzkFnoiQoSJvikE7Z8c8EfcCtgISLJA==
   dependencies:
-    "@jelly-swap/ethereum" "^0.1.49"
-    "@jelly-swap/types" "^0.1.49"
-    "@jelly-swap/utils" "^0.1.49"
+    "@jelly-swap/ethereum" "^0.1.51"
+    "@jelly-swap/types" "^0.1.51"
+    "@jelly-swap/utils" "^0.1.51"
     ethers "^4.0.40"
 
-"@jelly-swap/ethereum@0.1.49", "@jelly-swap/ethereum@^0.1.49":
-  version "0.1.49"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/ethereum/-/ethereum-0.1.49.tgz#6706e98318b22f766e338972da562c5dc1afb193"
-  integrity sha512-bBc+6CfrEEbJogIQAIBPXKWVoSQTDtQebw1+Ja6EKU84aM759aBXpd7zJwluRs8FMtz6wMel0nLqNk/xZQ/odg==
+"@jelly-swap/ethereum@0.1.51", "@jelly-swap/ethereum@^0.1.51":
+  version "0.1.51"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/ethereum/-/ethereum-0.1.51.tgz#d35bd69874c31cee5afb832bc6f5f5e9b9f1b9e6"
+  integrity sha512-sU2AqLMuDj6v+bUOkEHxM/+5ULxZ/P5DzW9gCwcNVyJPUWG999yXi9u3n+SA/bRLniA/rD704vWS49E80d1j5A==
   dependencies:
-    "@jelly-swap/types" "^0.1.49"
-    "@jelly-swap/utils" "^0.1.49"
+    "@jelly-swap/types" "^0.1.51"
+    "@jelly-swap/utils" "^0.1.51"
     ethers "^4.0.40"
 
-"@jelly-swap/harmony@0.1.50":
-  version "0.1.50"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/harmony/-/harmony-0.1.50.tgz#940145538088dbf1b6e26f3c92a95563a4e6ad00"
-  integrity sha512-HU5Pmv5vdaNefbpjIYyRQ/KSWEWgX82ld8svCbMbxEdYdOkPCQuzTOe/NNAe2JPxWsH2Rp4RVjeZG6U8iA/iQg==
+"@jelly-swap/harmony@0.1.51":
+  version "0.1.51"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/harmony/-/harmony-0.1.51.tgz#6825c0bd388bf4b9114fc149ee320c43950376f9"
+  integrity sha512-Nduq17hR3GosNUz/XvvNwL1SiNaU0iZX6p+ID1BOtt7dkkR5axeqB6DdaR+/zTLlFxz1JRRFcpYJuJdyDUOaow==
   dependencies:
     "@harmony-js/account" "^0.1.51"
     "@harmony-js/contract" "^0.1.51"
@@ -246,31 +246,40 @@
     "@harmony-js/network" "^0.1.51"
     "@harmony-js/transaction" "^0.1.51"
     "@harmony-js/utils" "^0.1.48"
-    "@jelly-swap/types" "^0.1.50"
-    "@jelly-swap/utils" "^0.1.50"
+    "@jelly-swap/types" "^0.1.51"
+    "@jelly-swap/utils" "^0.1.51"
+
+"@jelly-swap/matic@0.1.51":
+  version "0.1.51"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/matic/-/matic-0.1.51.tgz#ffc6291a6212cf3f92fba14b8867bd84e94ee8cf"
+  integrity sha512-XRFinatDr0Gfnu2Da9vkPFHaXrk/5i/57PpwWIrVLl7lNxjpfT01F2KjYD3iOz8rWBhZjkZOIWulDrCSd94d7Q==
+  dependencies:
+    "@jelly-swap/types" "^0.1.51"
+    "@jelly-swap/utils" "^0.1.51"
+    ethers "^4.0.40"
 
 "@jelly-swap/types@^0.1.49":
   version "0.1.49"
   resolved "https://registry.yarnpkg.com/@jelly-swap/types/-/types-0.1.49.tgz#e2ed0e32448362962f81015cdfd5d10caa409d2f"
   integrity sha512-HDctPiDyiA4IidQ03DGp0LZUOhdC+0HAC+KCzEgJ2KtY/ydTiQjyCXO5/lJgM42GNOejVN421Bj9f14IuRXiXA==
 
-"@jelly-swap/types@^0.1.50":
-  version "0.1.50"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/types/-/types-0.1.50.tgz#4504861c2e2736374fe65d085cdde8a6293f2738"
-  integrity sha512-SbC0eNTRLUpxOxaCXBNuqK6NTGWrKZwZ16170L2tCcjWlKTxCwcRU1vFc5KADP0ZUgAVYi1RG5OhZKGivUhMUg==
+"@jelly-swap/types@^0.1.51":
+  version "0.1.51"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/types/-/types-0.1.51.tgz#8607814d168cb18f48c9219c1947015268bfe86c"
+  integrity sha512-hS32yNVgBG5nsTbxBEMCOgCrZa0hHXWjPZo3Vvqb9MjAYAIfDVtOSenGYfp5FMhtxHzSK4AecL40OcLHgYU0Kw==
 
-"@jelly-swap/utils@0.1.49", "@jelly-swap/utils@^0.1.49":
-  version "0.1.49"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/utils/-/utils-0.1.49.tgz#2dabe88e01172dffc0ae07a9ba49ba25df24457f"
-  integrity sha512-GCJ7SriwH7mSTkkE6OsbMqLoBegmx+JGWZHeyTR8T3Fm6qin+wJxjrlz8DHffAEWIhfMa5bGDWo7BZNeFE9nbQ==
+"@jelly-swap/utils@0.1.51", "@jelly-swap/utils@^0.1.51":
+  version "0.1.51"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/utils/-/utils-0.1.51.tgz#8c7532d4ef3ad1970e45b0beceea8b7568ad90c4"
+  integrity sha512-uVnZxWiWIJ6JY8sFjdXzizjrxhX4cBARNuVW4UaP94O2ObLi2RCW0Q6A113ipUyM/A3zqndC/xqSY4kC1uqDAg==
   dependencies:
     create-hash "^1.2.0"
     moment "^2.24.0"
 
-"@jelly-swap/utils@^0.1.50":
-  version "0.1.50"
-  resolved "https://registry.yarnpkg.com/@jelly-swap/utils/-/utils-0.1.50.tgz#8b8d74e84192de741bf92dc96c608b2c2e413456"
-  integrity sha512-HFzFkQhsZcJ1nWBRykYBshPFe9yTocDCUgtEqldsx4/JQlHqLU697x1Mb4Qoy0PvQsW3a5QtZZlfztMHeCKuPg==
+"@jelly-swap/utils@^0.1.49":
+  version "0.1.49"
+  resolved "https://registry.yarnpkg.com/@jelly-swap/utils/-/utils-0.1.49.tgz#2dabe88e01172dffc0ae07a9ba49ba25df24457f"
+  integrity sha512-GCJ7SriwH7mSTkkE6OsbMqLoBegmx+JGWZHeyTR8T3Fm6qin+wJxjrlz8DHffAEWIhfMa5bGDWo7BZNeFE9nbQ==
   dependencies:
     create-hash "^1.2.0"
     moment "^2.24.0"
