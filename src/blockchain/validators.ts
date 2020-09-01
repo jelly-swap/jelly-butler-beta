@@ -3,6 +3,7 @@ import * as EthereumValidator from './ethereum/validator';
 import * as AeternityValidator from './aeternity/validator';
 import * as Erc20Validator from './erc20/validator';
 import * as HarmonyValidator from './harmony/validator';
+import * as MaticValidator from './matic/validator';
 
 import { SECONDARY_NETWORKS } from './config';
 
@@ -18,5 +19,6 @@ export default {
     ETH: EthereumValidator,
     AE: AeternityValidator,
     ONE: HarmonyValidator,
+    MATIC: MaticValidator,
     ...getErc20Validators(),
 };

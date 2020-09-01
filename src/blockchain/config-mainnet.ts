@@ -3,6 +3,7 @@ import EthereumConfig from './ethereum/config';
 import AeternityConfig from './aeternity/config';
 import Erc20Config from './erc20/config';
 import HarmonyConfig from './harmony/config';
+import MaticConfig from './matic/config';
 
 import getSupportedNetworks from '../config/supportedNetworks';
 import { SECONDARY_NETWORKS } from './config';
@@ -24,6 +25,7 @@ export default () => {
         ETH: supportedNetworks['ETH'] && EthereumConfig(),
         AE: supportedNetworks['AE'] && AeternityConfig(),
         ONE: supportedNetworks['ONE'] && HarmonyConfig(),
+        MATIC: supportedNetworks['MATIC'] && MaticConfig(),
         ...getErc20Configs(supportedNetworks),
     };
 };

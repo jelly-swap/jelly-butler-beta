@@ -59,7 +59,8 @@ export class BalanceService {
                         this.providedBalances[network] = this.allBalances[network];
                     }
                 } catch (err) {
-                    logDebug(`CANNOT_GET_BALANCES`, { network, err });
+                    logDebug(`CANNOT_GET_BALANCES ${network} ${err}`);
+                    logDebug(`CANNOT_GET_BALANCES`, err);
                 }
             }
         } catch (err) {

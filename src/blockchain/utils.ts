@@ -63,4 +63,5 @@ export const PK_MATCH_ADDRESS = {
     BTC: btcAddressMatch,
     AE: aeAddressMatch,
     ONE: oneAddressMatch,
+    MATIC: ethAddressMatch,
 };

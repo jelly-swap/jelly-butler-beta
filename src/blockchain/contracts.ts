@@ -5,6 +5,7 @@ import EthereumContract from './ethereum';
 import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
 import HarmonyContract from './harmony';
+import MaticContract from './matic';
 
 let Contracts: any;
 let NetworkContracts: any;
@@ -28,6 +29,7 @@ const getContracts = () => {
             BTC: Config.BTC && new BitcoinContract(Config.BTC),
             AE: Config.AE && new AeternityContract(Config.AE),
             ONE: Config.ONE && new HarmonyContract(Config.ONE),
+            MATIC: Config.MATIC && new MaticContract(Config.MATIC),
         };
 
         Contracts = Object.entries(AllContracts).reduce(
