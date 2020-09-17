@@ -4,8 +4,7 @@ import * as AeternityValidator from './aeternity/validator';
 import * as Erc20Validator from './erc20/validator';
 import * as HarmonyValidator from './harmony/validator';
 import * as MaticValidator from './matic/validator';
-
-import { SECONDARY_NETWORKS } from './config';
+import { SECONDARY_NETWORKS } from './erc20/config';
 
 const getErc20Validators = () => {
     return Object.keys(SECONDARY_NETWORKS).reduce((object, token) => {

@@ -1,4 +1,5 @@
-import getConfig, { SECONDARY_NETWORKS } from './config';
+import getConfig from './config';
+import { SECONDARY_NETWORKS } from './erc20/config';
 
 import BitcoinContract from './bitcoin';
 import EthereumContract from './ethereum';

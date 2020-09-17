@@ -5,7 +5,8 @@ import { Adapter as Erc20Adapter } from '@jelly-swap/erc20';
 import { Adapter as HarmonyAdapter } from '@jelly-swap/harmony';
 import { Adapter as MaticAdapter } from '@jelly-swap/matic';
 
-import getConfig, { SECONDARY_NETWORKS } from './config';
+import getConfig from './config';
+import { SECONDARY_NETWORKS } from './erc20/config';
 
 let Adapters: any;
 
