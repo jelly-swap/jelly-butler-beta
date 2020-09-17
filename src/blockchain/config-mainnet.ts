@@ -4,6 +4,7 @@ import AeternityConfig from './aeternity/config';
 import Erc20Config, { SECONDARY_NETWORKS } from './erc20/config';
 import HarmonyConfig from './harmony/config';
 import MaticConfig from './matic/config';
+import AvalancheConfig from './avalanche/config';
 
 import getSupportedNetworks from '../config/supportedNetworks';
 
@@ -25,6 +26,7 @@ export default () => {
         AE: supportedNetworks['AE'] && AeternityConfig(),
         ONE: supportedNetworks['ONE'] && HarmonyConfig(),
         MATIC: supportedNetworks['MATIC'] && MaticConfig(),
+        AVAX: supportedNetworks['AVAX'] && AvalancheConfig(),
         ...getErc20Configs(supportedNetworks),
     };
 };
