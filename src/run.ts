@@ -26,11 +26,21 @@ TODO: EXECUTE THESE WHEN BUTLER IS STARTED => {
     create end point and execute these when end point is called from the client
 }
 
-await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
+       validateAddresses(config)
+        .then((result) => {
+            if (result) {
+                await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
 
-await startHandlers();
+                await startHandlers();
 
-await startEventListener(config);
+                await startEventListener(config);
+            }
+        })
+        .catch((error) => {
+            logError(`Validate error: ${error}`);
+        });
+
+
 */
 
 export const run = (config = userConfig, combinedFile?: string, errorFile?: string) => {
@@ -52,15 +62,6 @@ export const run = (config = userConfig, combinedFile?: string, errorFile?: stri
         .catch((error) => {
             logError(`${error}`);
             logDebug(`${error}`, JSON.stringify(error));
-        });
-
-    validateAddresses(config)
-        .then((result) => {
-            if (result) {
-            }
-        })
-        .catch((error) => {
-            logError(`Validate error: ${error}`);
         });
 };
 
