@@ -31,29 +31,15 @@ export const run = (config = userConfig, combinedFile?: string, errorFile?: stri
         ...config.DATABASE[config.DATABASE.ACTIVE],
     });
 
-    validateAddresses(config)
-        .then((result) => {
-            if (result) {
-                createConnection(dbConfig as any)
-                    .then(async () => {
-                        getContracts();
+    createConnection(dbConfig as any)
+        .then(async () => {
+            await createServer(config.SERVER.PORT);
 
-                        await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
-
-                        await createServer(config.SERVER.PORT);
-
-                        await startHandlers();
-
-                        await startEventListener(config);
-                    })
-                    .catch((error) => {
-                        logError(`${error}`);
-                        logDebug(`${error}`, JSON.stringify(error));
-                    });
-            }
+            getContracts();
         })
         .catch((error) => {
-            logError(`Validate error: ${error}`);
+            logError(`${error}`);
+            logDebug(`${error}`, JSON.stringify(error));
         });
 };
 
