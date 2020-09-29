@@ -10,10 +10,10 @@ export default () => {
 
     const config = {
         ...Config(7200),
-        providerUrl: 'TODO_AVAX',
-        contractAddress: 'TODO_AVAX',
         explorer: 'https://cchain.explorer.avax.network/tx/',
-        chainId: 43110, // mainnet
+        providerUrl: 'https://ava.spacejelly.network/api/ext/bc/C/rpc',
+        contractAddress: '0x640440c1A691dC824C89f92A856848A9013D3784',
+        chainId: 43114,
         REFUND_PERIOD: 10,
         VALID_EXPIRATION: 72000,
     };
