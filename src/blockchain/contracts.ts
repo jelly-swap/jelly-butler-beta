@@ -1,4 +1,5 @@
-import getConfig, { SECONDARY_NETWORKS } from './config';
+import getConfig from './config';
+import { SECONDARY_NETWORKS } from './erc20/config';
 
 import BitcoinContract from './bitcoin';
 import EthereumContract from './ethereum';
@@ -6,6 +7,7 @@ import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
 import HarmonyContract from './harmony';
 import MaticContract from './matic';
+import AvalancheContract from './avalanche';
 
 let Contracts: any;
 let NetworkContracts: any;
@@ -30,6 +32,7 @@ const getContracts = () => {
             AE: Config.AE && new AeternityContract(Config.AE),
             ONE: Config.ONE && new HarmonyContract(Config.ONE),
             MATIC: Config.MATIC && new MaticContract(Config.MATIC),
+            AVAX: Config.AVAX && new AvalancheContract(Config.AVAX),
         };
 
         Contracts = Object.entries(AllContracts).reduce(

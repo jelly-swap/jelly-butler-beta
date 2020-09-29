@@ -11,10 +11,10 @@ import BitcoinProvider from '@jelly-swap/btc-provider';
 // Aeternity
 import { Crypto } from '@aeternity/aepp-sdk';
 import * as nacl from 'tweetnacl';
-import { SECONDARY_NETWORKS } from './config';
 
 // Harmony
 import { WalletProvider } from '@jelly-swap/harmony/dist/src/providers';
+import { SECONDARY_NETWORKS } from './erc20/config';
 
 export const compareAddress = (a1: string, a2: string) => {
     return a1.toLowerCase() === a2.toLowerCase();
@@ -64,4 +64,5 @@ export const PK_MATCH_ADDRESS = {
     AE: aeAddressMatch,
     ONE: oneAddressMatch,
     MATIC: ethAddressMatch,
+    AVAX: ethAddressMatch,
 };

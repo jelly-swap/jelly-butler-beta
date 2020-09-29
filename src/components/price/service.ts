@@ -16,6 +16,7 @@ export class PriceService {
     private userConfig: IUserConfig;
 
     private priceProvider: IPriceProvider;
+    private jellyProvider: IPriceProvider;
 
     private prices = {};
     private pricesWithSpreadAndFee = {};
@@ -29,6 +30,10 @@ export class PriceService {
 
         this.priceProvider = new PriceProviders[this.userConfig.PRICE.PROVIDER]();
 
+        if (this.userConfig.JELLY_PRICE_PROVIDER) {
+            this.jellyProvider = new PriceProviders.Jelly();
+        }
+
         PriceService.instance = this;
     }
 
@@ -40,6 +45,11 @@ export class PriceService {
                 prices = await provider.getPrices(AppConfig.PRICE.COINS);
             } else {
                 prices = await this.priceProvider.getPrices(AppConfig.PRICE.COINS);
+            }
+
+            if (this.jellyProvider) {
+                const jellyPrices = await this.jellyProvider.getPrices(null, null);
+                prices = { ...prices, ...jellyPrices };
             }
 
             for (const pair in this.userConfig.PAIRS) {
