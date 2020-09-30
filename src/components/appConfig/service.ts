@@ -8,7 +8,6 @@ export class AppConfigService {
 
         if (!config.length) {
             // SAVE ()
-
             const createdConfig = await this.appConfig.setInitialConfig();
 
             return createdConfig;

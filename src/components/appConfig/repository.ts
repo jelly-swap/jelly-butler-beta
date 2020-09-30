@@ -13,28 +13,18 @@ export default class AppConfigRepository {
     }
 
     getConfig() {
-        return this.appConfig.find();
-    }
-
-    getConfigById(id) {
-        return this.appConfig.findOne(id);
+        return this.appConfig.findOne();
     }
 
     setInitialConfig() {
-        return this.appConfig.save({
-            language: 'english',
-            theme: 'dark_theme',
-            sound: true,
-        });
+        return this.appConfig.save();
     }
 
     async updateConfig(id, newConfig) {
-        const previousVersion = await this.getConfigById(id);
+        const prop = Object.keys(newConfig)[0];
 
-        return this.appConfig.save({
-            id,
-            ...previousVersion,
-            ...newConfig,
-        });
+        await this.appConfig.update(id, { [prop]: newConfig[prop] });
+
+        return this.getConfig();
     }
 }
