@@ -12,13 +12,9 @@ export class AppConfig {
         const appConfig = await this.appConfig.getConfig();
 
         try {
-            response.status(200).send({
-                appConfig,
-            });
+            return appConfig;
         } catch (error) {
-            response.status(500).send({
-                error,
-            });
+            return error;
         }
     }
 
@@ -28,13 +24,9 @@ export class AppConfig {
         try {
             const appConfig = await this.appConfig.updateConfig(newConfig);
 
-            response.status(200).send({
-                appConfig,
-            });
+            return appConfig;
         } catch (error) {
-            response.status(500).send({
-                error,
-            });
+            return error;
         }
     }
 }
