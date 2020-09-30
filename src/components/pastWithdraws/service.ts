@@ -6,4 +6,8 @@ export class PastWithdrawsService {
     async getPast() {
         return this.pastWithdraws.getPast();
     }
+
+    async saveNewId(swap) {
+        return this.pastWithdraws.saveNewId(swap);
+    }
 }

@@ -9,6 +9,30 @@ export class PastWithdrawsController {
     }
 
     async getPast(request: Request, response: Response, next: NextFunction) {
-        return this.pastWithdraws.getPast();
+        try {
+            const pastWithdraws = await this.pastWithdraws.getPast();
+
+            response.status(200).send({ pastWithdraws });
+        } catch (error) {
+            response.status(500).send({
+                error,
+            });
+        }
+    }
+
+    async saveNewId(request: Request, response: Response, next: NextFunction) {
+        try {
+            const swap = request.body;
+
+            const res = await this.pastWithdraws.saveNewId(swap);
+
+            response.status(500).send({
+                res,
+            });
+        } catch (error) {
+            response.status(500).send({
+                error,
+            });
+        }
     }
 }

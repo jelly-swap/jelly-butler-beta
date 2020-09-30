@@ -7,4 +7,10 @@ export default [
         controller: PastWithdrawsController,
         action: 'getPast',
     },
+    {
+        method: 'post',
+        route: '/api/v1/pastWithdraws',
+        controller: PastWithdrawsController,
+        action: 'saveNewId',
+    },
 ];

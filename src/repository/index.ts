@@ -14,6 +14,9 @@ import MongoBalance from '../entity/mongo/balance';
 import AppConfig from '../entity/sql/appConfig';
 import MongoAppConfig from '../entity/mongo/appConfig';
 
+import PastWithdraws from '../entity/sql/pastWithdraws';
+import MongoPastWithdraws from '../entity/mongo/pastWithdraws';
+
 export default {
     MONGODB: {
         swap: () => getMongoRepository(MongoSwap),
@@ -21,6 +24,7 @@ export default {
         refund: () => getMongoRepository(MongoRefund),
         balance: () => getMongoRepository(MongoBalance),
         appConfig: () => getMongoRepository(MongoAppConfig),
+        pastWithdraws: () => getMongoRepository(MongoPastWithdraws),
     },
     SQLITE: {
         swap: () => getRepository(Swap),
@@ -28,5 +32,6 @@ export default {
         refund: () => getRepository(Refund),
         balance: () => getRepository(Balance),
         appConfig: () => getRepository(AppConfig),
+        pastWithdraws: () => getRepository(PastWithdraws),
     },
 };

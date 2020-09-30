@@ -15,4 +15,8 @@ export default class PastWithdrawsRepository {
     getPast() {
         return this.pastWithdraws.find();
     }
+
+    saveNewId({ withdrawnId }) {
+        return this.pastWithdraws.save({ withdrawnId });
+    }
 }
