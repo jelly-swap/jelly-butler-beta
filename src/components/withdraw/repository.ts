@@ -4,6 +4,7 @@ import Repository from '../../repository';
 import { logDebug } from '../../logger';
 import { safeAccess } from '../../utils';
 import UserConfig from '../../config';
+import { In } from 'typeorm';
 
 export default class WithdrawRepository {
     private withdrawRepository;
@@ -22,7 +23,7 @@ export default class WithdrawRepository {
 
     public async create(withdraw: any) {
         try {
-            await this.withdrawRepository.save(
+            return await this.withdrawRepository.save(
                 new WithdrawModel(
                     withdraw.id,
                     withdraw.hashLock,
@@ -35,10 +36,15 @@ export default class WithdrawRepository {
             );
         } catch (error) {
             logDebug(`WITHDRAW_REPOSITORY_ERROR`, error);
+            return error;
         }
     }
 
-    public async findByIdAndNetwork(id: string, network: string) {
+    public findByIdAndNetwork(id: string, network: string) {
         return this.withdrawRepository.findOne({ id, network });
+    }
+
+    public findManyByIds(ids: string[]) {
+        return this.withdrawRepository.find({ where: { id: In(ids) } });
     }
 }

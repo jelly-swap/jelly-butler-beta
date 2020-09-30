@@ -3,11 +3,16 @@ import SwapRepository from './repository';
 export class WithdrawService {
     private swapRepository = new SwapRepository();
 
-    async add(withdraw: any) {
-        return await this.swapRepository.create(withdraw);
+    public async add(withdraw: any) {
+        return this.swapRepository.create(withdraw);
     }
 
-    async findByIdAndNetwork(id: string, network: string) {
-        return await this.swapRepository.findByIdAndNetwork(id, network);
+    public async findByIdAndNetwork(id: string, network: string) {
+        return this.swapRepository.findByIdAndNetwork(id, network);
+    }
+
+    public findManyByIds(findManyByIds) {
+        const ids = Object.values(findManyByIds)[0] as string[];
+        return this.swapRepository.findManyByIds(ids);
     }
 }
