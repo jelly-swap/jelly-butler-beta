@@ -53,15 +53,6 @@ export const run = (config = userConfig, combinedFile?: string, errorFile?: stri
             logError(`${error}`);
             logDebug(`${error}`, JSON.stringify(error));
         });
-
-    validateAddresses(config)
-        .then((result) => {
-            if (result) {
-            }
-        })
-        .catch((error) => {
-            logError(`Validate error: ${error}`);
-        });
 };
 
 const validateAddresses = async (config) => {

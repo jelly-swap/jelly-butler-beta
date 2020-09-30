@@ -11,17 +11,22 @@ import MongoRefund from '../entity/mongo/refund';
 import Balance from '../entity/sql/balance';
 import MongoBalance from '../entity/mongo/balance';
 
+import AppConfig from '../entity/sql/appConfig';
+import MongoAppConfig from '../entity/mongo/appConfig';
+
 export default {
     MONGODB: {
         swap: () => getMongoRepository(MongoSwap),
         withdraw: () => getMongoRepository(MongoWithdraw),
         refund: () => getMongoRepository(MongoRefund),
         balance: () => getMongoRepository(MongoBalance),
+        appConfig: () => getMongoRepository(MongoAppConfig),
     },
     SQLITE: {
         swap: () => getRepository(Swap),
         withdraw: () => getRepository(Withdraw),
         refund: () => getRepository(Refund),
         balance: () => getRepository(Balance),
+        appConfig: () => getRepository(AppConfig),
     },
 };
