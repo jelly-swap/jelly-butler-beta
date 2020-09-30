@@ -21,6 +21,28 @@ import UserConfig from './config';
 import { PK_MATCH_ADDRESS, compareAddress } from './blockchain/utils';
 import { SECONDARY_NETWORKS } from './blockchain/config';
 
+/*
+TODO: EXECUTE THESE WHEN BUTLER IS STARTED => {
+    create end point and execute these when end point is called from the client
+}
+
+       validateAddresses(config)
+        .then((result) => {
+            if (result) {
+                await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
+
+                await startHandlers();
+
+                await startEventListener(config);
+            }
+        })
+        .catch((error) => {
+            logError(`Validate error: ${error}`);
+        });
+
+
+*/
+
 export const run = (config = userConfig, combinedFile?: string, errorFile?: string) => {
     setLoggerConfig(combinedFile, errorFile);
 
@@ -31,29 +53,15 @@ export const run = (config = userConfig, combinedFile?: string, errorFile?: stri
         ...config.DATABASE[config.DATABASE.ACTIVE],
     });
 
-    validateAddresses(config)
-        .then((result) => {
-            if (result) {
-                createConnection(dbConfig as any)
-                    .then(async () => {
-                        getContracts();
+    createConnection(dbConfig as any)
+        .then(async () => {
+            await createServer(config.SERVER.PORT);
 
-                        await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
-
-                        await createServer(config.SERVER.PORT);
-
-                        await startHandlers();
-
-                        await startEventListener(config);
-                    })
-                    .catch((error) => {
-                        logError(`${error}`);
-                        logDebug(`${error}`, JSON.stringify(error));
-                    });
-            }
+            getContracts();
         })
         .catch((error) => {
-            logError(`Validate error: ${error}`);
+            logError(`${error}`);
+            logDebug(`${error}`, JSON.stringify(error));
         });
 };
 
