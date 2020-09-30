@@ -17,7 +17,7 @@ export default class AppConfigRepository {
     }
 
     setInitialConfig() {
-        return this.appConfig.save();
+        return this.appConfig.save({});
     }
 
     async updateConfig(id, newConfig) {

@@ -24,8 +24,6 @@ export class AppConfig {
         try {
             const appConfig = await this.appConfig.updateConfig(newConfig);
 
-            console.log(appConfig);
-
             return appConfig;
         } catch (error) {
             return error;

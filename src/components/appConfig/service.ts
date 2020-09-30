@@ -6,14 +6,11 @@ export class AppConfigService {
     async getConfig() {
         const config = await this.appConfig.getConfig();
 
-        if (!config.length) {
-            // SAVE ()
-            const createdConfig = await this.appConfig.setInitialConfig();
-
-            return createdConfig;
+        if (!config) {
+            return this.appConfig.setInitialConfig();
         }
 
-        return config[0];
+        return config;
     }
 
     async updateConfig(newConfig) {

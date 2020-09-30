@@ -5,12 +5,18 @@ export default class AppConfig {
     @PrimaryGeneratedColumn()
     public id: number;
 
-    @Column()
+    @Column({
+        default: true,
+    })
     sound: boolean;
 
-    @Column()
+    @Column({
+        default: 'english',
+    })
     language: string;
 
-    @Column()
+    @Column({
+        default: 'dark_theme',
+    })
     theme: string;
 }
