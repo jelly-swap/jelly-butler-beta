@@ -11,6 +11,8 @@ import MongoRefund from '../entity/mongo/refund';
 import Balance from '../entity/sql/balance';
 import MongoBalance from '../entity/mongo/balance';
 
+import Pending from '../entity/sql/pending';
+
 export default {
     MONGODB: {
         swap: () => getMongoRepository(MongoSwap),
@@ -23,5 +25,6 @@ export default {
         withdraw: () => getRepository(Withdraw),
         refund: () => getRepository(Refund),
         balance: () => getRepository(Balance),
+        pending: () => getRepository(Pending),
     },
 };
