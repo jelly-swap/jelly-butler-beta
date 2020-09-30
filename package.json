@@ -4,7 +4,7 @@
     "description": "Butler is automated market making software that is used for liquidity provision to JellySwap protocol.",
     "main": "index.js",
     "scripts": {
-        "start": "ts-node src/index.ts",
+        "start": "nodemon src/index.ts",
         "start-testnet": "set NETWORK=testnet&&ts-node src/index.ts"
     },
     "repository": {
@@ -54,6 +54,7 @@
         "@types/nodemailer": "^6.4.0",
         "@types/winston": "^2.4.4",
         "@types/ws": "^7.2.2",
+        "nodemon": "^2.0.4",
         "ts-node": "^8.6.2",
         "tslint-config-prettier": "^1.18.0",
         "typescript": "^3.8.3"
