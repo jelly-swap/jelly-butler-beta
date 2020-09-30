@@ -9,9 +9,9 @@ export class AppConfig {
     }
 
     async getConfig(request: Request, response: Response, next: NextFunction) {
-        const appConfig = await this.appConfig.getConfig();
-
         try {
+            const appConfig = await this.appConfig.getConfig();
+
             return appConfig;
         } catch (error) {
             return error;
