@@ -65,4 +65,5 @@ export const PK_MATCH_ADDRESS = {
     ONE: oneAddressMatch,
     MATIC: ethAddressMatch,
     AVAX: ethAddressMatch,
+    BNB: ethAddressMatch,
 };
