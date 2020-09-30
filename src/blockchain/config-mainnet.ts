@@ -5,6 +5,7 @@ import Erc20Config, { SECONDARY_NETWORKS } from './erc20/config';
 import HarmonyConfig from './harmony/config';
 import MaticConfig from './matic/config';
 import AvalancheConfig from './avalanche/config';
+import BinanceConfig from './binance/config';
 
 import getSupportedNetworks from '../config/supportedNetworks';
 
@@ -27,6 +28,7 @@ export default () => {
         ONE: supportedNetworks['ONE'] && HarmonyConfig(),
         MATIC: supportedNetworks['MATIC'] && MaticConfig(),
         AVAX: supportedNetworks['AVAX'] && AvalancheConfig(),
+        BNB: supportedNetworks['BNB'] && BinanceConfig(),
         ...getErc20Configs(supportedNetworks),
     };
 };

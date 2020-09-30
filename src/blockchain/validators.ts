@@ -5,6 +5,7 @@ import * as Erc20Validator from './erc20/validator';
 import * as HarmonyValidator from './harmony/validator';
 import * as MaticValidator from './matic/validator';
 import * as AvalancheValidator from './avalanche/validator';
+import * as BinanceValidator from './binance/validator';
 
 import { SECONDARY_NETWORKS } from './erc20/config';
 
@@ -22,5 +23,6 @@ export default {
     ONE: HarmonyValidator,
     MATIC: MaticValidator,
     AVAX: AvalancheValidator,
+    BNB: BinanceValidator,
     ...getErc20Validators(),
 };
