@@ -15,9 +15,7 @@ export default class Withdraw {
     @Column()
     secret: string;
 
-    @Column({
-        nullable: true,
-    })
+    @Column()
     transactionHash: string;
 
     @Column()
