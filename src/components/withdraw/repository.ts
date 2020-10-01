@@ -1,10 +1,10 @@
+import { In } from 'typeorm';
+
 import { WithdrawModel } from './model';
 import Repository from '../../repository';
-
 import { logDebug } from '../../logger';
 import { safeAccess } from '../../utils';
 import UserConfig from '../../config';
-import { In } from 'typeorm';
 
 export default class WithdrawRepository {
     private withdrawRepository;
