@@ -1,24 +1,14 @@
-import { In } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 
-import Repository from '../../repository';
+import Pending from '../../entity/sql/pending';
 import { logDebug } from '../../logger';
-import { safeAccess } from '../../utils';
-import UserConfig from '../../config';
 import { PendingModel } from './model';
 
 export default class PendingRepository {
     private pendingRepository;
 
     constructor() {
-        const userConfig = new UserConfig().getUserConfig();
-
-        const getPendingRepository = safeAccess(Repository, [userConfig.DATABASE.ACTIVE, 'pending']);
-
-        if (!getPendingRepository) {
-            throw new Error('REFUND_REPOSITORY_MISSING');
-        } else {
-            this.pendingRepository = getPendingRepository();
-        }
+        this.pendingRepository = getRepository(Pending);
     }
 
     public async create(withdraw: any) {
