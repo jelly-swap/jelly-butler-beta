@@ -20,7 +20,7 @@ export class PendingController {
     }
 
     public async findManyByIds(request: Request, response: Response, next: NextFunction) {
-        const ids = request.body?.ids;
+        const ids = request.body.ids;
 
         try {
             if (!ids) {
