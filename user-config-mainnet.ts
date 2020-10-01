@@ -116,19 +116,10 @@ export default {
     SERVER: { PORT: 9000 },
 
     // ================== Database configuration ==================
-    //options: MONGODB or SQLITE
+    //options:  SQLITE
     DATABASE: {
         ACTIVE: 'SQLITE',
 
-        MONGODB: {
-            //Docker Setup
-            URL: 'mongodb://db:27017/butler',
-            AUTH: 'admin',
-            MONGO_PASSWORD: process.env.MONGO_PASSWORD,
-
-            //Manual setup
-            //URL: 'mongodb://localhost:27017/butler',
-        },
         SQLITE: {
             database: 'butler.sqlite',
         },
