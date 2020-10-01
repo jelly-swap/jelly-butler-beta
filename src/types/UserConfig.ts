@@ -56,11 +56,6 @@ export interface IUserConfig {
     DATABASE: {
         ACTIVE: string;
 
-        MONGODB: {
-            URL: string;
-            AUTH: string;
-            MONGO_PASSWORD: string;
-        };
         SQLITE: {
             database: string;
         };

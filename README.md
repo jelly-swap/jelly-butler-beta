@@ -30,8 +30,6 @@ There are two main approaches to install Butler:
 
 **3. Configure Butler**
 
--   Setup a password for the database in `.env` `MONGO_PASSWORD='your password'`
-
 -   Open `config.ts` and fill all required fields.
 
 -   Butler needs a price source and you have two options:
@@ -80,14 +78,6 @@ Then you can open again config.ts and update your configurations. When you are r
     docker-compose up
 
 # Manual Setup[](#manual-setup)
-
-**1. Setup MongoDB on your system**
-
--   Linux - [https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)
-
--   Windows - [https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/)
-
--   Mac - [https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/)
 
 **1. Install NodeJS**
 
