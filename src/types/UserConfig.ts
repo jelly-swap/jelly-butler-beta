@@ -48,17 +48,14 @@ export interface IUserConfig {
     };
 
     AGGREGATOR_URL: string;
+    TRACKER_URL: string;
+    JELLY_PRICE_PROVIDER: string;
 
     SERVER: { PORT: number };
 
     DATABASE: {
         ACTIVE: string;
 
-        MONGODB: {
-            URL: string;
-            AUTH: string;
-            MONGO_PASSWORD: string;
-        };
         SQLITE: {
             database: string;
         };
