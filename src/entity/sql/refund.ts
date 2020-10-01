@@ -7,7 +7,7 @@ export default class Refund {
 
     @Column()
     @Index({ unique: true })
-    swapId: string;
+    id: string;
 
     @Column()
     hashLock: string;
@@ -28,14 +28,14 @@ export default class Refund {
     createdAt: Date;
 
     constructor(
-        swapId: string,
+        id: string,
         hashLock: string,
         transactionHash: string,
         sender: string,
         receiver: string,
         network: string
     ) {
-        this.swapId = swapId;
+        this.id = id;
         this.hashLock = hashLock;
         this.transactionHash = transactionHash;
         this.sender = sender;
