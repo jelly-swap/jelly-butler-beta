@@ -19,7 +19,7 @@ import getDbConfig from './config/database';
 import UserConfig from './config';
 
 import { PK_MATCH_ADDRESS, compareAddress } from './blockchain/utils';
-import { SECONDARY_NETWORKS } from './blockchain/config';
+import { SECONDARY_NETWORKS } from './blockchain/erc20/config';
 
 /*
 TODO: EXECUTE THESE WHEN BUTLER IS STARTED => {
