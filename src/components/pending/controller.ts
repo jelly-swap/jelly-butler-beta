@@ -20,10 +20,14 @@ export class PendingController {
     }
 
     public async findManyByIds(request: Request, response: Response, next: NextFunction) {
-        const payload = request.body;
+        const ids = request.body?.ids;
 
         try {
-            const pendingSwaps = await this.pendingService.findManyByIds(payload);
+            if (!ids) {
+                return 'Error ids missing';
+            }
+
+            const pendingSwaps = await this.pendingService.findManyByIds(ids);
 
             return pendingSwaps;
         } catch (error) {

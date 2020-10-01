@@ -7,7 +7,7 @@ export default class PendingService {
         return this.pendingRepository.create(pending);
     }
 
-    public findManyByIds(body) {
-        return this.pendingRepository.findManyByIds(body.ids);
+    public findManyByIds(ids) {
+        return this.pendingRepository.findManyByIds(ids);
     }
 }
