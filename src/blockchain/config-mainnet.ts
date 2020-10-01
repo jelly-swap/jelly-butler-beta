@@ -1,12 +1,13 @@
 import BitcoinConfig from './bitcoin/config';
 import EthereumConfig from './ethereum/config';
 import AeternityConfig from './aeternity/config';
-import Erc20Config from './erc20/config';
+import Erc20Config, { SECONDARY_NETWORKS } from './erc20/config';
 import HarmonyConfig from './harmony/config';
 import MaticConfig from './matic/config';
+import AvalancheConfig from './avalanche/config';
+import BinanceConfig from './binance/config';
 
 import getSupportedNetworks from '../config/supportedNetworks';
-import { SECONDARY_NETWORKS } from './config';
 
 const getErc20Configs = (supportedNetworks) => {
     return Object.keys(SECONDARY_NETWORKS).reduce((object, token) => {
@@ -26,6 +27,8 @@ export default () => {
         AE: supportedNetworks['AE'] && AeternityConfig(),
         ONE: supportedNetworks['ONE'] && HarmonyConfig(),
         MATIC: supportedNetworks['MATIC'] && MaticConfig(),
+        AVAX: supportedNetworks['AVAX'] && AvalancheConfig(),
+        BNB: supportedNetworks['BNB'] && BinanceConfig(),
         ...getErc20Configs(supportedNetworks),
     };
 };

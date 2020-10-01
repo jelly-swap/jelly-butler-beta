@@ -19,7 +19,29 @@ import getDbConfig from './config/database';
 import UserConfig from './config';
 
 import { PK_MATCH_ADDRESS, compareAddress } from './blockchain/utils';
-import { SECONDARY_NETWORKS } from './blockchain/config';
+import { SECONDARY_NETWORKS } from './blockchain/erc20/config';
+
+/*
+TODO: EXECUTE THESE WHEN BUTLER IS STARTED => {
+    create end point and execute these when end point is called from the client
+}
+
+       validateAddresses(config)
+        .then((result) => {
+            if (result) {
+                await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
+
+                await startHandlers();
+
+                await startEventListener(config);
+            }
+        })
+        .catch((error) => {
+            logError(`Validate error: ${error}`);
+        });
+
+
+*/
 
 export const run = (config = userConfig, combinedFile?: string, errorFile?: string) => {
     setLoggerConfig(combinedFile, errorFile);
