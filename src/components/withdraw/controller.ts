@@ -34,10 +34,14 @@ export class WithdrawController {
     }
 
     public async findManyByIds(request: Request, response: Response, next: NextFunction) {
-        const payload = request.body;
+        const ids = request.body?.ids;
 
         try {
-            const withdrawnSwaps = await this.withdrawService.findManyByIds(payload);
+            if (!ids) {
+                return 'Error missing body';
+            }
+
+            const withdrawnSwaps = await this.withdrawService.findManyByIds(ids);
 
             return withdrawnSwaps;
         } catch (error) {

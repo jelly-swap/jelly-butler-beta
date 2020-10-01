@@ -11,7 +11,7 @@ export class WithdrawService {
         return this.swapRepository.findByIdAndNetwork(id, network);
     }
 
-    public findManyByIds(body) {
-        return this.swapRepository.findManyByIds(body.ids);
+    public findManyByIds(ids) {
+        return this.swapRepository.findManyByIds(ids);
     }
 }
