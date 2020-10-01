@@ -1,30 +1,30 @@
 import { In } from 'typeorm';
 
-import { WithdrawModel } from './model';
 import Repository from '../../repository';
 import { logDebug } from '../../logger';
 import { safeAccess } from '../../utils';
 import UserConfig from '../../config';
+import { PendingModel } from './model';
 
-export default class WithdrawRepository {
-    private withdrawRepository;
+export default class PendingRepository {
+    private pendingRepository;
 
     constructor() {
         const userConfig = new UserConfig().getUserConfig();
 
-        const getWithdrawRepository = safeAccess(Repository, [userConfig.DATABASE.ACTIVE, 'withdraw']);
+        const getPendingRepository = safeAccess(Repository, [userConfig.DATABASE.ACTIVE, 'pending']);
 
-        if (!getWithdrawRepository) {
-            throw new Error('WITHDRAW_REPOSITORY_MISSING');
+        if (!getPendingRepository) {
+            throw new Error('REFUND_REPOSITORY_MISSING');
         } else {
-            this.withdrawRepository = getWithdrawRepository();
+            this.pendingRepository = getPendingRepository();
         }
     }
 
     public async create(withdraw: any) {
         try {
-            return await this.withdrawRepository.save(
-                new WithdrawModel(
+            return this.pendingRepository.save(
+                new PendingModel(
                     withdraw.id,
                     withdraw.hashLock,
                     withdraw.secret,
@@ -40,11 +40,7 @@ export default class WithdrawRepository {
         }
     }
 
-    public findByIdAndNetwork(id: string, network: string) {
-        return this.withdrawRepository.findOne({ id, network });
-    }
-
-    public findManyByIds(ids: string[]) {
-        return this.withdrawRepository.find({ where: { id: In(ids) } });
+    public findManyByIds(ids) {
+        return this.pendingRepository.find({ where: { id: In(ids) } });
     }
 }
