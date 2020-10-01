@@ -6,8 +6,7 @@ import BitcoinConfig from './bitcoin/config';
 import EthereumConfig from './ethereum/config';
 import HarmonyConfig from './harmony/config';
 import AeternityConfig from './aeternity/config';
-
-import { SECONDARY_NETWORKS } from './config';
+import { SECONDARY_NETWORKS } from './erc20/config';
 
 export default () => {
     const supportedNetworks = getSupportedNetworks();

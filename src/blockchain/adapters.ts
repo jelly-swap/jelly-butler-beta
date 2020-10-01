@@ -4,8 +4,10 @@ import { Adapter as AeternityAdapter } from '@jelly-swap/aeternity';
 import { Adapter as Erc20Adapter } from '@jelly-swap/erc20';
 import { Adapter as HarmonyAdapter } from '@jelly-swap/harmony';
 import { Adapter as MaticAdapter } from '@jelly-swap/matic';
+import { Adapter as AvalancheAdapter } from '@jelly-swap/avalanche';
 
-import getConfig, { SECONDARY_NETWORKS } from './config';
+import getConfig from './config';
+import { SECONDARY_NETWORKS } from './erc20/config';
 
 let Adapters: any;
 
@@ -29,6 +31,8 @@ export default () => {
             AE: Config.AE && new AeternityAdapter(Config.AE as any),
             ONE: Config.ONE && new HarmonyAdapter(Config.ONE),
             MATIC: Config.MATIC && new MaticAdapter(Config.MATIC),
+            AVAX: Config.AVAX && new AvalancheAdapter(Config.AVAX),
+            BNB: Config.BNB && new AvalancheAdapter(Config.BNB),
         };
 
         Adapters = Object.entries(AllAdapters).reduce((a, [k, v]) => (v === undefined ? a : { ...a, [k]: v }), {});
