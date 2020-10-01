@@ -16,7 +16,12 @@ export default class AppConfig {
     language: string;
 
     @Column({
-        default: 'dark_theme',
+        default: 'theme_dark',
     })
     theme: string;
+
+    @Column({
+        default: 0,
+    })
+    intro: number;
 }
