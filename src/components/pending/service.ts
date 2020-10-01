@@ -7,9 +7,7 @@ export default class PendingService {
         return this.pendingRepository.create(pending);
     }
 
-    public findManyByIds(payload) {
-        const ids = Object.values(payload)[0] as string[];
-
-        return this.pendingRepository.findManyByIds(ids);
+    public findManyByIds(body) {
+        return this.pendingRepository.findManyByIds(body.ids);
     }
 }
