@@ -20,10 +20,14 @@ export class RefundController {
     }
 
     public async findManyByIds(request: Request, response: Response, next: NextFunction) {
-        const payload = request.body;
+        const ids = request.body?.ids;
 
         try {
-            const refundedSwaps = await this.refundService.findManyByIds(payload);
+            if (!ids) {
+                return 'Error missing body';
+            }
+
+            const refundedSwaps = await this.refundService.findManyByIds(ids);
 
             return refundedSwaps;
         } catch (error) {

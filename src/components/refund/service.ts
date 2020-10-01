@@ -7,7 +7,7 @@ export default class RefundService {
         return this.refundRepository.create(refund);
     }
 
-    public findManyByIds(body) {
-        return this.refundRepository.findManyByIds(body.ids);
+    public findManyByIds(ids) {
+        return this.refundRepository.findManyByIds(ids);
     }
 }
