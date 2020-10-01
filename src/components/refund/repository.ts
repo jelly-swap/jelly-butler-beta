@@ -1,9 +1,10 @@
+import { In } from 'typeorm';
+
 import Repository from '../../repository';
 import { logDebug } from '../../logger';
 import { safeAccess } from '../../utils';
 import UserConfig from '../../config';
 import { RefundModel } from './model';
-import { In } from 'typeorm';
 
 export default class RefundRepository {
     private refundRepository;
