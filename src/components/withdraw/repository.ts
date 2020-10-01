@@ -1,24 +1,14 @@
-import { In } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 
+import Withdraw from '../../entity/sql/withdraw';
 import { WithdrawModel } from './model';
-import Repository from '../../repository';
 import { logDebug } from '../../logger';
-import { safeAccess } from '../../utils';
-import UserConfig from '../../config';
 
 export default class WithdrawRepository {
     private withdrawRepository;
 
     constructor() {
-        const userConfig = new UserConfig().getUserConfig();
-
-        const getWithdrawRepository = safeAccess(Repository, [userConfig.DATABASE.ACTIVE, 'withdraw']);
-
-        if (!getWithdrawRepository) {
-            throw new Error('WITHDRAW_REPOSITORY_MISSING');
-        } else {
-            this.withdrawRepository = getWithdrawRepository();
-        }
+        this.withdrawRepository = getRepository(Withdraw);
     }
 
     public async create(withdraw: any) {

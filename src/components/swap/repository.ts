@@ -1,23 +1,14 @@
-import { SwapModel } from './model';
-import Repository from '../../repository';
+import { getRepository } from 'typeorm';
 
+import Swap from '../../entity/sql/swap';
+import { SwapModel } from './model';
 import { logDebug } from '../../logger';
-import { safeAccess } from '../../utils';
-import UserConfig from '../../config';
 
 export default class SwapRepository {
     private swapRepository;
 
     constructor() {
-        const userConfig = new UserConfig().getUserConfig();
-
-        const getSwapRepository = safeAccess(Repository, [userConfig.DATABASE.ACTIVE, 'swap']);
-
-        if (!getSwapRepository) {
-            throw new Error('SWAP_REPOSITORY_MISSING');
-        } else {
-            this.swapRepository = getSwapRepository();
-        }
+        this.swapRepository = getRepository(Swap);
     }
 
     public async create(swap: any) {

@@ -1,22 +1,13 @@
-import Repository from '../../repository';
-import { safeAccess } from '../../utils';
+import { getRepository } from 'typeorm';
 
+import Balance from '../../entity/sql/balance';
 import { logDebug } from '../../logger';
-import UserConfig from '../../config';
 
 export default class BalanceRepository {
     private balanceRepository;
 
     constructor() {
-        const userConfig = new UserConfig().getUserConfig();
-
-        const getBalanceRepository = safeAccess(Repository, [userConfig.DATABASE.ACTIVE, 'balance']);
-
-        if (!getBalanceRepository) {
-            throw new Error('BALANCE_REPOSITORY_MISSING');
-        } else {
-            this.balanceRepository = getBalanceRepository();
-        }
+        this.balanceRepository = getRepository(Balance);
     }
 
     public async saveBalance(balance: any) {

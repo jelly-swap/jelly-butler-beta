@@ -1,29 +1,26 @@
-import Repository from '../../repository';
+import { getRepository } from 'typeorm';
 
-import { safeAccess } from '../../utils';
-import UserConfig from '../../config';
+import AppConfig from '../../entity/sql/appConfig';
 
-export default class AppConfigRepository {
-    private appConfig;
+export default class appConfigRepositoryRepository {
+    private appConfigRepository;
 
     constructor() {
-        const userConfig = new UserConfig().getUserConfig();
-
-        this.appConfig = safeAccess(Repository, [userConfig.DATABASE.ACTIVE, 'appConfig'])();
+        this.appConfigRepository = getRepository(AppConfig);
     }
 
     getConfig() {
-        return this.appConfig.findOne();
+        return this.appConfigRepository.findOne();
     }
 
     setInitialConfig() {
-        return this.appConfig.save({});
+        return this.appConfigRepository.save({});
     }
 
     async updateConfig(id, newConfig) {
         const prop = Object.keys(newConfig)[0];
 
-        await this.appConfig.update(id, { [prop]: newConfig[prop] });
+        await this.appConfigRepository.update(id, { [prop]: newConfig[prop] });
 
         return this.getConfig();
     }

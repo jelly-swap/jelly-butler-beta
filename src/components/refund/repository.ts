@@ -1,24 +1,14 @@
-import { In } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 
-import Repository from '../../repository';
+import Refund from '../../entity/sql/refund';
 import { logDebug } from '../../logger';
-import { safeAccess } from '../../utils';
-import UserConfig from '../../config';
 import { RefundModel } from './model';
 
 export default class RefundRepository {
     private refundRepository;
 
     constructor() {
-        const userConfig = new UserConfig().getUserConfig();
-
-        const getRefundRepository = safeAccess(Repository, [userConfig.DATABASE.ACTIVE, 'refund']);
-
-        if (!getRefundRepository) {
-            throw new Error('REFUND_REPOSITORY_MISSING');
-        } else {
-            this.refundRepository = getRefundRepository();
-        }
+        this.refundRepository = getRepository(Refund);
     }
 
     public async create(withdraw: any) {
