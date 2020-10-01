@@ -2,7 +2,7 @@ import { getRepository } from 'typeorm';
 
 import AppConfig from '../../entity/sql/appConfig';
 
-export default class appConfigRepositoryRepository {
+export default class AppConfigRepository {
     private appConfigRepository;
 
     constructor() {
