@@ -23,6 +23,12 @@ export default {
             SECRET: '',
         },
 
+        BNB: {
+            ADDRESS: '',
+            // Binance Private Key
+            SECRET: '',
+        },
+
         ONE: {
             ADDRESS: '',
             // Harmony Private Key
@@ -94,6 +100,7 @@ export default {
 
     AGGREGATOR_URL: 'https://jelly-jam-testnet.herokuapp.com/api/v1/info',
     TRACKER_URL: 'jelly-tracker-testnet.herokuapp.com',
+    JELLY_PRICE_PROVIDER: 'http://localhost:8080/prices',
 
     SERVER: { PORT: 9000 },
 
