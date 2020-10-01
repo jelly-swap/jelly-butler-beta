@@ -7,9 +7,7 @@ export default class RefundService {
         return this.refundRepository.create(refund);
     }
 
-    public findManyByIds(payload) {
-        const ids = Object.values(payload)[0] as string[];
-
-        return this.refundRepository.findManyByIds(ids);
+    public findManyByIds(body) {
+        return this.refundRepository.findManyByIds(body.ids);
     }
 }
