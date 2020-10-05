@@ -33,4 +33,8 @@ export default class RefundRepository {
     public findManyByIds(ids) {
         return this.refundRepository.find({ where: { id: In(ids) } });
     }
+
+    public getAll() {
+        return this.refundRepository.find();
+    }
 }

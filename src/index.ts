@@ -5,8 +5,10 @@ const combinedFile = process.argv[3];
 const errorFile = process.argv[4];
 
 // Electron fork
-if (config) {
-    run(JSON.parse(config), combinedFile, errorFile);
-} else {
-    run();
-}
+run();
+
+// if (config) {
+//     run(JSON.parse(config), combinedFile, errorFile);
+// } else {
+
+// }

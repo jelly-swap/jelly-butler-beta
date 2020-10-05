@@ -37,4 +37,8 @@ export default class WithdrawRepository {
     public findManyByIds(ids: string[]) {
         return this.withdrawRepository.find({ where: { id: In(ids) } });
     }
+
+    public getAll() {
+        return this.withdrawRepository.find();
+    }
 }
