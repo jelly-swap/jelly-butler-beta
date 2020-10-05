@@ -71,6 +71,7 @@ export const run = (config = userConfig, combinedFile?: string, errorFile?: stri
 
             if (typeof process.send === 'function') {
                 process.send({
+                    topic: 'initialData',
                     appConfig,
                     pendingSwaps,
                     pastWithdraws,
