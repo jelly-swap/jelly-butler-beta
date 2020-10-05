@@ -21,6 +21,11 @@ import UserConfig from './config';
 import { PK_MATCH_ADDRESS, compareAddress } from './blockchain/utils';
 import { SECONDARY_NETWORKS } from './blockchain/erc20/config';
 
+import AppConfigRepository from './components/appConfig/repository';
+import WithdrawRepository from './components/withdraw/repository';
+import RefundRepository from './components/refund/repository';
+import PendingRepository from './components/pending/repository';
+
 /*
 TODO: EXECUTE THESE WHEN BUTLER IS STARTED => {
     create end point and execute these when end point is called from the client
@@ -56,6 +61,23 @@ export const run = (config = userConfig, combinedFile?: string, errorFile?: stri
     createConnection(dbConfig as any)
         .then(async () => {
             await createServer(config.SERVER.PORT);
+
+            const [appConfig, pendingSwaps, pastWithdraws, pastRefunds] = await Promise.all([
+                new AppConfigRepository().getConfig(),
+                new PendingRepository().getAll(),
+                new WithdrawRepository().getAll(),
+                new RefundRepository().getAll(),
+            ]);
+
+            if (typeof process.send === 'function') {
+                process.send({
+                    topic: 'initialData',
+                    appConfig,
+                    pendingSwaps,
+                    pastWithdraws,
+                    pastRefunds,
+                });
+            }
 
             getContracts();
         })

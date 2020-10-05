@@ -17,10 +17,10 @@ export default class AppConfigRepository {
         return this.appConfigRepository.save({});
     }
 
-    async updateConfig(id, newConfig) {
-        const prop = Object.keys(newConfig)[0];
+    async updateConfig(newConfig) {
+        const config = await this.getConfig();
 
-        await this.appConfigRepository.update(id, { [prop]: newConfig[prop] });
+        await this.appConfigRepository.update(config.id, newConfig);
 
         return this.getConfig();
     }

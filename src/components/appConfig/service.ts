@@ -14,8 +14,6 @@ export class AppConfigService {
     }
 
     async updateConfig(newConfig) {
-        const { id, ...rest } = newConfig;
-
-        return this.appConfig.updateConfig(id, rest);
+        return this.appConfig.updateConfig(newConfig);
     }
 }

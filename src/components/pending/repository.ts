@@ -33,4 +33,8 @@ export default class PendingRepository {
     public findManyByIds(ids) {
         return this.pendingRepository.find({ where: { id: In(ids) } });
     }
+
+    public getAll() {
+        return this.pendingRepository.find();
+    }
 }
