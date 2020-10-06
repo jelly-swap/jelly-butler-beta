@@ -5,12 +5,13 @@ import getAdapters from '../../blockchain/adapters';
 import getProvidedAssets from '../../config/providedAssets';
 import getSupportedNetworks from '../../config/supportedNetworks';
 
-import { addBig, toBigNumber, mul } from '../../utils/math';
+import { addBig, toBigNumber, mul, greaterThan } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
 import BalanceRepository from './repository';
 
-import { logDebug } from '../../logger';
+import { logDebug, logError } from '../../logger';
 import { safeAccess } from '../../utils';
+import { SECONDARY_NETWORKS } from '../../blockchain/erc20/config';
 
 export class BalanceService {
     private static Instance: BalanceService;
@@ -45,6 +46,8 @@ export class BalanceService {
     }
 
     async update() {
+        const erc20Address = {};
+
         try {
             for (const network in this.allAssets) {
                 try {
@@ -57,6 +60,19 @@ export class BalanceService {
 
                     if (this.providedAssets[network]) {
                         this.providedBalances[network] = this.allBalances[network];
+                    }
+
+                    if (SECONDARY_NETWORKS[network]) {
+                        if (!erc20Address[address]) {
+                            const ethBalance = await this.contracts['ETH'].getBalance(address, network);
+                            erc20Address[address] = address;
+                            if (!greaterThan(ethBalance, 0)) {
+                                logError(
+                                    `You need ETH in ${address} for the Ethereum network fees in order to  provide ${network}.`
+                                );
+                                process.exit(-1);
+                            }
+                        }
                     }
                 } catch (err) {
                     logDebug(`CANNOT_GET_BALANCES ${network} ${err}`);
