@@ -46,6 +46,8 @@ export class BalanceService {
     }
 
     async update() {
+        const erc20Address = {};
+
         try {
             for (const network in this.allAssets) {
                 try {
@@ -61,8 +63,6 @@ export class BalanceService {
                     }
 
                     if (SECONDARY_NETWORKS[network]) {
-                        const erc20Address = {};
-
                         if (!erc20Address[address]) {
                             const ethBalance = await this.contracts['ETH'].getBalance(address, network);
                             erc20Address[address] = address;
