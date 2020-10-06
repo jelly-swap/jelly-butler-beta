@@ -108,11 +108,6 @@ export const isOutputSwapValid = async (swap, takerDesiredAmount) => {
         return false;
     }
 
-    if (compareAddress(swap.outputAddress, safeAccess(userConfig, ['WALLETS', swap.network, 'ADDRESS']))) {
-        logDebug(`OUTPUT_WRONG_OUTPUT_ADDRESS`, swap);
-        return false;
-    }
-
     if (compareAddress(swap.sender, swap.receiver)) {
         logDebug(`OUTPUT_SENDER_CANNOT_EQUAL_RECEIVER`, swap);
         return false;
