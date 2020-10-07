@@ -14,6 +14,11 @@ const TokenConfig = {
         decimals: 8,
         address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
     },
+    TBTC: {
+        network: 'TBTC',
+        decimals: 18,
+        address: '0x8dAEBADE922dF735c38C80C7eBD708Af50815fAa',
+    },
     USDC: {
         network: 'USDC',
         decimals: 6,
