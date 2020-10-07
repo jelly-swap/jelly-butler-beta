@@ -10,6 +10,7 @@ export default {
         DAI: true,
         USDC: true,
         WBTC: true,
+        TBTC: true,
     },
 
     // The amount of fee that is charged by JellySwap protocol.
@@ -31,10 +32,10 @@ export default {
     BALANCE_SNAPSHOT_INTERVAL: 3600,
 
     PRICE: {
-        COINS: ['ETH', 'BTC', 'AE', 'DAI', 'WBTC', 'USDC', 'USDT', 'ONE', 'MATIC', 'AVAX', 'BNB'],
+        COINS: ['ETH', 'BTC', 'AE', 'DAI', 'WBTC', 'TBTC', 'USDC', 'USDT', 'ONE', 'MATIC', 'AVAX', 'BNB'],
     },
 
-    DUPLICATE_PRICE: { DAI: 'USDC', WBTC: 'BTC' },
+    DUPLICATE_PRICE: { DAI: 'USDC', WBTC: 'BTC', TBTC: 'TBTC' },
 
     // ================== Binance configuration ==================
     BINANCE: {
