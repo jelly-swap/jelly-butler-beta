@@ -35,6 +35,7 @@ const AddressToToken = {
     '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599': TokenConfig.WBTC,
     '0x6b175474e89094c44da98b954eedeac495271d0f': TokenConfig.DAI,
     '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48': TokenConfig.USDC,
+    '0x8dAEBADE922dF735c38C80C7eBD708Af50815fAa': TokenConfig.TBTC,
 };
 
 export default (token) => {
