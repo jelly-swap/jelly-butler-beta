@@ -55,7 +55,7 @@ export default class BinanceExchange implements IExchange {
                     logError(`Could not place order in Binance for ${quantity} ${pair}`);
                 } else {
                     logInfo(`BINANCE_ORDER_PLACED ${pair} ${quantity} ${response.orderId}`);
-                    logData(`You placed ${ORDER_TYPE_TO_LABEL[type]} order in Binance for ${quantity} ${pair} `);
+                    logData(`You placed ${ORDER_TYPE_TO_LABEL[type]} order in Binance for ${quantity} ${pair}`);
                 }
             });
 
