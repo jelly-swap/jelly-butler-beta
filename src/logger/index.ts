@@ -43,7 +43,7 @@ const log = (level, msg, data) => {
         logger[level](msg);
 
         if (process.send && FORWARD_LOG_LEVEL.includes(level)) {
-            process.send({ TYPE: 'LOGGER', DATA: { level, msg: `${new Date().toLocaleString()}:  ${msg}` } });
+            process.send({ TYPE: 'LOGGER', DATA: { level, timestamp: new Date().toLocaleString(), msg } });
         }
     }
 };

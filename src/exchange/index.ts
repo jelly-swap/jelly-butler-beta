@@ -39,7 +39,7 @@ export default class Exchange implements IExchange {
             return result;
         } catch (err) {
             logError(`Could not place order in ${this.userConfig.EXCHANGE.NAME}.`);
-            logError('PLACE_ORDER_ERROR', err);
+            logError(`PLACE_ORDER_ERROR ${err}`);
             return false;
         }
     }
