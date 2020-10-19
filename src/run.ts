@@ -20,40 +20,41 @@ import UserConfig from './config';
 
 import { PK_MATCH_ADDRESS } from './blockchain/utils';
 
-export const run = (config = userConfig, combinedFile?: string, errorFile?: string) => {
-    setLoggerConfig(combinedFile, errorFile);
+export const run = async (config = userConfig, combinedFile?: string, errorFile?: string) => {
+    try {
+        setLoggerConfig(combinedFile, errorFile);
 
-    new UserConfig().setUserConfig(config);
+        new UserConfig().setUserConfig(config);
 
-    const dbConfig = getDbConfig({
-        name: config.DATABASE.ACTIVE,
-        ...config.DATABASE[config.DATABASE.ACTIVE],
-    });
-
-    validateAddresses(config)
-        .then((result) => {
-            if (result) {
-                createConnection(dbConfig as any)
-                    .then(async () => {
-                        getContracts();
-
-                        await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
-
-                        await createServer(config.SERVER.PORT);
-
-                        await startHandlers();
-
-                        await startEventListener(config);
-                    })
-                    .catch((error) => {
-                        logError(`${error}`);
-                        logDebug(`${error}`, JSON.stringify(error));
-                    });
-            }
-        })
-        .catch((error) => {
-            logError(`Validate error: ${error}`);
+        const dbConfig = getDbConfig({
+            name: config.DATABASE.ACTIVE,
+            ...config.DATABASE[config.DATABASE.ACTIVE],
         });
+
+        const isValid = await validateAddresses(config);
+
+        if (isValid) {
+            await createConnection(dbConfig as any);
+
+            getContracts();
+
+            await startTasks([new PriceTask(), new BalanceTask(), new InfoTask()]);
+
+            await createServer(config.SERVER.PORT);
+
+            await startHandlers();
+
+            await startEventListener(config);
+
+            return true;
+        }
+
+        return false;
+    } catch (error) {
+        logError(`${error}`);
+        logDebug(`${error}`, JSON.stringify(error));
+        return false;
+    }
 };
 
 const validateAddresses = async (config) => {

@@ -70,6 +70,7 @@ export class BalanceService {
                                 logError(
                                     `You need ETH in ${address} for the Ethereum network fees in order to  provide ${network}.`
                                 );
+                                logError(`Exiting...`);
                                 process.exit(-1);
                             }
                         }

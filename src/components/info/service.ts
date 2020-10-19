@@ -8,7 +8,7 @@ import getSupportedNetworks from '../../config/supportedNetworks';
 
 import { BalanceService } from '../balance/service';
 import { PriceService } from '../price/service';
-import { logError } from '../../logger';
+import { logData, logError } from '../../logger';
 import { IUserConfig } from '../../types/UserConfig';
 import { safeAccess } from '../../utils';
 
@@ -57,10 +57,16 @@ export default class InfoService {
 
             const { valid, message } = result?.data;
             if (!valid) {
-                logError(`CANNOT_CONNECT_TO_NETWORK`, message);
+                logError(`CANNOT_CONNECT_TO_NETWORK ${message}`);
+
+                if (message === 'DUPLICATE_NAME') {
+                    logData(
+                        `If that is your Butler name and no one is using it at the moment, please stand still - Butler will reconnect.`
+                    );
+                }
             }
         } catch (err) {
-            logError(`REGISTER_ERROR`, err);
+            logError(`REGISTER_ERROR ${err}`);
         }
     }
 
@@ -115,14 +121,14 @@ export default class InfoService {
             const { valid, message } = result?.data;
 
             if (!valid) {
-                logError(`CANNOT_CONNECT_TO_NETWORK`, message);
+                logError(`CANNOT_CONNECT_TO_NETWORK ${message}`);
 
                 if (message === 'NOT_REGISTERED') {
                     await this.register();
                 }
             }
         } catch (err) {
-            logError(`I_AM_ALIVE_ERROR`, err);
+            logError(`I_AM_ALIVE_ERROR ${err}`);
         }
     }
 
