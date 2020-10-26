@@ -23,7 +23,7 @@ export default () => {
 
     return {
         BTC: supportedNetworks['BTC'] && BitcoinConfig(),
-        ETH: supportedNetworks['ETH'] && EthereumConfig(),
+        ETH: EthereumConfig(),
         AE: supportedNetworks['AE'] && AeternityConfig(),
         ONE: supportedNetworks['ONE'] && HarmonyConfig(),
         MATIC: supportedNetworks['MATIC'] && MaticConfig(),

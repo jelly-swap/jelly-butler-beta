@@ -1,5 +1,6 @@
 import { Config } from '@jelly-swap/ethereum';
 import UserConfig from '../../config';
+import supportedNetworks from '../../config/supportedNetworks';
 import { safeAccess } from '../../utils';
 
 export default () => {
@@ -26,6 +27,8 @@ export default () => {
             PRIVATE_KEY: secret,
         };
     } else {
-        throw new Error('Ethereum ADDRESS and SECRET are missing.');
+        if (supportedNetworks()['ETH']) {
+            throw new Error(`Ethereum ADDRESS and SECRET are missing.`);
+        }
     }
 };

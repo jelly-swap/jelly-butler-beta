@@ -1,19 +1,27 @@
 import { Contract } from '@jelly-swap/ethereum';
-import { WalletProvider } from '@jelly-swap/ethereum/dist/src/providers';
+import { WalletProvider, JsonRpcProvider } from '@jelly-swap/ethereum/dist/src/providers';
 
 import { greaterThan } from '../../utils/math';
 
 export default class EthereumContract extends Contract {
-    private wallet: WalletProvider;
+    private wallet: WalletProvider | JsonRpcProvider;
 
     constructor(config) {
-        const _wallet = new WalletProvider(config.PRIVATE_KEY, config.providerUrl);
-        super(_wallet, config);
-        this.wallet = _wallet;
+        if (config.PRIVATE_KEY) {
+            const _wallet = new WalletProvider(config.PRIVATE_KEY, config.providerUrl);
+            super(_wallet, config);
+            this.wallet = _wallet;
+        } else {
+            const _wallet = new JsonRpcProvider(config.providerUrl);
+            super(_wallet, config);
+            this.wallet = _wallet;
+        }
     }
 
     async signMessage(message: string) {
-        return await this.wallet.signMessage(message);
+        if (this.wallet instanceof WalletProvider) {
+            return await this.wallet.signMessage(message);
+        }
     }
 
     async userWithdraw(swap, secret) {

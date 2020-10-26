@@ -28,7 +28,7 @@ const getContracts = () => {
 
         const AllContracts = {
             ...getErc20Contracts(Config),
-            ETH: Config.ETH && new EthereumContract(Config.ETH),
+            ETH: new EthereumContract(Config.ETH),
             BTC: Config.BTC && new BitcoinContract(Config.BTC),
             AE: Config.AE && new AeternityContract(Config.AE),
             ONE: Config.ONE && new HarmonyContract(Config.ONE),

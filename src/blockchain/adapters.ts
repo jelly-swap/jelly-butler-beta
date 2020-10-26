@@ -26,7 +26,7 @@ export default () => {
 
         const AllAdapters = {
             ...getErc20Adapters(Config),
-            ETH: Config.ETH && new EthereumAdapter(Config.ETH as any),
+            ETH: new EthereumAdapter(Config.ETH as any),
             BTC: Config.BTC && new BitcoinAdapter(Config.BTC as any),
             AE: Config.AE && new AeternityAdapter(Config.AE as any),
             ONE: Config.ONE && new HarmonyAdapter(Config.ONE),
