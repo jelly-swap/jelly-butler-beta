@@ -1,4 +1,5 @@
 import * as BitcoinValidator from './bitcoin/validator';
+import * as AlgorandValidator from './algorand/validator';
 import * as EthereumValidator from './ethereum/validator';
 import * as AeternityValidator from './aeternity/validator';
 import * as Erc20Validator from './erc20/validator';
@@ -18,6 +19,7 @@ const getErc20Validators = () => {
 
 export default {
     BTC: BitcoinValidator,
+    ALGO: AlgorandValidator,
     ETH: EthereumValidator,
     AE: AeternityValidator,
     ONE: HarmonyValidator,

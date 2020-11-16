@@ -36,7 +36,8 @@ export default class SwapRepository {
                     swap.outputAmount,
                     swap.expiration,
                     swap.network,
-                    swap.outputNetwork
+                    swap.outputNetwork,
+                    swap.expireBlock
                 )
             );
         } catch (error) {

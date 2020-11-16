@@ -20,15 +20,21 @@ export default () => {
         gasMultiplier: 1,
     };
 
-    if (address && secret) {
+    if (!(address && secret)) {
+        if (supportedNetworks()['ETH']) {
+            throw new Error(`Ethereum ADDRESS and SECRET are missing.`);
+        }
+
         return {
             ...config,
             receiverAddress: address,
             PRIVATE_KEY: secret,
         };
-    } else {
-        if (supportedNetworks()['ETH']) {
-            throw new Error(`Ethereum ADDRESS and SECRET are missing.`);
-        }
     }
+
+    return {
+        ...config,
+        receiverAddress: address,
+        PRIVATE_KEY: secret,
+    };
 };

@@ -39,6 +39,9 @@ export default class Swap {
     @Column()
     expiration: number;
 
+    @Column({ nullable: true })
+    expireBlock: number;
+
     @Column()
     network: string;
 
@@ -61,7 +64,8 @@ export default class Swap {
         outputAmount: number,
         expiration: number,
         network: string,
-        outputNetwork: string
+        outputNetwork: string,
+        expireBlock?: number
     ) {
         this.id = id;
         this.outputSwapId = outputSwapId;
@@ -76,5 +80,6 @@ export default class Swap {
         this.expiration = expiration;
         this.network = network;
         this.outputNetwork = outputNetwork;
+        this.expireBlock = expireBlock;
     }
 }

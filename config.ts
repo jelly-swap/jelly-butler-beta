@@ -2,6 +2,7 @@ export default {
     NETWORKS: {
         ETH: true,
         BTC: true,
+        ALGO: true,
         AE: true,
         MATIC: true,
         AVAX: true,
@@ -32,7 +33,7 @@ export default {
     BALANCE_SNAPSHOT_INTERVAL: 3600,
 
     PRICE: {
-        COINS: ['ETH', 'BTC', 'AE', 'DAI', 'WBTC', 'TBTC', 'USDC', 'USDT', 'ONE', 'MATIC', 'AVAX', 'BNB'],
+        COINS: ['ETH', 'BTC', 'AE', 'DAI', 'WBTC', 'USDC', 'USDT', 'ONE', 'MATIC', 'AVAX', 'BNB', 'ALGO'],
     },
 
     DUPLICATE_PRICE: { DAI: 'USDC', WBTC: 'BTC', TBTC: 'BTC' },
@@ -41,6 +42,7 @@ export default {
     BINANCE: {
         PAIRS: {
             ETHBTC: true,
+            BTCALGO: true,
             BTCUSDT: true,
             AEETH: true,
             AEBTC: true,
@@ -51,6 +53,7 @@ export default {
         PRECISION: {
             ETH: 3,
             BTC: 4,
+            ALGO: 4,
             BNB: 4,
             AE: 1,
             MATIC: 1,
