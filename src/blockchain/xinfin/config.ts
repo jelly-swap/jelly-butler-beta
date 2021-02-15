@@ -5,15 +5,15 @@ import { safeAccess } from '../../utils';
 export default () => {
     const userConfig = new UserConfig().getUserConfig();
 
-    const address = safeAccess(userConfig, ['WALLETS', 'BNB', 'ADDRESS']);
-    const secret = safeAccess(userConfig, ['WALLETS', 'BNB', 'SECRET']);
+    const address = safeAccess(userConfig, ['WALLETS', 'XDC', 'ADDRESS']);
+    const secret = safeAccess(userConfig, ['WALLETS', 'XDC', 'SECRET']);
 
     const config = {
         ...Config(7200),
-        explorer: 'https://bscscan.com//tx/',
-        providerUrl: 'https://bsc-dataseed.binance.org/',
-        contractAddress: '0xe77b9f7a4b0f22ab015c30d9f1a016b4759179ae',
-        chainId: 56,
+        explorer: 'https://explorer.xinfin.network/tx/',
+        providerUrl: 'https://rpc.xinfin.network',
+        contractAddress: '0xdc81ec2ea4e84e8f53824922101b3d285e4c036b',
+        chainId: 50,
         REFUND_PERIOD: 10,
         VALID_EXPIRATION: 72000,
     };
@@ -25,6 +25,6 @@ export default () => {
             PRIVATE_KEY: secret,
         };
     } else {
-        throw new Error('BNB ADDRESS and BNB private key are missing.');
+        throw new Error('XDC ADDRESS and XDC Private key are missing.');
     }
 };

@@ -28,6 +28,10 @@ export const ethAddressMatch = async (privateKey, address) => {
     return compareAddress(utils.computeAddress(fixHash(privateKey, true)), address);
 };
 
+export const xdcAddressMatch = async (privateKey, address) => {
+    return compareAddress(utils.computeAddress(fixHash(privateKey, true)).replace('0x','xdc'), address);
+};
+
 export const btcAddressMatch = async (mnemonic, address) => {
     try {
         const wallet = new Wallet(mnemonic, new BitcoinProvider(''));
@@ -66,4 +70,5 @@ export const PK_MATCH_ADDRESS = {
     MATIC: ethAddressMatch,
     AVAX: ethAddressMatch,
     BNB: ethAddressMatch,
+    XDC: ethAddressMatch,
 };
