@@ -74,7 +74,7 @@ export default {
         },
 
         XDC:{
-            //XDC public key starting with 0x instead of xdc
+            //XDC public address starting with 0x instead of xdc
             ADDRESS: '',
             // XDC Private Key
             SECRET: '',
