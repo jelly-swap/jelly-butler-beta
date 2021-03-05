@@ -11,7 +11,7 @@ export default () => {
     const config = {
         ...Config(7200),
         explorer: 'https://explorer.xinfin.network/tx/',
-        providerUrl: 'https://rpc.xinfin.network',
+        providerUrl: 'https://appsrpc.xinfin.network/',
         contractAddress: '0xdc81ec2ea4e84e8f53824922101b3d285e4c036b',
         chainId: 50,
         REFUND_PERIOD: 10,

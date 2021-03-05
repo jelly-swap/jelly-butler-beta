@@ -72,6 +72,13 @@ export default {
             // Avalanche Private Key
             SECRET: '',
         },
+
+        XDC:{
+            //XDC public key starting with 0x instead of xdc
+            ADDRESS: '',
+            // XDC Private Key
+            SECRET: '',
+        },
     },
 
     // BLOCKCHAIN PROVIDER
