@@ -5,7 +5,7 @@ import { greaterThan } from '../../utils/math';
 
 const DEFAULT_OPTIONS = { gasPrice: '0x6D6E2EDC00', gasLimit: 350000 };
 
-export default class BinanceContract extends Contract {
+export default class XinfinContract extends Contract {
     private wallet: WalletProvider;
 
     constructor(config) {

@@ -9,6 +9,7 @@ import HarmonyContract from './harmony';
 import MaticContract from './matic';
 import AvalancheContract from './avalanche';
 import BinanceContract from './binance';
+import XinfinContract from './xinfin';
 
 let Contracts: any;
 let NetworkContracts: any;
@@ -35,6 +36,7 @@ const getContracts = () => {
             MATIC: Config.MATIC && new MaticContract(Config.MATIC),
             AVAX: Config.AVAX && new AvalancheContract(Config.AVAX),
             BNB: Config.BNB && new BinanceContract(Config.BNB),
+            XDC: Config.XDC && new XinfinContract(Config.XDC),
         };
 
         Contracts = Object.entries(AllContracts).reduce(

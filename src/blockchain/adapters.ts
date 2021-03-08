@@ -33,6 +33,7 @@ export default () => {
             MATIC: Config.MATIC && new MaticAdapter(Config.MATIC),
             AVAX: Config.AVAX && new AvalancheAdapter(Config.AVAX),
             BNB: Config.BNB && new AvalancheAdapter(Config.BNB),
+            XDC: Config.XDC && new AvalancheAdapter(Config.XDC),
         };
 
         Adapters = Object.entries(AllAdapters).reduce((a, [k, v]) => (v === undefined ? a : { ...a, [k]: v }), {});
