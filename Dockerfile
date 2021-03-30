@@ -1,18 +1,22 @@
-FROM node:12.16.1-alpine
+FROM node:12
 
-RUN mkdir -p /home/node/app/node_modules && mkdir -p /home/node/app/logs && chown -R node:node /home/node/app 
-RUN apk update && apk add yarn python g++ make && rm -rf /var/cache/apk/*
+# Create app directory
+WORKDIR /usr/src/app
 
-WORKDIR /home/node/app
-
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
 COPY package*.json ./
-
-USER node
+COPY yarn.lock ./
 
 RUN yarn install 
 
-COPY --chown=node:node . .
+# Bundle app source
+COPY . .
+
+ENV PORT=9003
 
 EXPOSE 9003
 
+# Stage 2 - Run the application
 CMD [ "yarn", "start" ]

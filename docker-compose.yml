@@ -1,11 +1,12 @@
 version: '3.7'
 
 services:
-    nodejs:
+    butler:
         build:
             context: .
             dockerfile: Dockerfile
-        image: butler
+        depends_on:
+            - mongo-db
         container_name: butler
         restart: unless-stopped
         env_file: .env
@@ -14,13 +15,12 @@ services:
         ports:
             - '9003:9003'
         volumes:
-            - .:/home/node/app
-            - node_modules:/home/node/app/node_modules
-            - logs:/home/node/app/logs
-        networks:
-            - app-network
-        command: ./wait-for.sh db:27017 -- yarn start
-    db:
+            - .:/app/
+            - /app/node_modules
+            - ./logs:/home/node/app/logs
+        command: yarn start
+    
+    mongo-db:
         image: 'bitnami/mongodb:latest'
         container_name: db
         restart: unless-stopped
@@ -29,18 +29,6 @@ services:
             - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
         volumes:
             - dbdata:/data/db
-        networks:
-            - app-network
 
-networks:
-    app-network:
-        driver: bridge
 volumes:
     dbdata:
-    node_modules:
-    logs:
-        driver: local
-        driver_opts:
-            type: none
-            device: $PWD/logs
-            o: bind
