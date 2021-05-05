@@ -9,6 +9,7 @@ import { WithdrawService } from '../../components/withdraw/service';
 
 import { validateWithdraw } from '../validator';
 import EmailService from '../../email';
+import { toBigNumber } from '../../utils/math';
 
 const RETRY_COUNT = 10;
 const RETRY_TIME = 1000 * 10;
@@ -63,7 +64,7 @@ export default class WithdrawHandler {
 
                             logData(
                                 `You received ${this.adapters[network].parseFromNative(
-                                    String(inputAmount),
+                                    String(toBigNumber(inputAmount)),
                                     network
                                 )} ${network}.`
                             );

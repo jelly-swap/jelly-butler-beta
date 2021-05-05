@@ -2,6 +2,7 @@ import getContracts from '../contracts';
 import getAdapters from '../adapters';
 import { logInfo, logError, logDebug, logData } from '../../logger';
 import EmailService from '../../email';
+import { toBigNumber } from '../../utils/math';
 
 export default class RefundHandler {
     private emailService: EmailService;
@@ -33,7 +34,7 @@ export default class RefundHandler {
                     this.localCache[id] = true;
 
                     logData(
-                        `Refund ${this.adapters[network].parseFromNative(String(inputAmount), network)} ${network}`
+                        `Refund ${this.adapters[network].parseFromNative(String(toBigNumber(inputAmount)), network)} ${network}`
                     );
                     logInfo(`REFUND ${network}: ID: ${id}, TxHash: ${transactionHash}`);
 

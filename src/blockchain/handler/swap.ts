@@ -12,6 +12,7 @@ import Exchange from '../../exchange';
 import { divDecimals, mulDecimals, mul, toFixed } from '../../utils/math';
 import { PriceService } from '../../components/price/service';
 import getBlockchainConfig from '../config';
+import { toBigNumber } from '../../utils/math';
 
 const RETRY_COUNT = 10;
 const RETRY_TIME = 1000 * 10;
@@ -78,10 +79,10 @@ export default class SwapHandler {
 
                             logData(
                                 `Created a swap: ${outputAdapter.parseFromNative(
-                                    String(outputSwap.inputAmount),
+                                    String(toBigNumber(outputSwap.inputAmount)),
                                     outputSwap.network
                                 )} ${outputSwap.network} for ${inputAdapter.parseFromNative(
-                                    String(inputSwap.inputAmount),
+                                    String(toBigNumber(inputSwap.inputAmount)),
                                     inputSwap.network
                                 )} ${inputSwap.network}`
                             );
