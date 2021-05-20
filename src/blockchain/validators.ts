@@ -7,6 +7,7 @@ import * as HarmonyValidator from './harmony/validator';
 import * as MaticValidator from './matic/validator';
 import * as AvalancheValidator from './avalanche/validator';
 import * as BinanceValidator from './binance/validator';
+import * as XinfinValidator from './xinfin/validator';
 
 import { SECONDARY_NETWORKS } from './erc20/config';
 
@@ -26,5 +27,6 @@ export default {
     MATIC: MaticValidator,
     AVAX: AvalancheValidator,
     BNB: BinanceValidator,
+    XDC: XinfinValidator,
     ...getErc20Validators(),
 };

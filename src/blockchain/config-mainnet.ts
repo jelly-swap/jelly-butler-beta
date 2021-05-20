@@ -7,6 +7,7 @@ import HarmonyConfig from './harmony/config';
 import MaticConfig from './matic/config';
 import AvalancheConfig from './avalanche/config';
 import BinanceConfig from './binance/config';
+import XinfinConfig from './xinfin/config';
 
 import getSupportedNetworks from '../config/supportedNetworks';
 
@@ -31,6 +32,7 @@ export default () => {
         MATIC: supportedNetworks['MATIC'] && MaticConfig(),
         AVAX: supportedNetworks['AVAX'] && AvalancheConfig(),
         BNB: supportedNetworks['BNB'] && BinanceConfig(),
+        XDC: supportedNetworks['XDC'] && XinfinConfig(),
         ...getErc20Configs(supportedNetworks),
     };
 };
