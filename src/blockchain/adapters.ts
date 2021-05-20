@@ -1,4 +1,5 @@
 import { Adapter as BitcoinAdapter } from '@jelly-swap/bitcoin';
+import { Adapter as AlgorandAdapter } from '@jelly-swap/algorand';
 import { Adapter as EthereumAdapter } from '@jelly-swap/ethereum';
 import { Adapter as AeternityAdapter } from '@jelly-swap/aeternity';
 import { Adapter as Erc20Adapter } from '@jelly-swap/erc20';
@@ -26,8 +27,9 @@ export default () => {
 
         const AllAdapters = {
             ...getErc20Adapters(Config),
-            ETH: Config.ETH && new EthereumAdapter(Config.ETH as any),
+            ETH: new EthereumAdapter(Config.ETH as any),
             BTC: Config.BTC && new BitcoinAdapter(Config.BTC as any),
+            ALGO: Config.ALGO && new AlgorandAdapter(Config.ALGO),
             AE: Config.AE && new AeternityAdapter(Config.AE as any),
             ONE: Config.ONE && new HarmonyAdapter(Config.ONE),
             MATIC: Config.MATIC && new MaticAdapter(Config.MATIC),

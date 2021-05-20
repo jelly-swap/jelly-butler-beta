@@ -50,7 +50,7 @@ export default class SwapHandler {
                 const outputAdapter = this.adapters[inputSwap.outputNetwork];
                 const contract = this.contracts[inputSwap.outputNetwork];
 
-                const outputSwap = outputAdapter.createSwapFromInput({
+                const outputSwap = await outputAdapter.createSwapFromInput({
                     ...inputSwap,
                     outputAmount: this.getLatestOutputAmount(inputSwap),
                 });

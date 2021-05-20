@@ -93,18 +93,17 @@ export const isInputSwapValid = async (swap) => {
 };
 
 export const isOutputSwapValid = async (swap, takerDesiredAmount) => {
-    const userConfig = new UserConfig().getUserConfig();
     const blockchainConfig = getBlockchainConfig();
     const inputNetworkValidation = safeAccess(blockchainConfig, [swap.network]);
     const outputNetworkValidation = safeAccess(blockchainConfig, [swap.outputNetwork]);
 
     if (!inputNetworkValidation) {
-        logDebug(`INPUT_CHAIN_VALIDATION_FAILED`, swap);
+        logDebug(`OUTPUT_SWAP_INPUT_CHAIN_VALIDATION_FAILED`, swap);
         return false;
     }
 
     if (!outputNetworkValidation) {
-        logDebug(`OUTPUT_CHAIN_VALIDATION_FAILED`, swap);
+        logDebug(`OUTPUT_SWAP_OUTPUT_CHAIN_VALIDATION_FAILED`, swap);
         return false;
     }
 

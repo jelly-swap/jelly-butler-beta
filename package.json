@@ -16,7 +16,9 @@
     "license": "ISC",
     "dependencies": {
         "@jelly-swap/aeternity": "0.1.49-node",
-        "@jelly-swap/avalanche": "^0.1.51",
+        "@jelly-swap/algo-provider": "0.1.53",
+        "@jelly-swap/algorand": "0.1.53",
+        "@jelly-swap/avalanche": "0.1.53",
         "@jelly-swap/bitcoin": "0.1.51",
         "@jelly-swap/btc-provider": "0.1.51",
         "@jelly-swap/btc-utils": "0.1.51",

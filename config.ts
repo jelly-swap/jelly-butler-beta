@@ -2,6 +2,7 @@ export default {
     NETWORKS: {
         ETH: true,
         BTC: true,
+        ALGO: true,
         AE: true,
         MATIC: true,
         AVAX: true,
@@ -11,6 +12,7 @@ export default {
         USDC: true,
         WBTC: true,
         TBTC: true,
+        XDC: true,
     },
 
     // The amount of fee that is charged by JellySwap protocol.
@@ -32,7 +34,7 @@ export default {
     BALANCE_SNAPSHOT_INTERVAL: 3600,
 
     PRICE: {
-        COINS: ['ETH', 'BTC', 'AE', 'DAI', 'WBTC', 'TBTC', 'USDC', 'USDT', 'ONE', 'MATIC', 'AVAX', 'BNB', 'XDC'],
+        COINS: ['ETH', 'BTC', 'AE', 'DAI', 'WBTC', 'TBTC', 'USDC', 'USDT', 'ONE', 'MATIC', 'AVAX', 'BNB', 'XDC', 'ALGO'],
     },
 
     DUPLICATE_PRICE: { DAI: 'USDC', WBTC: 'BTC', TBTC: 'BTC' },
@@ -41,6 +43,7 @@ export default {
     BINANCE: {
         PAIRS: {
             ETHBTC: true,
+            BTCALGO: true,
             BTCUSDT: true,
             AEETH: true,
             AEBTC: true,
@@ -51,6 +54,7 @@ export default {
         PRECISION: {
             ETH: 3,
             BTC: 4,
+            ALGO: 4,
             BNB: 4,
             XDC: 1,
             AE: 1,

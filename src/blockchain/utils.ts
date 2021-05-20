@@ -16,6 +16,9 @@ import * as nacl from 'tweetnacl';
 import { WalletProvider } from '@jelly-swap/harmony/dist/src/providers';
 import { SECONDARY_NETWORKS } from './erc20/config';
 
+// Algorand
+import algosdk from 'algosdk';
+
 export const compareAddress = (a1: string, a2: string) => {
     return a1.toLowerCase() === a2.toLowerCase();
 };
@@ -54,6 +57,15 @@ export const aeAddressMatch = async (privateKey, address) => {
     return `ak_${Crypto.encodeBase58Check(publicBuffer)}` === address;
 };
 
+export const algoAddressMatch = async (mnemonic, address) => {
+    try {
+        const keyPair = algosdk.mnemonicToSecretKey(mnemonic);
+        return compareAddress(keyPair.addr, address);
+    } catch (err) {
+        return false;
+    }
+};
+
 const getErc20Matcher = () => {
     return Object.keys(SECONDARY_NETWORKS).reduce((object, token) => {
         object[token] = ethAddressMatch;
@@ -65,6 +77,7 @@ export const PK_MATCH_ADDRESS = {
     ...getErc20Matcher(),
     ETH: ethAddressMatch,
     BTC: btcAddressMatch,
+    ALGO: algoAddressMatch,
     AE: aeAddressMatch,
     ONE: oneAddressMatch,
     MATIC: ethAddressMatch,

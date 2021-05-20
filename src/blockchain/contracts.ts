@@ -2,6 +2,7 @@ import getConfig from './config';
 import { SECONDARY_NETWORKS } from './erc20/config';
 
 import BitcoinContract from './bitcoin';
+import AlgorandContract from './algorand';
 import EthereumContract from './ethereum';
 import AeternityContract from './aeternity';
 import Erc20Contract from './erc20';
@@ -29,8 +30,9 @@ const getContracts = () => {
 
         const AllContracts = {
             ...getErc20Contracts(Config),
-            ETH: Config.ETH && new EthereumContract(Config.ETH),
+            ETH: new EthereumContract(Config.ETH),
             BTC: Config.BTC && new BitcoinContract(Config.BTC),
+            ALGO: Config.ALGO && new AlgorandContract(Config.ALGO),
             AE: Config.AE && new AeternityContract(Config.AE),
             ONE: Config.ONE && new HarmonyContract(Config.ONE),
             MATIC: Config.MATIC && new MaticContract(Config.MATIC),

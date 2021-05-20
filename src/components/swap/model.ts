@@ -12,7 +12,8 @@ export class SwapModel {
         public outputAmount: number,
         public expiration: number,
         public network: string,
-        public outputNetwork: string
+        public outputNetwork: string,
+        public expireBlock: number
     ) {
         this.id = id;
         this.outputSwapId = outputSwapId;
@@ -27,5 +28,6 @@ export class SwapModel {
         this.expiration = expiration;
         this.network = network;
         this.outputNetwork = outputNetwork;
+        this.expireBlock = expireBlock;
     }
 }
